@@ -31,13 +31,20 @@ void randomSleep(int min, int max)
 	Sleep(time);
 }
 
+int randomPos(int org, int max)
+{
+	return org + (rand() * (2 * max) / RAND_MAX) - max;
+}
+
 int main()
 {
 	srand((uint32_t)time(NULL));
 
-	POINT pos, p;
+	POINT pos, p, pos2;
 
-	printf("Press <INSERT> to begin clicking, <ESC> to cancel and move your mouse to abord...\n");
+	int speed = 150;
+
+	printf("Press <INSERT> to begin clicking, <+> or <-> to increase/decrease speed (default is up to 150 ms), <ESC> to cancel and move your mouse to abord...\n");
 
 	while (true)
 	{
@@ -46,6 +53,10 @@ int main()
 		{
 			// grab position
 			GetCursorPos(&pos);
+
+			printf("Origin position of cursor is (%d, %d)\n", pos.x, pos.y);
+
+			pos2 = pos;
 
 			break;
 		}
@@ -65,14 +76,40 @@ int main()
 
 		mouse_event(MOUSEEVENTF_LEFTDOWN, pos.x, pos.y, 0, 0);
 
-		// between 6 and 8 clicks/second = 125-166
+		if (speed < 40)
+		{
+			printf("Speed %d ms faster than maximum (40 ms), cap it...\n", speed);
+
+			speed = 40;
+		}
+
+		mouse_event(MOUSEEVENTF_LEFTDOWN, pos2.x, pos2.y, 0, 0);
+
+		// between 6 and 14 clicks/second = 125-166
 
 		// wait a little before releasing the mouse
 		randomSleep(10, 25);
-		mouse_event(MOUSEEVENTF_LEFTUP, pos.x, pos.y, 0, 0);
+		mouse_event(MOUSEEVENTF_LEFTUP, pos2.x, pos2.y, 0, 0);
 
 		// wait before reclicking
-		randomSleep(50, 150);
+		randomSleep(30, speed);
+
+		// abort if move the mouse or click on Escape
+		if (GetCursorPos(&p))
+		{
+			if (p.x != pos2.x && p.y != pos2.y) break;
+
+			printf("Cursor at at (%d, %d)\n", p.x, p.y);
+		}
+
+		// randomize position
+		pos2.x = randomPos(pos.x, 5);
+		pos2.y = randomPos(pos.y, 5);
+
+		// set cursor position
+		SetCursorPos(pos2.x, pos2.y);
+
+		printf("Click at (%d, %d)\n", pos2.x, pos2.y);
 	}
 
 	return 0;
