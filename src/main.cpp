@@ -71,10 +71,24 @@ int main()
 
 	while (true)
 	{
-		// abort if move the mouse or click on Escape
-		if ((GetCursorPos(&p) && p.x != pos.x && p.y != pos.y)) break;
+		if (GetAsyncKeyState(VK_ADD))
+		{
+			// increase speed
+			speed -= 10;
 
-		mouse_event(MOUSEEVENTF_LEFTDOWN, pos.x, pos.y, 0, 0);
+			printf("Increase speed to %d ms\n", speed);
+		}
+		else if (GetAsyncKeyState(VK_SUBTRACT))
+		{
+			// decrease speed
+			speed += 10;
+
+			printf("Decrease speed to %d ms\n", speed);
+		}
+		else if (GetAsyncKeyState(VK_ESCAPE))
+		{
+			return 0;
+		}
 
 		if (speed < 40)
 		{
