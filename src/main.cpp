@@ -40,9 +40,13 @@ int main()
 {
 	srand((uint32_t)time(NULL));
 
-	POINT pos, p, pos2;
+	POINT pos; // original position of the user click
+	POINT pos2; // random position
+	POINT p; // checked position
 
 	int speed = 150;
+
+	bool click = false;
 
 	printf("Press <INSERT> to begin clicking, <+> or <-> to increase/decrease speed (default is up to 150 ms), <ESC> to cancel and move your mouse to abord...\n");
 
@@ -58,20 +62,9 @@ int main()
 
 			pos2 = pos;
 
-			break;
+			click = true;
 		}
-		else if (GetAsyncKeyState(VK_ESCAPE))
-		{
-			return 0;
-		}
-
-		// wait 100ms
-		Sleep(100);
-	}
-
-	while (true)
-	{
-		if (GetAsyncKeyState(VK_ADD))
+		else if (GetAsyncKeyState(VK_ADD))
 		{
 			// increase speed
 			speed -= 10;
@@ -97,33 +90,39 @@ int main()
 			speed = 40;
 		}
 
-		mouse_event(MOUSEEVENTF_LEFTDOWN, pos2.x, pos2.y, 0, 0);
-
-		// between 6 and 14 clicks/second = 125-166
-
-		// wait a little before releasing the mouse
-		randomSleep(10, 25);
-		mouse_event(MOUSEEVENTF_LEFTUP, pos2.x, pos2.y, 0, 0);
-
-		// wait before reclicking
-		randomSleep(30, speed);
-
-		// abort if move the mouse or click on Escape
-		if (GetCursorPos(&p))
+		if (click)
 		{
-			if (p.x != pos2.x && p.y != pos2.y) break;
+			mouse_event(MOUSEEVENTF_LEFTDOWN, pos2.x, pos2.y, 0, 0);
 
-			printf("Cursor at at (%d, %d)\n", p.x, p.y);
+			// between 6 and 14 clicks/second = 125-166
+
+			// wait a little before releasing the mouse
+			randomSleep(10, 25);
+			mouse_event(MOUSEEVENTF_LEFTUP, pos2.x, pos2.y, 0, 0);
+
+			// wait before reclicking
+			randomSleep(30, speed);
+
+			// stop auto-click if move the mouse
+			if (GetCursorPos(&p) && p.x != pos2.x && p.y != pos2.y)
+			{
+				click = false;
+			}
+
+			// randomize position
+			pos2.x = randomPos(pos.x, 5);
+			pos2.y = randomPos(pos.y, 5);
+
+			// set cursor position
+			SetCursorPos(pos2.x, pos2.y);
+
+			printf("Click at (%d, %d)\n", pos2.x, pos2.y);
 		}
-
-		// randomize position
-		pos2.x = randomPos(pos.x, 5);
-		pos2.y = randomPos(pos.y, 5);
-
-		// set cursor position
-		SetCursorPos(pos2.x, pos2.y);
-
-		printf("Click at (%d, %d)\n", pos2.x, pos2.y);
+		else
+		{
+			// wait 100ms
+			Sleep(100);
+		}
 	}
 
 	return 0;
