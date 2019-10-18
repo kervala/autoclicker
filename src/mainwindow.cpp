@@ -89,7 +89,7 @@ MainWindow::MainWindow():QMainWindow(nullptr, Qt::WindowStaysOnTopHint)
 	m_mapper = new QDataWidgetMapper(this);
 	m_mapper->setModel(m_model);
 	m_mapper->addMapping(nameLineEdit, 0);
-	m_mapper->addMapping(positionPushButton, 1);
+	// m_mapper->addMapping(positionPushButton, 1);
 	m_mapper->addMapping(delaySpinBox, 2);
 
 	connect(spotsListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::onSelectionChanged);
