@@ -182,7 +182,7 @@ void MainWindow::onStartOrStop()
 		m_timers.push_back(timer);
 	}
 
-	m_lastMousePosition = QCursor::pos();
+	m_lastMousePosition = QPoint();
 
 	// start all timers
 	for (int i = 0; i < m_timers.size(); ++i)
@@ -195,6 +195,9 @@ void MainWindow::onStartOrStop()
 
 void MainWindow::onTimer()
 {
+	// do this because sometimes, the mouse move when clicking
+	if (m_lastMousePosition == QPoint()) m_lastMousePosition = QCursor::pos();
+
 	QTimer* timer = qobject_cast<QTimer*>(sender());
 
 	int row = timer->property("row").toInt();
