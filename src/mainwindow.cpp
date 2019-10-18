@@ -24,6 +24,7 @@
 #include "updatedialog.h"
 #include "updater.h"
 #include "spotmodel.h"
+#include "utils.h"
 
 #ifdef Q_OS_WIN32
 #include <QtWinExtras/QWinTaskbarProgress>
@@ -221,13 +222,13 @@ void MainWindow::onTimer()
 	}
 
 	// set cursor position
-	SetCursorPos(spot.lastPosition.x(), spot.lastPosition.y());
+	QCursor::setPos(spot.lastPosition);
 
 	// update last mouse position
 	m_lastMousePosition = spot.lastPosition;
 
 	// left click down
-	mouse_event(MOUSEEVENTF_LEFTDOWN, spot.lastPosition.x(), spot.lastPosition.y(), 0, 0);
+	mouseLeftClickDown(spot.lastPosition);
 
 	// between 6 and 14 clicks/second = 125-166
 
@@ -235,7 +236,7 @@ void MainWindow::onTimer()
 	QThread::currentThread()->msleep(QRandomGenerator::global()->bounded(10, 25));
 
 	// left click up
-	mouse_event(MOUSEEVENTF_LEFTUP, spot.lastPosition.x(), spot.lastPosition.y(), 0, 0);
+	mouseLeftClickUp(spot.lastPosition);
 
 	int delay = QRandomGenerator::global()->bounded(30, spot.delay);
 

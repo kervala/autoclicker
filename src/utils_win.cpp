@@ -179,6 +179,16 @@ cleanup:
 
 */
 
+void mouseLeftClickUp(const QPoint& pos)
+{
+	mouse_event(MOUSEEVENTF_LEFTUP, pos.x(), pos.y(), 0, 0);
+}
+
+void mouseLeftClickDown(const QPoint& pos)
+{
+	mouse_event(MOUSEEVENTF_LEFTDOWN, pos.x(), pos.y(), 0, 0);
+}
+
 QPixmap grabWindow(WId window)
 {
 	return QPixmap();

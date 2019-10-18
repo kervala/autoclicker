@@ -22,6 +22,9 @@
 
 class QAbstractItemModel;
 
+void mouseLeftClickUp(const QPoint& pos);
+void mouseLeftClickDown(const QPoint& pos);
+
 void CreateWindowsList(QAbstractItemModel *model);
 bool RestoreMinimizedWindow(WId &id);
 void MinimizeWindow(WId id);
