@@ -160,7 +160,7 @@ void SystrayIcon::displayMessage(const QString &message, SystrayAction action)
 
 void SystrayIcon::update()
 {
-	if (!QSystemTrayIcon::isSystemTrayAvailable() || !ConfigFile::getInstance()->getUseSystray())
+	if (!QSystemTrayIcon::isSystemTrayAvailable())
 	{
 		release();
 	}

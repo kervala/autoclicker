@@ -73,21 +73,6 @@ ConfigFile* ConfigFile::s_instance = NULL;
 
 ConfigFile::ConfigFile(QObject* parent):QObject(parent), m_settings(QSettings::IniFormat, QSettings::UserScope, QApplication::organizationName(), QApplication::applicationName())
 {
-	m_rememberPassword = true;
-	m_animationFrameDelay = 100; // in ms
-	m_autoSaveDelay = 30; // in seconds
-	m_checkMessagesDelay = 60; // in seconds
-	m_displayTimestamps = true;
-	m_enableAnimations = true; // enable animations for MNG and animated GIF
-	m_splitter = 0; // position of splitter
-	m_enableOembedThumbnail = true;
-	m_enableLogs = true;
-	m_enableTextLogs = true;
-	m_enableHtmlLogs = true;
-	m_enableSound = false;
-	m_useSystray = false;
-	m_hideMinimizedWindow = false;
-
 	if (!s_instance) s_instance = this;
 
 	initDirectories();
@@ -105,120 +90,21 @@ bool ConfigFile::load()
 {
 	int version = m_settings.value("version", 1).toInt();
 
-	if (version == 2)
-	{
-		loadVersion2();
-	}
-	else
+	if (version == 1)
 	{
 		loadVersion1();
 	}
-
-	autoSave();
 
 	return true;
 }
 
 bool ConfigFile::loadVersion1()
 {
-	// server parameters
-	m_login = m_settings.value("login").toString();
-	m_password = m_settings.value("password").toString();
-	m_rememberPassword = m_settings.value("remember_password", true).toBool();
-
-	// load rooms
-	m_settings.beginGroup("channels");
-
-	QStringList rooms = m_settings.childKeys();
-
-	m_rooms.clear();
-
-	foreach(const QString &room, rooms)
-	{
-		setRoomValue(room, m_settings.value(room, 0).toInt());
-	}
-
-	m_settings.endGroup();
-
-	return true;
-}
-
-bool ConfigFile::loadVersion2()
-{
-	// general parameters
-	m_autoSaveDelay = m_settings.value("autosave").toInt();
-
-	// server parameters
-	m_settings.beginGroup("server");
-
-	m_login = m_settings.value("login").toString();
-	m_password = m_settings.value("password").toString();
-	m_rememberPassword = m_settings.value("remember_password", true).toBool();
-
-	m_settings.endGroup();
-
 	// window parameters
 	m_settings.beginGroup("window");
 
 	m_size = QSize(m_settings.value("width", 0).toInt(), m_settings.value("height", 0).toInt());
 	m_position = QPoint(m_settings.value("x", 0).toInt(), m_settings.value("y", 0).toInt());
-	m_splitter = m_settings.value("splitter", 0).toInt();
-
-	m_settings.endGroup();
-
-	// chat parameters
-	m_settings.beginGroup("chat");
-
-	m_enableAnimations = m_settings.value("enable_animations", true).toBool();
-	m_animationFrameDelay = m_settings.value("animation_frame_delay", 100).toInt();
-	m_displayTimestamps = m_settings.value("display_timestamps", true).toBool();
-	m_useSystray = m_settings.value("use_systray", false).toBool();
-	m_hideMinimizedWindow = m_settings.value("hide_minimized_windows", false).toBool();
-	m_enableOembedThumbnail = m_settings.value("enable_oembed_thumbnail", true).toBool();
-	m_highlightColor = m_settings.value("highlight_color", "").toString();
-	m_errorColor = m_settings.value("error_color", "").toString();
-	m_screenStyle = m_settings.value("screen_style", "").toString();
-	m_logStyle = m_settings.value("log_style", "").toString();
-
-	m_settings.endGroup();
-
-	// logs parameters
-	m_settings.beginGroup("logs");
-
-	m_enableLogs = m_settings.value("enable_logs", true).toBool();
-	m_enableHtmlLogs = m_settings.value("enable_html_logs", true).toBool();
-	m_enableTextLogs = m_settings.value("enable_text_logs", true).toBool();
-	m_logsDirectory = m_settings.value("logs_directory", "").toString();
-
-	m_settings.endGroup();
-
-	// load rooms
-	m_settings.beginGroup("rooms");
-
-	QStringList rooms = m_settings.childKeys();
-
-	m_rooms.clear();
-
-	foreach(const QString &room, rooms)
-	{
-		setRoomValue(room, m_settings.value(room, 0).toInt());
-	}
-
-	m_settings.endGroup();
-
-	// messages parameters
-	m_settings.beginGroup("messages");
-
-	m_checkMessagesDelay = m_settings.value("check_messages_delay", 60).toInt(); // in seconds
-
-	m_settings.endGroup();
-
-	// sounds parameters
-	m_settings.beginGroup("sounds");
-
-	m_enableSound = m_settings.value("enable_sounds", true).toBool();
-	m_nameMentionedSound = m_settings.value("name_mentioned_sound", "").toString();
-	m_noteReceivedSound = m_settings.value("note_received_sound", "").toString();
 
 	m_settings.endGroup();
 
@@ -232,7 +118,6 @@ bool ConfigFile::save()
 	// no need to save because no change has been made
 	if (!m_modified)
 	{
-		autoSave();
 		return true;
 	}
 
@@ -240,17 +125,7 @@ bool ConfigFile::save()
 	m_settings.clear();
 
 	// general parameters
-	m_settings.setValue("version", 2);
-	m_settings.setValue("autosave", m_autoSaveDelay);
-
-	// server parameters
-	m_settings.beginGroup("server");
-
-	m_settings.setValue("login", m_login);
-	m_settings.setValue("password", m_password);
-	m_settings.setValue("remember_password", m_rememberPassword);
-
-	m_settings.endGroup();
+	m_settings.setValue("version", 1);
 
 	// window parameters
 	m_settings.beginGroup("window");
@@ -259,69 +134,10 @@ bool ConfigFile::save()
 	m_settings.setValue("height", m_size.height());
 	m_settings.setValue("x", m_position.x());
 	m_settings.setValue("y", m_position.y());
-	m_settings.setValue("splitter", m_splitter);
-
-	m_settings.endGroup();
-
-	// chat parameters
-	m_settings.beginGroup("chat");
-
-	m_settings.setValue("enable_animations", m_enableAnimations);
-	m_settings.setValue("animation_frame_delay", m_animationFrameDelay);
-	m_settings.setValue("display_timestamps", m_displayTimestamps);
-	m_settings.setValue("use_systray", m_useSystray);
-	m_settings.setValue("hide_minimized_windows", m_hideMinimizedWindow);
-	m_settings.setValue("enable_oembed_thumbnail", m_enableOembedThumbnail);
-	m_settings.setValue("highlight_color", m_highlightColor == Qt::blue ? "":m_highlightColor.name());
-	m_settings.setValue("error_color", m_errorColor == Qt::red ? "":m_errorColor.name());
-	m_settings.setValue("screen_style", m_screenStyle);
-	m_settings.setValue("log_style", m_logStyle);
-
-	m_settings.endGroup();
-
-	// logs parameters
-	m_settings.beginGroup("logs");
-
-	m_settings.setValue("enable_logs", m_enableLogs);
-	m_settings.setValue("enable_html_logs", m_enableHtmlLogs);
-	m_settings.setValue("enable_text_logs", m_enableTextLogs);
-	m_settings.setValue("logs_directory", m_logsDirectory == m_defaultLogsDirectory ? "":m_logsDirectory);
-
-	m_settings.endGroup();
-
-	// save rooms
-	m_settings.beginGroup("rooms");
-
-	ConfigRoomsIterator it = m_rooms.begin();
-
-	while(it != m_rooms.end())
-	{
-		m_settings.setValue(it->name, it->value);
-
-		++it;
-	}
-
-	m_settings.endGroup();
-
-	// messages parameters
-	m_settings.beginGroup("messages");
-
-	m_settings.setValue("check_messages_delay", m_checkMessagesDelay);
-
-	m_settings.endGroup();
-
-	// sounds parameters
-	m_settings.beginGroup("sounds");
-
-	m_settings.setValue("enable_sounds", m_enableSound);
-	m_settings.setValue("name_mentioned_sound", m_nameMentionedSound);
-	m_settings.setValue("note_received_sound", m_noteReceivedSound);
 
 	m_settings.endGroup();
 
 	modified(false);
-
-	autoSave();
 
 	return true;
 }
@@ -349,95 +165,6 @@ void ConfigFile::setWindowPosition(const QPoint &pos)
 	if (m_position == pos || pos.isNull()) return;
 
 	m_position = pos;
-	modified(true);
-}
-
-ConfigRooms ConfigFile::getRooms() const
-{
-	return m_rooms;
-}
-
-ConfigRoomsIterator ConfigFile::getRoom(const QString &name, bool insert)
-{
-	ConfigRoomsIterator it = m_rooms.begin();
-
-	while(it != m_rooms.end())
-	{
-		if (it->name.toLower() == name.toLower()) break;
-
-		++it;
-	}
-
-	if (it == m_rooms.end())
-	{
-		ConfigRoom room;
-		room.name = name;
-
-		it = m_rooms.insert(it, room);
-
-		modified(true);
-	}
-
-	return it;
-}
-
-void ConfigFile::setRoomAutoConnect(const QString &name, bool autoconnect)
-{
-	ConfigRoomsIterator it = getRoom(name, true);
-
-	if (it->autoconnect == autoconnect) return;
-
-	it->autoconnect = autoconnect;
-	it->updateToValue();
-
-	modified(true);
-}
-
-void ConfigFile::setRoomConnected(const QString &name, bool connected)
-{
-	ConfigRoomsIterator it = getRoom(name, true);
-
-	if (it->connected == connected) return;
-
-	it->connected = connected;
-	it->updateToValue();
-
-	modified(true);
-}
-
-void ConfigFile::setRoomFocused(const QString &name, bool focused)
-{
-	ConfigRoomsIterator it = getRoom(name, true);
-
-	if (it->focused == focused) return;
-
-	it->focused = focused;
-	it->updateToValue();
-
-	modified(true);
-}
-
-void ConfigFile::setRoomOrder(const QString &name, int order)
-{
-	ConfigRoomsIterator it = getRoom(name, true);
-
-	if (it->order == order) return;
-
-	it->order = order;
-	it->updateToValue();
-
-	modified(true);
-}
-
-void ConfigFile::setRoomValue(const QString &name, int value)
-{
-	ConfigRoomsIterator it = getRoom(name, true);
-
-	if (it->value == value) return;
-
-	it->value = value;
-	it->updateFromValue();
-
 	modified(true);
 }
 
@@ -566,7 +293,8 @@ void ConfigFile::initDirectories()
 	m_downloadDirectory = QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation);
 #endif
 
-
+	// create directories
+	QDir().mkpath(m_localDataDirectory);
 }
 
 void ConfigFile::updateSettings()
@@ -576,22 +304,6 @@ void ConfigFile::updateSettings()
 	{
 		m_logsDirectory = m_defaultLogsDirectory;
 	}
-
-	// colors
-	if (!m_highlightColor.isValid())
-	{
-		m_highlightColor = Qt::blue;
-	}
-
-	if (!m_errorColor.isValid())
-	{
-		m_errorColor = Qt::red;
-	}
-}
-
-void ConfigFile::autoSave()
-{
-	if (m_autoSaveDelay > 0) QTimer::singleShot(m_autoSaveDelay * 60 * 1000, this, SLOT(save()));
 }
 
 void ConfigFile::modified(bool modified)
@@ -599,14 +311,6 @@ void ConfigFile::modified(bool modified)
 	m_modified = modified;
 }
 
-IMPLEMENT_QSTRING_VAR(Login, login);
-IMPLEMENT_QSTRING_VAR(Password, password);
-IMPLEMENT_BOOL_VAR(RememberPassword, rememberPassword);
-IMPLEMENT_INT_VAR(AnimationFrameDelay, animationFrameDelay);
-IMPLEMENT_INT_VAR(AutoSaveDelay, autoSaveDelay);
-IMPLEMENT_INT_VAR(CheckMessagesDelay, checkMessagesDelay);
-IMPLEMENT_BOOL_VAR(DisplayTimestamps, displayTimestamps);
-IMPLEMENT_BOOL_VAR(EnableAnimations, enableAnimations);
 IMPLEMENT_QSTRING_VAR(DefaultLogsDirectory, defaultLogsDirectory);
 IMPLEMENT_QSTRING_VAR(LogsDirectory, logsDirectory);
 IMPLEMENT_QSTRING_VAR(TranslationsDirectory, translationsDirectory);
@@ -615,17 +319,3 @@ IMPLEMENT_QSTRING_VAR(CacheDirectory, cacheDirectory);
 IMPLEMENT_QSTRING_VAR(DownloadDirectory, downloadDirectory);
 IMPLEMENT_QSTRING_VAR(GlobalDataDirectory, globalDataDirectory);
 IMPLEMENT_QSTRING_VAR(LocalDataDirectory, localDataDirectory);
-IMPLEMENT_INT_VAR(Splitter, splitter);
-IMPLEMENT_BOOL_VAR(EnableOembedThumbnail, enableOembedThumbnail);
-IMPLEMENT_BOOL_VAR(EnableLogs, enableLogs);
-IMPLEMENT_BOOL_VAR(EnableTextLogs, enableTextLogs);
-IMPLEMENT_BOOL_VAR(EnableHtmlLogs, enableHtmlLogs);
-IMPLEMENT_QCOLOR_VAR(HighlightColor, highlightColor);
-IMPLEMENT_QCOLOR_VAR(ErrorColor, errorColor);
-IMPLEMENT_QSTRING_VAR(ScreenStyle, screenStyle);
-IMPLEMENT_QSTRING_VAR(LogStyle, logStyle);
-IMPLEMENT_BOOL_VAR(EnableSound, enableSound);
-IMPLEMENT_QSTRING_VAR(NameMentionedSound, nameMentionedSound);
-IMPLEMENT_QSTRING_VAR(NoteReceivedSound, noteReceivedSound);
-IMPLEMENT_BOOL_VAR(UseSystray, useSystray);
-IMPLEMENT_BOOL_VAR(HideMinimizedWindow, hideMinimizedWindow);

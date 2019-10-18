@@ -21,7 +21,6 @@
 #include "mainwindow.h"
 #include "moc_mainwindow.cpp"
 #include "configfile.h"
-#include "configfile.h"
 #include "updatedialog.h"
 #include "updater.h"
 #include "spotmodel.h"
@@ -347,7 +346,7 @@ void MainWindow::onAboutQt()
 void MainWindow::onMinimize()
 {
 	// only hide window if using systray and enabled hide minized window
-	if (isVisible() && ConfigFile::getInstance()->getUseSystray() && ConfigFile::getInstance()->getHideMinimizedWindow())
+	if (isVisible())
 	{
 		hide();
 	}
