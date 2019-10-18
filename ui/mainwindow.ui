@@ -19,19 +19,16 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="keyLabel">
+        <widget class="QPushButton" name="loadPushButton">
          <property name="text">
-          <string>Key to start clicking</string>
-         </property>
-         <property name="buddy">
-          <cstring>keyPushButton</cstring>
+          <string>Load</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="keyPushButton">
+        <widget class="QPushButton" name="savePushButton">
          <property name="text">
-          <string>Key</string>
+          <string>Save</string>
          </property>
         </widget>
        </item>

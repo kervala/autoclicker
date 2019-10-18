@@ -48,8 +48,16 @@ public:
 
 	Spot getSpot(int row) const;
 
+	void reset();
+
+	bool load(const QString& filename);
+	bool save(const QString& filename) const;
+
 private:
 	QList<Spot> m_spots;
 };
+
+QDataStream& operator << (QDataStream& stream, const Spot& spot);
+QDataStream& operator >> (QDataStream& stream, Spot& spot);
 
 #endif

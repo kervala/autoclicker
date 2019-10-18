@@ -20,6 +20,18 @@
 #include "common.h"
 #include "spotmodel.h"
 
+struct SMagicHeader
+{
+	union
+	{
+		char str[5];
+		quint32 num;
+	};
+};
+
+SMagicHeader s_header = { "ACFK" };
+quint32 s_version = 1;
+
 SpotModel::SpotModel(QObject* parent) : QAbstractTableModel(parent)
 {
 }
@@ -129,4 +141,97 @@ bool SpotModel::removeRows(int position, int rows, const QModelIndex& parent)
 Spot SpotModel::getSpot(int row) const
 {
 	return m_spots[row];
+}
+
+void SpotModel::reset()
+{
+	beginResetModel();
+
+	m_spots.clear();
+
+	endResetModel();
+}
+
+bool SpotModel::load(const QString& filename)
+{
+	if (filename.isEmpty()) return false;
+
+	QFile file(filename);
+
+	if (!file.open(QIODevice::ReadOnly)) return false;
+
+	QDataStream stream(&file);
+
+	// Read and check the header
+	SMagicHeader header;
+
+	stream >> header.num;
+
+	if (header.num != s_header.num) return false;
+
+	// Read the version
+	quint32 version;
+	stream >> version;
+
+	if (version > s_version) return false;
+
+	// define version for items and other serialized objects
+	stream.device()->setProperty("version", version);
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+	stream.setVersion(QDataStream::Qt_5_4);
+#else
+	stream.setVersion(QDataStream::Qt_5_6);
+#endif
+
+	beginResetModel();
+
+	// spots
+	stream >> m_spots;
+
+	endResetModel();
+
+	return true;
+}
+
+bool SpotModel::save(const QString& filename) const
+{
+	if (filename.isEmpty()) return false;
+
+	QFile file(filename);
+
+	if (!file.open(QIODevice::WriteOnly)) return false;
+
+	QDataStream stream(&file);
+
+	// Write a header with a "magic number" and a version
+	stream << s_header.num;
+	stream << s_version;
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+	stream.setVersion(QDataStream::Qt_5_4);
+#else
+	stream.setVersion(QDataStream::Qt_5_6);
+#endif
+
+	stream << m_spots;
+
+	return true;
+}
+
+QDataStream& operator << (QDataStream& stream, const Spot &spot)
+{
+	stream << spot.name << spot.originalPosition << spot.delay;
+
+	return stream;
+}
+
+QDataStream& operator >> (QDataStream& stream, Spot &spot)
+{
+	stream >> spot.name >> spot.originalPosition >> spot.delay;
+
+	// copy original position
+	spot.lastPosition = spot.originalPosition;
+
+	return stream;
 }

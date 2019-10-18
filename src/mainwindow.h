@@ -37,10 +37,15 @@ public:
 
 public slots:
 	// buttons
+
+	// actions
+	void onLoad();
+	void onSave();
+	void onStartOrStop();
+
+	// spots
 	void onAdd();
 	void onRemove();
-	void onStartOrStop();
-	void onKey();
 	void onPosition();
 
 	// file menu

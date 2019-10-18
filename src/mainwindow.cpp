@@ -62,7 +62,8 @@ MainWindow::MainWindow():QMainWindow(nullptr, Qt::WindowStaysOnTopHint)
 	connect(addPushButton, &QPushButton::clicked, this, &MainWindow::onAdd);
 	connect(removePushButton, &QPushButton::clicked, this, &MainWindow::onRemove);
 	connect(startPushButton, &QPushButton::clicked, this, &MainWindow::onStartOrStop);
-	connect(keyPushButton, &QPushButton::clicked, this, &MainWindow::onKey);
+	connect(loadPushButton, &QPushButton::clicked, this, &MainWindow::onLoad);
+	connect(savePushButton, &QPushButton::clicked, this, &MainWindow::onSave);
 	connect(positionPushButton, &QPushButton::clicked, this, &MainWindow::onPosition);
 
 	// Systray
@@ -245,8 +246,22 @@ void MainWindow::onTimer()
 	timer->start();
 }
 
-void MainWindow::onKey()
+void MainWindow::onLoad()
 {
+	QString filename = QFileDialog::getOpenFileName(this, tr("Load actions"), ConfigFile::getInstance()->getLocalDataDirectory(), "AutoClicker Files (*.acf)");
+
+	if (filename.isEmpty()) return;
+
+	m_model->load(filename);
+}
+
+void MainWindow::onSave()
+{
+	QString filename = QFileDialog::getSaveFileName(this, tr("Save actions"), ConfigFile::getInstance()->getLocalDataDirectory(), "AutoClicker Files (*.acf)");
+
+	if (filename.isEmpty()) return;
+
+	m_model->save(filename);
 }
 
 void MainWindow::onPosition()
