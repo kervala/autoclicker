@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>293</width>
-    <height>358</height>
+    <width>275</width>
+    <height>352</height>
    </rect>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -101,7 +101,7 @@
        <item row="2" column="0">
         <widget class="QLabel" name="delayLabel">
          <property name="text">
-          <string>Maximum delay between clicks</string>
+          <string>Delay in ms</string>
          </property>
          <property name="buddy">
           <cstring>delaySpinBox</cstring>
@@ -127,7 +127,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="positionLabel">
          <property name="text">
-          <string>Click base position</string>
+          <string>Click position</string>
          </property>
          <property name="buddy">
           <cstring>positionPushButton</cstring>
@@ -151,7 +151,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>293</width>
+     <width>275</width>
      <height>21</height>
     </rect>
    </property>
