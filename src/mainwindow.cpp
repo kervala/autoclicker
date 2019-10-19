@@ -284,12 +284,10 @@ void MainWindow::onTimer()
 	// left click up
 	mouseLeftClickUp(spot.lastPosition);
 
-	int delay = QRandomGenerator::global()->bounded(30, spot.delay);
+	int delay = QRandomGenerator::global()->bounded(30, spot.delay) - 10 /* Qt latency */;
 
-	qDebug() << "timeout" << row << "delay" << delay;
-
-	timer->setInterval(delay);
-	timer->start();
+	// restart timer
+	timer->start(delay);
 }
 
 void MainWindow::onLoad()
