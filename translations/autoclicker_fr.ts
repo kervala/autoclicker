@@ -4,197 +4,155 @@
 <context>
     <name>ConnectDialog</name>
     <message>
-        <location filename="../ui/connectdialog.ui" line="14"/>
         <source>Connect to server</source>
-        <translation>Se connecter au serveur</translation>
+        <translation type="vanished">Se connecter au serveur</translation>
     </message>
     <message>
-        <location filename="../ui/connectdialog.ui" line="23"/>
         <source>Login or email</source>
-        <translation>Identifiant ou email</translation>
+        <translation type="vanished">Identifiant ou email</translation>
     </message>
     <message>
-        <location filename="../ui/connectdialog.ui" line="36"/>
         <source>Password</source>
-        <translation>Mot de passe</translation>
+        <translation type="vanished">Mot de passe</translation>
     </message>
     <message>
-        <location filename="../ui/connectdialog.ui" line="53"/>
         <source>Remember password</source>
-        <translation>Se souvenir du mot de passe</translation>
+        <translation type="vanished">Se souvenir du mot de passe</translation>
     </message>
 </context>
 <context>
     <name>DAmn</name>
     <message>
-        <location filename="../src/damntablumps.cpp" line="103"/>
         <source>Unable to parse tablump: %1</source>
-        <translation>Impossible de parser le tablump : %1</translation>
+        <translation type="vanished">Impossible de parser le tablump : %1</translation>
     </message>
     <message>
-        <location filename="../src/damntablumps.cpp" line="113"/>
         <source>Tablump %1 not found in table</source>
-        <translation>Tablump %1 non trouvé dans la table</translation>
+        <translation type="vanished">Tablump %1 non trouvé dans la table</translation>
     </message>
     <message>
-        <location filename="../src/damntablumps.cpp" line="405"/>
         <source>Tablump %1 not recognized</source>
-        <translation>Tablump %1 non reconnu</translation>
+        <translation type="vanished">Tablump %1 non reconnu</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="52"/>
         <source>Unable to recognize message: %1</source>
-        <translation>Impossible de déterminer le message: %1</translation>
+        <translation type="vanished">Impossible de déterminer le message: %1</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="95"/>
         <source>Unable to parse parameter: %1</source>
-        <translation>Impossinle de parser le paramètre : %1</translation>
+        <translation type="vanished">Impossinle de parser le paramètre : %1</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="126"/>
         <source>Unable to parse property: %1</source>
-        <translation>Impossible de parser la propriété : %1</translation>
+        <translation type="vanished">Impossible de parser la propriété : %1</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="155"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="vanished">OK</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="156"/>
         <source>Bad namespace</source>
-        <translation>Mauvais espace de nom</translation>
+        <translation type="vanished">Mauvais espace de nom</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="157"/>
         <source>Bad parameter</source>
-        <translation>Mauvais paramètre</translation>
+        <translation type="vanished">Mauvais paramètre</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="158"/>
         <source>Bad command</source>
-        <translation>Mauvaise commande</translation>
+        <translation type="vanished">Mauvaise commande</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="159"/>
         <source>Unknown property</source>
-        <translation>Propriété inconnue</translation>
+        <translation type="vanished">Propriété inconnue</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="160"/>
         <source>Authentication failed</source>
-        <translation>Echec de l&apos;authentification</translation>
+        <translation type="vanished">Echec de l&apos;authentification</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="161"/>
         <source>Nothing to send</source>
-        <translation>Rien à envoyer</translation>
+        <translation type="vanished">Rien à envoyer</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="162"/>
         <source>Already joined</source>
-        <translation>Déjà rejoint</translation>
+        <translation type="vanished">Déjà rejoint</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="163"/>
         <source>No login</source>
-        <translation>Aucun identifiant</translation>
+        <translation type="vanished">Aucun identifiant</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="164"/>
         <source>Not privileged</source>
-        <translation>Non privilégié</translation>
+        <translation type="vanished">Non privilégié</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="165"/>
         <source>Too many connections</source>
-        <translation>Trop de connexions</translation>
+        <translation type="vanished">Trop de connexions</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="166"/>
         <source>Unknown</source>
-        <translation>Inconnu</translation>
+        <translation type="vanished">Inconnu</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="192"/>
         <source>Error &quot;%1&quot; not recognized</source>
-        <translation>Error &quot;%1&quot; non reconnue</translation>
+        <translation type="vanished">Error &quot;%1&quot; non reconnue</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="207"/>
         <source>Connection closed</source>
-        <translation>Connexion fermée</translation>
+        <translation type="vanished">Connexion fermée</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="413"/>
         <source>Room %1 doesn&apos;t exist</source>
-        <translation>Le salon %1 n&apos;existe pas</translation>
+        <translation type="vanished">Le salon %1 n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="433"/>
         <source>Privilege class %1 doesn&apos;t exist</source>
-        <translation>La classe de privilège %1 n&apos;existe pas</translation>
+        <translation type="vanished">La classe de privilège %1 n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="492"/>
         <source>Unable to recognize param: %1</source>
-        <translation>Impossible de déterminer le paramètre : %1</translation>
+        <translation type="vanished">Impossible de déterminer le paramètre : %1</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="495"/>
         <source>Unable to recognize command: %1</source>
-        <translation>Impossible de déterminer la commande : %1</translation>
+        <translation type="vanished">Impossible de déterminer la commande : %1</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="510"/>
-        <location filename="../src/damnparsers.cpp" line="539"/>
-        <location filename="../src/damnparsers.cpp" line="763"/>
-        <location filename="../src/damnparsers.cpp" line="781"/>
-        <location filename="../src/damnparsers.cpp" line="796"/>
         <source>Not implemented: %1</source>
-        <translation>Non implémenté : %1</translation>
+        <translation type="vanished">Non implémenté : %1</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="438"/>
-        <location filename="../src/damnparsers.cpp" line="611"/>
-        <location filename="../src/damnparsers.cpp" line="766"/>
         <source>Unable to recognize property: %1</source>
-        <translation>Impossible de déterminer la propriété : %1</translation>
+        <translation type="vanished">Impossible de déterminer la propriété : %1</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="208"/>
         <source>Timed out</source>
-        <translation>Expirée</translation>
+        <translation type="vanished">Expirée</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="574"/>
         <source>Unable to remove room %1</source>
-        <translation>Impossible de supprimer le salon %1</translation>
+        <translation type="vanished">Impossible de supprimer le salon %1</translation>
     </message>
     <message>
-        <location filename="../src/damnparsers.cpp" line="686"/>
         <source>Unable to parse privclass: %1</source>
-        <translation>Impossible de parser la privclass : %1</translation>
+        <translation type="vanished">Impossible de parser la privclass : %1</translation>
     </message>
     <message>
-        <location filename="../src/damn.cpp" line="126"/>
         <source>Remote host closed</source>
-        <translation>Fermeture de l&apos;hôte distant</translation>
+        <translation type="vanished">Fermeture de l&apos;hôte distant</translation>
     </message>
     <message>
         <source>Operation error</source>
         <translation type="vanished">Erreur d&apos;opération</translation>
     </message>
     <message>
-        <location filename="../src/damn.cpp" line="136"/>
         <source>Unable to connect</source>
-        <translation>Impossible de se connecter</translation>
+        <translation type="vanished">Impossible de se connecter</translation>
     </message>
     <message>
-        <location filename="../src/damn.cpp" line="140"/>
         <source>Socket error: %1</source>
-        <translation>Erreur de socket : %1</translation>
+        <translation type="vanished">Erreur de socket : %1</translation>
     </message>
     <message>
         <source>Disconnected</source>
@@ -209,77 +167,63 @@
         <translation type="vanished">Fin de la lecture du canal</translation>
     </message>
     <message>
-        <location filename="../src/damncommands.cpp" line="296"/>
         <source>Waiting messages:</source>
-        <translation>Messages en attente :</translation>
+        <translation type="vanished">Messages en attente :</translation>
     </message>
     <message>
-        <location filename="../src/damncommands.cpp" line="302"/>
         <source>- Room %1</source>
-        <translation>- Salon %1</translation>
+        <translation type="vanished">- Salon %1</translation>
     </message>
     <message>
-        <location filename="../src/damncommands.cpp" line="344"/>
         <source>I&apos;m currently away from keyboard, but I&apos;ll reply you when I&apos;m back</source>
-        <translation>Je suis AFK, mais je répondrais à mon retour</translation>
+        <translation type="vanished">Je suis AFK, mais je répondrais à mon retour</translation>
     </message>
 </context>
 <context>
     <name>HtmlFormatting</name>
     <message>
-        <location filename="../src/htmlformatting.cpp" line="42"/>
         <source>** %1 has been made a member of %2 by %3 *</source>
-        <translation>** %1 a été promu membre de %2 par %3 *</translation>
+        <translation type="vanished">** %1 a été promu membre de %2 par %3 *</translation>
     </message>
     <message>
-        <location filename="../src/htmlformatting.cpp" line="47"/>
         <source>** Privilege class %1 has been updated by %2 with: %3</source>
-        <translation>** La classe de privilège %1 a été mise à jour par %2 avec : %3</translation>
+        <translation type="vanished">** La classe de privilège %1 a été mise à jour par %2 avec : %3</translation>
     </message>
     <message>
-        <location filename="../src/htmlformatting.cpp" line="52"/>
         <source>** %1 has joined</source>
-        <translation>** %1 a rejoint le salon</translation>
+        <translation type="vanished">** %1 a rejoint le salon</translation>
     </message>
     <message>
-        <location filename="../src/htmlformatting.cpp" line="57"/>
         <source>** %1 has left</source>
-        <translation>** %1 a quitté le salon</translation>
+        <translation type="vanished">** %1 a quitté le salon</translation>
     </message>
     <message>
-        <location filename="../src/htmlformatting.cpp" line="62"/>
         <source>** %1 has been kicked by %2</source>
-        <translation>** %1 a été éjecté par %2</translation>
+        <translation type="vanished">** %1 a été éjecté par %2</translation>
     </message>
     <message>
-        <location filename="../src/htmlformatting.cpp" line="67"/>
         <source>*** You have joined %1 *</source>
-        <translation>*** Vous venez de rejoindre le salon %1 *</translation>
+        <translation type="vanished">*** Vous venez de rejoindre le salon %1 *</translation>
     </message>
     <message>
-        <location filename="../src/htmlformatting.cpp" line="72"/>
         <source>*** You have left %1 *</source>
-        <translation>*** Vous venez de quitter le salon %1 *</translation>
+        <translation type="vanished">*** Vous venez de quitter le salon %1 *</translation>
     </message>
     <message>
-        <location filename="../src/htmlformatting.cpp" line="151"/>
         <source>** Topic removed by %1 *</source>
-        <translation>** Sujet supprimé par %1 *</translation>
+        <translation type="vanished">** Sujet supprimé par %1 *</translation>
     </message>
     <message>
-        <location filename="../src/htmlformatting.cpp" line="155"/>
         <source>** Topic changed by %1: %2 *</source>
-        <translation>** Sujet modifié par %1 : %2 *</translation>
+        <translation type="vanished">** Sujet modifié par %1 : %2 *</translation>
     </message>
     <message>
-        <location filename="../src/htmlformatting.cpp" line="167"/>
         <source>** Title removed by %1 *</source>
-        <translation>** Titre supprimé par %1 *</translation>
+        <translation type="vanished">** Titre supprimé par %1 *</translation>
     </message>
     <message>
-        <location filename="../src/htmlformatting.cpp" line="171"/>
         <source>** Title changed by %1: %2 *</source>
-        <translation>** Titre modifié par %1 : %2 *</translation>
+        <translation type="vanished">** Titre modifié par %1 : %2 *</translation>
     </message>
     <message>
         <source>Topic: %1</source>
@@ -293,168 +237,222 @@
 <context>
     <name>InputEdit</name>
     <message>
-        <location filename="../src/inputedit.cpp" line="166"/>
         <source>History</source>
-        <translation>Historique</translation>
+        <translation type="vanished">Historique</translation>
     </message>
     <message>
-        <location filename="../src/inputedit.cpp" line="188"/>
         <source>Clear history</source>
-        <translation>Effacer l&apos;historique</translation>
+        <translation type="vanished">Effacer l&apos;historique</translation>
     </message>
 </context>
 <context>
     <name>JoinRoomDialog</name>
     <message>
-        <location filename="../ui/joinroomdialog.ui" line="14"/>
         <source>Join room</source>
-        <translation>Rejoindre le salon</translation>
+        <translation type="vanished">Rejoindre le salon</translation>
     </message>
     <message>
-        <location filename="../ui/joinroomdialog.ui" line="20"/>
         <source>Please select or enter room to join</source>
-        <translation>Veuillez sélectionner ou entrer le salon à rejoindre</translation>
+        <translation type="vanished">Veuillez sélectionner ou entrer le salon à rejoindre</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../ui/mainwindow.ui" line="60"/>
+        <location filename="../ui/mainwindow.ui" line="201"/>
         <source>&amp;Help</source>
         <translation>&amp;Aide</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="50"/>
         <source>&amp;Server</source>
-        <translation>&amp;Serveur</translation>
+        <translation type="vanished">&amp;Serveur</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="70"/>
         <source>&amp;Room</source>
-        <translation>&amp;Salon</translation>
+        <translation type="vanished">&amp;Salon</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="78"/>
         <source>S&amp;tash</source>
-        <translation>S&amp;tash</translation>
+        <translation type="vanished">S&amp;tash</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="85"/>
         <source>Notes</source>
-        <translation>Notes</translation>
+        <translation type="vanished">Notes</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="116"/>
+        <location filename="../ui/mainwindow.ui" line="18"/>
+        <source>Simple mode</source>
+        <translation>Mode simplifié</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="24"/>
+        <source>Start key</source>
+        <translation>Touche de lancement</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="34"/>
+        <location filename="../ui/mainwindow.ui" line="137"/>
+        <source>Delay in ms</source>
+        <translation>Délai en ms</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="60"/>
+        <source>Spots</source>
+        <translation>Endroits</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="68"/>
+        <source>Load</source>
+        <translation>Charger</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="75"/>
+        <source>Save</source>
+        <translation>Enregistrer</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="82"/>
+        <source>Add</source>
+        <translation>Ajouter</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="89"/>
+        <source>Remove</source>
+        <translation>Supprimer</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="108"/>
+        <location filename="../src/mainwindow.cpp" line="170"/>
+        <source>Start</source>
+        <translation>Commencer</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="118"/>
+        <source>Spot</source>
+        <translation>Endroit</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="124"/>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="163"/>
+        <source>Click position</source>
+        <translation>Position clic</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="173"/>
+        <source>(0, 0)</source>
+        <translation>(0, 0)</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="193"/>
+        <source>&amp;File</source>
+        <translation>&amp;Fichier</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="230"/>
         <source>&amp;About...</source>
         <translation>&amp;A propos...</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="124"/>
+        <location filename="../ui/mainwindow.ui" line="238"/>
         <source>About Qt</source>
         <translation>A propos de Qt</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="143"/>
+        <location filename="../ui/mainwindow.ui" line="246"/>
+        <source>Check updates...</source>
+        <translation>Vérifier mises-à-jour...</translation>
+    </message>
+    <message>
         <source>&amp;Connect</source>
-        <translation>&amp;Connecter</translation>
+        <translation type="vanished">&amp;Connecter</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="148"/>
         <source>&amp;Disconnect</source>
-        <translation>&amp;Déconnecter</translation>
+        <translation type="vanished">&amp;Déconnecter</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="153"/>
         <source>&amp;Join</source>
-        <translation>&amp;Rejoindre</translation>
+        <translation type="vanished">&amp;Rejoindre</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="158"/>
         <source>&amp;Part</source>
-        <translation>&amp;Quitter</translation>
+        <translation type="vanished">&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="166"/>
         <source>&amp;Known rooms</source>
-        <translation>Salons &amp;connus</translation>
+        <translation type="vanished">Salons &amp;connus</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="174"/>
         <source>Upload &amp;files...</source>
-        <translation>Téléverser des &amp;fichiers...</translation>
+        <translation type="vanished">Téléverser des &amp;fichiers...</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="179"/>
         <source>Upload &amp;screenshot...</source>
-        <translation>Téléverser une &amp;capture d&apos;écran...</translation>
+        <translation type="vanished">Téléverser une &amp;capture d&apos;écran...</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="184"/>
         <source>Check for updates</source>
-        <translation>Vérifier les mises-à-jour</translation>
+        <translation type="vanished">Vérifier les mises-à-jour</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="197"/>
         <source>&amp;Send note...</source>
-        <translation>&amp;Envoyer une note...</translation>
+        <translation type="vanished">&amp;Envoyer une note...</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="202"/>
         <source>Check URL changes</source>
-        <translation>Vérifier les changements de l&apos;URL</translation>
+        <translation type="vanished">Vérifier les changements de l&apos;URL</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="207"/>
         <source>Stop check URL changes</source>
-        <translation>Arrêter de vérifier les changements de l&apos;URL</translation>
+        <translation type="vanished">Arrêter de vérifier les changements de l&apos;URL</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="192"/>
         <source>Display notes</source>
-        <translation>Afficher les notes</translation>
+        <translation type="vanished">Afficher les notes</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="169"/>
         <source>Known rooms</source>
-        <translation>Salons connus</translation>
+        <translation type="vanished">Salons connus</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="135"/>
         <source>&amp;Logs</source>
-        <translation>&amp;Journal</translation>
+        <translation type="vanished">&amp;Journal</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="100"/>
+        <location filename="../ui/mainwindow.ui" line="214"/>
         <source>&amp;Settings</source>
         <translation>&amp;Paramètres</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="108"/>
+        <location filename="../ui/mainwindow.ui" line="222"/>
         <source>E&amp;xit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="167"/>
+        <location filename="../src/mainwindow.cpp" line="361"/>
         <source>About %1</source>
         <translation>A propos de %1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="169"/>
+        <location filename="../src/mainwindow.cpp" line="363"/>
         <source>deviantART Messaging Network (dAmn) chat client</source>
         <translation>Client de chat pour deviantART Messaging Network (dAmn)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="171"/>
+        <location filename="../src/mainwindow.cpp" line="365"/>
         <source>Author: %1</source>
         <translation>Auteur : %1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="172"/>
         <source>Homepage: %1</source>
-        <translation>Site officiel : %1</translation>
+        <translation type="vanished">Site officiel : %1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="173"/>
+        <location filename="../src/mainwindow.cpp" line="366"/>
         <source>Support: %1</source>
         <translation>Support technique : %1</translation>
     </message>
@@ -463,27 +461,40 @@
         <translation type="vanished">Téléverser des fichiers</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="294"/>
         <source>Upload files</source>
-        <translation>Téléverser des fichiers</translation>
+        <translation type="vanished">Téléverser des fichiers</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="381"/>
         <source>URL changes check</source>
-        <translation>Vérification des changements de l&apos;URL</translation>
+        <translation type="vanished">Vérification des changements de l&apos;URL</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="381"/>
         <source>Enter URL to check:</source>
-        <translation>Entrez l&apos;URL à vérifier :</translation>
+        <translation type="vanished">Entrez l&apos;URL à vérifier :</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="466"/>
+        <location filename="../src/mainwindow.cpp" line="168"/>
+        <location filename="../src/mainwindow.cpp" line="196"/>
+        <source>Stop</source>
+        <translation>Arrêter</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="257"/>
+        <source>Load actions</source>
+        <translation>Charger actions</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="266"/>
+        <source>Save actions</source>
+        <translation>Enregistrer actions</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="454"/>
         <source>New version</source>
         <translation>Mise-à-jour disponible</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="467"/>
+        <location filename="../src/mainwindow.cpp" line="455"/>
         <source>Version %1 is available since %2.
 
 Do you want to download it now?</source>
@@ -492,186 +503,154 @@ Do you want to download it now?</source>
 Souhaitez-vous la télécharger maintenant ?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="488"/>
+        <location filename="../src/mainwindow.cpp" line="476"/>
         <source>No update found</source>
         <translation>Aucune mise-à-jour trouvée</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="489"/>
+        <location filename="../src/mainwindow.cpp" line="477"/>
         <source>You already have the last %1 version (%2).</source>
         <translation>Vous avez déjà la dernière version de %1 (%2).</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="530"/>
         <source>Url %1 changed, click here to open it</source>
-        <translation>L&apos;URL %1 a changé, cliquez ici pour l&apos;ouvrir</translation>
+        <translation type="vanished">L&apos;URL %1 a changé, cliquez ici pour l&apos;ouvrir</translation>
     </message>
 </context>
 <context>
     <name>NoteFrame</name>
     <message>
-        <location filename="../ui/noteframe.ui" line="19"/>
         <source>To</source>
-        <translation>A</translation>
+        <translation type="vanished">A</translation>
     </message>
     <message>
-        <location filename="../ui/noteframe.ui" line="32"/>
         <source>Subject</source>
-        <translation>Sujet</translation>
+        <translation type="vanished">Sujet</translation>
     </message>
     <message>
-        <location filename="../ui/noteframe.ui" line="50"/>
         <source>Include signature</source>
-        <translation>Inclure la signature</translation>
+        <translation type="vanished">Inclure la signature</translation>
     </message>
     <message>
-        <location filename="../ui/noteframe.ui" line="59"/>
         <source>Save as draft</source>
-        <translation>Enregistrer comme brouillon</translation>
+        <translation type="vanished">Enregistrer comme brouillon</translation>
     </message>
     <message>
-        <location filename="../ui/noteframe.ui" line="79"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="vanished">Annuler</translation>
     </message>
     <message>
-        <location filename="../ui/noteframe.ui" line="86"/>
         <source>Preview</source>
-        <translation>Aperçu</translation>
+        <translation type="vanished">Aperçu</translation>
     </message>
     <message>
-        <location filename="../ui/noteframe.ui" line="93"/>
         <source>Send</source>
-        <translation>Envoyer</translation>
+        <translation type="vanished">Envoyer</translation>
     </message>
 </context>
 <context>
     <name>NotesFrame</name>
     <message>
-        <location filename="../ui/notesframe.ui" line="14"/>
         <source>Notes</source>
-        <translation>Notes</translation>
+        <translation type="vanished">Notes</translation>
     </message>
     <message>
-        <location filename="../ui/notesframe.ui" line="40"/>
         <source>Search</source>
-        <translation>Rechercher</translation>
+        <translation type="vanished">Rechercher</translation>
     </message>
 </context>
 <context>
     <name>NotesModel</name>
     <message>
-        <location filename="../src/notesmodel.cpp" line="116"/>
         <source>Subject</source>
-        <translation>Sujet</translation>
+        <translation type="vanished">Sujet</translation>
     </message>
     <message>
-        <location filename="../src/notesmodel.cpp" line="119"/>
         <source>Sender</source>
-        <translation>Expéditeur</translation>
+        <translation type="vanished">Expéditeur</translation>
     </message>
     <message>
-        <location filename="../src/notesmodel.cpp" line="122"/>
         <source>Date</source>
-        <translation>Date</translation>
+        <translation type="vanished">Date</translation>
     </message>
 </context>
 <context>
     <name>OAuth2</name>
     <message>
-        <location filename="../src/oauth2json.cpp" line="128"/>
         <source>Unable to read file %1</source>
-        <translation>Impossible d&apos;accéder au fichier %1</translation>
+        <translation type="vanished">Impossible d&apos;accéder au fichier %1</translation>
     </message>
     <message>
-        <location filename="../src/oauth2json.cpp" line="229"/>
         <source>No login received</source>
-        <translation>Aucun identifiant reçu</translation>
+        <translation type="vanished">Aucun identifiant reçu</translation>
     </message>
     <message>
-        <location filename="../src/oauth2json.cpp" line="269"/>
         <source>No dAmn token received</source>
-        <translation>Aucun jeton dAmn reçu</translation>
+        <translation type="vanished">Aucun jeton dAmn reçu</translation>
     </message>
     <message>
-        <location filename="../src/oauth2json.cpp" line="358"/>
         <source>Invalid ID for uploaded item</source>
-        <translation>ID invalide pour l&apos;objet téléversé</translation>
+        <translation type="vanished">ID invalide pour l&apos;objet téléversé</translation>
     </message>
     <message>
-        <location filename="../src/oauth2json.cpp" line="363"/>
         <source>File not found in files to upload to Stash</source>
-        <translation>Fichier non trouvé parmi les fichiers téléversés dans le Stash</translation>
+        <translation type="vanished">Fichier non trouvé parmi les fichiers téléversés dans le Stash</translation>
     </message>
     <message>
-        <location filename="../src/oauth2json.cpp" line="381"/>
         <source>API error: %1</source>
-        <translation>Erreur API : %1</translation>
+        <translation type="vanished">Erreur API : %1</translation>
     </message>
     <message>
         <source>Network error: %1 (%2) (HTTP %3)</source>
         <translation type="vanished">Erreur réseau : %1 (%2) (HTTP %3)</translation>
     </message>
     <message>
-        <location filename="../src/oauth2.cpp" line="462"/>
         <source>Error: both content (%1) and redirection (%2) are defined</source>
-        <translation>Erreur : le contenu (%1) et la redirection (%2) sont tous deux définis</translation>
+        <translation type="vanished">Erreur : le contenu (%1) et la redirection (%2) sont tous deux définis</translation>
     </message>
     <message>
-        <location filename="../src/oauth2.cpp" line="653"/>
         <source>Login &apos;%1&apos; or password is incorrect</source>
-        <translation>Identifiant &apos;%1&apos; ou mot de passe incorrect</translation>
+        <translation type="vanished">Identifiant &apos;%1&apos; ou mot de passe incorrect</translation>
     </message>
     <message>
-        <location filename="../src/oauth2.cpp" line="658"/>
         <source>Unknown error for login &apos;%1&apos;</source>
-        <translation>Erreur inconnue pour l&apos;utilisateur &apos;%1&apos;</translation>
+        <translation type="vanished">Erreur inconnue pour l&apos;utilisateur &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../src/oauth2.cpp" line="775"/>
         <source>Unknown error while redirected to %1</source>
-        <translation>Error inconnue lors de la redirection vers %1</translation>
+        <translation type="vanished">Error inconnue lors de la redirection vers %1</translation>
     </message>
     <message>
-        <location filename="../src/oauth2.cpp" line="802"/>
         <source>Error when sending note: %1</source>
-        <translation>Erreur lors de l&apos;envoi de la note : %1</translation>
+        <translation type="vanished">Erreur lors de l&apos;envoi de la note : %1</translation>
     </message>
     <message>
-        <location filename="../src/oauth2.cpp" line="819"/>
         <source>Something goes wrong... URL: %1 Redirection: %2</source>
-        <translation>Quelque chose s&apos;est mal passé... URL: %1 Redirection: %2</translation>
+        <translation type="vanished">Quelque chose s&apos;est mal passé... URL: %1 Redirection: %2</translation>
     </message>
     <message>
-        <location filename="../src/oauth2.cpp" line="674"/>
-        <location filename="../src/oauth2.cpp" line="701"/>
         <source>Unable to find validate_key</source>
-        <translation>Impossible de trouver validate_key</translation>
+        <translation type="vanished">Impossible de trouver validate_key</translation>
     </message>
     <message>
-        <location filename="../src/oauth2.cpp" line="437"/>
         <source>Network error: %1 (HTTP %2)</source>
-        <translation>Erreur réseau : %1 (HTTP %2)</translation>
+        <translation type="vanished">Erreur réseau : %1 (HTTP %2)</translation>
     </message>
     <message>
-        <location filename="../src/oauth2.cpp" line="696"/>
         <source>Unable to find validate_token</source>
-        <translation>Impossible de trouver validate_token</translation>
+        <translation type="vanished">Impossible de trouver validate_token</translation>
     </message>
     <message>
-        <location filename="../src/oauth2.cpp" line="721"/>
         <source>Something goes wrong... URL: %1</source>
-        <translation>Quelque chose s&apos;est mal passé... URL : %1</translation>
+        <translation type="vanished">Quelque chose s&apos;est mal passé... URL : %1</translation>
     </message>
     <message>
-        <location filename="../src/oauth2.cpp" line="601"/>
         <source>Unable to find validate token or key</source>
-        <translation>Impossible de valider le jeton ou la clé</translation>
+        <translation type="vanished">Impossible de valider le jeton ou la clé</translation>
     </message>
     <message>
-        <location filename="../src/oauth2.cpp" line="488"/>
         <source>Proxy authentication required</source>
-        <translation>Authentification requise pour le proxy</translation>
+        <translation type="vanished">Authentification requise pour le proxy</translation>
     </message>
     <message>
         <source>NOEXEC_HALT: %1 (%2 - %3: %4)</source>
@@ -682,35 +661,30 @@ Souhaitez-vous la télécharger maintenant ?</translation>
         <translation type="vanished">%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../src/oauth2difi.cpp" line="404"/>
-        <location filename="../src/oauth2difi.cpp" line="416"/>
         <source>%1: %2 (%3)</source>
-        <translation>%1 : %2 (%3)</translation>
+        <translation type="vanished">%1 : %2 (%3)</translation>
     </message>
     <message>
-        <location filename="../src/oauth2difi.cpp" line="430"/>
         <source>DiFi error: %1</source>
-        <translation>Erreur DiFi : %1</translation>
+        <translation type="vanished">Erreur DiFi : %1</translation>
     </message>
 </context>
 <context>
     <name>OEmbed</name>
     <message>
-        <location filename="../src/oembed.cpp" line="198"/>
         <source>Invalid oEmbed version: %1</source>
-        <translation>Version invalide d&apos;oEmbed: %1</translation>
+        <translation type="vanished">Version invalide d&apos;oEmbed: %1</translation>
     </message>
     <message>
-        <location filename="../src/oembed.cpp" line="252"/>
         <source>Unsupported oEmbed type: %1</source>
-        <translation>Type d&apos;oEmbed invalide : %1</translation>
+        <translation type="vanished">Type d&apos;oEmbed invalide : %1</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/utils_x.cpp" line="84"/>
-        <location filename="../src/utils_win.cpp" line="325"/>
+        <location filename="../src/utils_x.cpp" line="88"/>
+        <location filename="../src/utils_win.cpp" line="479"/>
         <source>Whole screen</source>
         <translation>Ecran complet</translation>
     </message>
@@ -718,250 +692,207 @@ Souhaitez-vous la télécharger maintenant ?</translation>
 <context>
     <name>RoomFrame</name>
     <message>
-        <location filename="../src/roomframe.cpp" line="39"/>
         <source>Homepage</source>
-        <translation>Page d&apos;accueil</translation>
+        <translation type="vanished">Page d&apos;accueil</translation>
     </message>
     <message>
-        <location filename="../src/roomframe.cpp" line="42"/>
         <source>Promote</source>
-        <translation>Promouvoir</translation>
+        <translation type="vanished">Promouvoir</translation>
     </message>
     <message>
-        <location filename="../src/roomframe.cpp" line="45"/>
         <source>Demote</source>
-        <translation>Rétrograder</translation>
+        <translation type="vanished">Rétrograder</translation>
     </message>
     <message>
-        <location filename="../src/roomframe.cpp" line="48"/>
         <source>Ban</source>
-        <translation>Bannir</translation>
+        <translation type="vanished">Bannir</translation>
     </message>
     <message>
-        <location filename="../src/roomframe.cpp" line="51"/>
         <source>Unban</source>
-        <translation>Débannir</translation>
+        <translation type="vanished">Débannir</translation>
     </message>
     <message>
-        <location filename="../src/roomframe.cpp" line="54"/>
         <source>Kick</source>
-        <translation>Ejecter</translation>
+        <translation type="vanished">Ejecter</translation>
     </message>
 </context>
 <context>
     <name>RoomsDialog</name>
     <message>
-        <location filename="../ui/roomsdialog.ui" line="14"/>
         <source>Rooms</source>
-        <translation>Salons</translation>
+        <translation type="vanished">Salons</translation>
     </message>
     <message>
-        <location filename="../ui/roomsdialog.ui" line="20"/>
         <source>Check rooms you want to join automatically at startup</source>
-        <translation>Cocher les salons que vous souhaitez rejoindre automatiquement au démarrage</translation>
+        <translation type="vanished">Cocher les salons que vous souhaitez rejoindre automatiquement au démarrage</translation>
     </message>
 </context>
 <context>
     <name>RoomsTabWidget</name>
     <message>
-        <location filename="../src/roomstabwidget.cpp" line="99"/>
         <source>Server</source>
-        <translation>Serveur</translation>
+        <translation type="vanished">Serveur</translation>
     </message>
     <message>
-        <location filename="../src/roomstabwidget.cpp" line="120"/>
         <source>Notes</source>
-        <translation>Notes</translation>
+        <translation type="vanished">Notes</translation>
     </message>
     <message>
-        <location filename="../src/roomstabwidget.cpp" line="160"/>
         <source>Note</source>
-        <translation>Note</translation>
+        <translation type="vanished">Note</translation>
     </message>
     <message>
-        <location filename="../src/roomstabwidget.cpp" line="259"/>
         <source>Connected to server</source>
-        <translation>Connecté au serveur</translation>
+        <translation type="vanished">Connecté au serveur</translation>
     </message>
     <message>
-        <location filename="../src/roomstabwidget.cpp" line="278"/>
         <source>Disconnected from server</source>
-        <translation>Déconnecté du serveur</translation>
+        <translation type="vanished">Déconnecté du serveur</translation>
     </message>
     <message>
-        <location filename="../src/roomstabwidget.cpp" line="287"/>
         <source>Trying to reconnect...</source>
-        <translation>Reconnexion en cours...</translation>
+        <translation type="vanished">Reconnexion en cours...</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/roomstabwidget.cpp" line="352"/>
         <source>You received %n note(s), click &lt;a href=&quot;https://www.deviantart.com/messages/notes/&quot;&gt;here&lt;/a&gt; to read them.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Vous venez de recevoir %n note, cliquez &lt;a href=&quot;https://www.deviantart.com/messages/notes/&quot;&gt;ici&lt;/a&gt; pour la lire.</numerusform>
             <numerusform>Vous venez de recevoir %n notes, cliquez &lt;a href=&quot;https://www.deviantart.com/messages/notes/&quot;&gt;ici&lt;/a&gt; pour les lire.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/roomstabwidget.cpp" line="357"/>
         <source>You received %n note(s), click to read them</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Vous venez de recevoir %n note, cliquez pour la lire</numerusform>
             <numerusform>Vous venez de recevoir %n notes, cliquez pour les lire</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../src/roomstabwidget.cpp" line="517"/>
         <source>Room %1 doesn&apos;t exist</source>
-        <translation>La salon %1 n&apos;existe pas</translation>
+        <translation type="vanished">La salon %1 n&apos;existe pas</translation>
     </message>
     <message>
-        <location filename="../src/roomstabwidget.cpp" line="651"/>
         <source>AFK mode %1 with message: %2</source>
-        <translation>Mode AFK %1 avec le message : %2</translation>
+        <translation type="vanished">Mode AFK %1 avec le message : %2</translation>
     </message>
     <message>
-        <location filename="../src/roomstabwidget.cpp" line="651"/>
         <source>enabled</source>
-        <translation>activé</translation>
+        <translation type="vanished">activé</translation>
     </message>
     <message>
-        <location filename="../src/roomstabwidget.cpp" line="651"/>
         <source>disabled</source>
-        <translation>désactivé</translation>
+        <translation type="vanished">désactivé</translation>
     </message>
     <message>
-        <location filename="../src/roomstabwidget.cpp" line="878"/>
         <source>Unable to find sound file: %1</source>
-        <translation>Impossible de trouver le fichier sonore : %1</translation>
+        <translation type="vanished">Impossible de trouver le fichier sonore : %1</translation>
     </message>
 </context>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="18"/>
         <source>Chat</source>
-        <translation>Discussion</translation>
+        <translation type="vanished">Discussion</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="27"/>
         <source>Text font:</source>
-        <translation>Police de caractères :</translation>
+        <translation type="vanished">Police de caractères :</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="49"/>
         <source>Highlight color:</source>
-        <translation>Couleur de surbrillance :</translation>
+        <translation type="vanished">Couleur de surbrillance :</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="56"/>
-        <location filename="../ui/settingsdialog.ui" line="70"/>
         <source>Click to change color</source>
-        <translation>Cliquez ici pour changer la couleur</translation>
+        <translation type="vanished">Cliquez ici pour changer la couleur</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="63"/>
         <source>Error color:</source>
-        <translation>Couleur des erreurs :</translation>
+        <translation type="vanished">Couleur des erreurs :</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="77"/>
         <source>Display timestamp</source>
-        <translation>Afficher l&apos;heure</translation>
+        <translation type="vanished">Afficher l&apos;heure</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="87"/>
-        <location filename="../ui/settingsdialog.ui" line="174"/>
         <source>Style:</source>
-        <translation>Style :</translation>
+        <translation type="vanished">Style :</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="94"/>
         <source>Use system tray icon</source>
-        <translation>Utiliser l&apos;icône de la barre de notification</translation>
+        <translation type="vanished">Utiliser l&apos;icône de la barre de notification</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="101"/>
         <source>Hide window when minimized</source>
-        <translation>Masquer la fenêtre quand minimisée</translation>
+        <translation type="vanished">Masquer la fenêtre quand minimisée</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="111"/>
         <source>Enable logs</source>
-        <translation>Activer les journaux</translation>
+        <translation type="vanished">Activer les journaux</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="122"/>
         <source>Files formats:</source>
-        <translation>Formats de fichiers :</translation>
+        <translation type="vanished">Formats de fichiers :</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="129"/>
         <source>Text</source>
-        <translation>Texte</translation>
+        <translation type="vanished">Texte</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="136"/>
         <source>HTML</source>
-        <translation>HTML</translation>
+        <translation type="vanished">HTML</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="147"/>
         <source>Output directory:</source>
-        <translation>Répertoire de sortie :</translation>
+        <translation type="vanished">Répertoire de sortie :</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="163"/>
-        <location filename="../ui/settingsdialog.ui" line="255"/>
-        <location filename="../ui/settingsdialog.ui" line="285"/>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="vanished">...</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="196"/>
         <source>Enable animations</source>
-        <translation>Activer les animations</translation>
+        <translation type="vanished">Activer les animations</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="205"/>
         <source>Refresh delay (in ms)</source>
-        <translation>Délai de rafraichissement (en ms)</translation>
+        <translation type="vanished">Délai de rafraichissement (en ms)</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="231"/>
         <source>Enable sounds</source>
-        <translation>Activer les sons</translation>
+        <translation type="vanished">Activer les sons</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="240"/>
         <source>Someone mentioned your name:</source>
-        <translation>Quelqu&apos;un mentionne votre nom :</translation>
+        <translation type="vanished">Quelqu&apos;un mentionne votre nom :</translation>
     </message>
     <message>
-        <location filename="../ui/settingsdialog.ui" line="264"/>
         <source>You received a note:</source>
-        <translation>Vous avez reçu une note :</translation>
+        <translation type="vanished">Vous avez reçu une note :</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="43"/>
         <source>&lt;default&gt;</source>
-        <translation>&lt;défaut&gt;</translation>
+        <translation type="vanished">&lt;défaut&gt;</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="160"/>
         <source>Choose logs directory</source>
-        <translation>Choisir le répertoire des journaux</translation>
+        <translation type="vanished">Choisir le répertoire des journaux</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="170"/>
-        <location filename="../src/settingsdialog.cpp" line="180"/>
         <source>Choose WAV file</source>
-        <translation>Choisir le fichier WAV</translation>
+        <translation type="vanished">Choisir le fichier WAV</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="170"/>
-        <location filename="../src/settingsdialog.cpp" line="180"/>
         <source>Audio files (*.wav)</source>
-        <translation>Fichiers audio (*.wav)</translation>
+        <translation type="vanished">Fichiers audio (*.wav)</translation>
+    </message>
+</context>
+<context>
+    <name>SpotModel</name>
+    <message>
+        <location filename="../src/spotmodel.cpp" line="111"/>
+        <source>Spot #%1</source>
+        <translation>Endroit #1</translation>
     </message>
 </context>
 <context>
@@ -980,6 +911,14 @@ Souhaitez-vous la télécharger maintenant ?</translation>
         <location filename="../src/systrayicon.cpp" line="69"/>
         <source>Quit</source>
         <translation>Quitter</translation>
+    </message>
+</context>
+<context>
+    <name>TestDialog</name>
+    <message>
+        <location filename="../ui/testdialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation>Dialogue</translation>
     </message>
 </context>
 <context>
@@ -1020,12 +959,12 @@ Souhaitez-vous la télécharger maintenant ?</translation>
         <translation>Une erreur est survenue pendant le téléchargement, veuillez cliquer sur &quot;Réessayer&quot; pour relancer le téléchargement.</translation>
     </message>
     <message>
-        <location filename="../src/updatedialog.cpp" line="134"/>
+        <location filename="../src/updatedialog.cpp" line="144"/>
         <source>Your download is complete, click on &quot;Install&quot; to install the new version.</source>
         <translation>Votre téléchargement est terminé, cliquez sur &quot;Installer&quot; pour installer la mise-à-jour.</translation>
     </message>
     <message>
-        <location filename="../src/updatedialog.cpp" line="139"/>
+        <location filename="../src/updatedialog.cpp" line="149"/>
         <source>Your download is complete, but we&apos;re unable to create file %1.</source>
         <translation>Votre téléchargement est terminé, mais impossible de créer le fichier %1.</translation>
     </message>
