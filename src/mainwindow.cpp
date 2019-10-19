@@ -25,6 +25,7 @@
 #include "updater.h"
 #include "spotmodel.h"
 #include "utils.h"
+#include "testdialog.h"
 
 #ifdef Q_OS_WIN32
 #include <QtWinExtras/QWinTaskbarProgress>
@@ -310,10 +311,18 @@ void MainWindow::onPosition()
 {
 	QModelIndex index = spotsListView->selectionModel()->currentIndex();
 
-	positionPushButton->setEnabled(false);
-	positionPushButton->setText("???");
+void MainWindow::onTestDialog()
+{
+	static TestDialog* s_dialog = nullptr;
 
-	QFuture<void> future = QtConcurrent::run(this, &MainWindow::getMousePosition);
+	if (!s_dialog)
+	{
+		s_dialog = new TestDialog(this);
+		s_dialog->setModal(false);
+	}
+
+	s_dialog->reset();
+	s_dialog->show();
 }
 
 void MainWindow::getMousePosition()

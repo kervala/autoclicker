@@ -50,6 +50,7 @@ public slots:
 	void onPosition();
 
 	// file menu
+	void onTestDialog();
 
 	// help menu
 	void onCheckUpdates();

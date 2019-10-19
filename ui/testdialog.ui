@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TestDialog</class>
+ <widget class="QDialog" name="TestDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>455</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="positionLabel">
+     <property name="text">
+      <string notr="true">Position</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="clicksLabel">
+     <property name="text">
+      <string>Clicks</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="releaseLabel">
+     <property name="text">
+      <string>Release</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="averageLabel">
+     <property name="text">
+      <string>Average</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>203</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
