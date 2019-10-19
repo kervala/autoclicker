@@ -20,6 +20,7 @@
 #include "common.h"
 #include "mainwindow.h"
 #include "moc_mainwindow.cpp"
+#include "ui_mainwindow.h"
 #include "configfile.h"
 #include "updatedialog.h"
 #include "updater.h"
@@ -38,20 +39,21 @@
 
 MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_stopExternalListener(0), m_startShortcut(nullptr)
 {
-	setupUi(this);
+	m_ui = new Ui::MainWindow();
+	m_ui->setupUi(this);
 
 #ifdef Q_OS_WIN32
 	m_button = new QWinTaskbarButton(this);
 #endif
 
-	// Server menu
-	//connect(actionSettings, &QAction::triggered, this, &MainWindow::onSettings);
-	connect(actionExit, &QAction::triggered, this, &MainWindow::close);
+	// File menu
+	connect(m_ui->actionTestDialog, &QAction::triggered, this, &MainWindow::onTestDialog);
+	connect(m_ui->actionExit, &QAction::triggered, this, &MainWindow::close);
 
 	// Help menu
-	connect(actionCheckUpdates, &QAction::triggered, this, &MainWindow::onCheckUpdates);
-	connect(actionAbout, &QAction::triggered, this, &MainWindow::onAbout);
-	connect(actionAboutQt, &QAction::triggered, this, &MainWindow::onAboutQt);
+	connect(m_ui->actionCheckUpdates, &QAction::triggered, this, &MainWindow::onCheckUpdates);
+	connect(m_ui->actionAbout, &QAction::triggered, this, &MainWindow::onAbout);
+	connect(m_ui->actionAboutQt, &QAction::triggered, this, &MainWindow::onAboutQt);
 
 	QSize size = ConfigFile::getInstance()->getWindowSize();
 	if (!size.isNull()) resize(size);
@@ -60,12 +62,12 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	if (!pos.isNull()) move(pos);
 
 	// Buttons
-	connect(addPushButton, &QPushButton::clicked, this, &MainWindow::onAdd);
-	connect(removePushButton, &QPushButton::clicked, this, &MainWindow::onRemove);
-	connect(startPushButton, &QPushButton::clicked, this, &MainWindow::onStartOrStop);
-	connect(loadPushButton, &QPushButton::clicked, this, &MainWindow::onLoad);
-	connect(savePushButton, &QPushButton::clicked, this, &MainWindow::onSave);
-	connect(positionPushButton, &QPushButton::clicked, this, &MainWindow::onPosition);
+	connect(m_ui->addPushButton, &QPushButton::clicked, this, &MainWindow::onAdd);
+	connect(m_ui->removePushButton, &QPushButton::clicked, this, &MainWindow::onRemove);
+	connect(m_ui->startPushButton, &QPushButton::clicked, this, &MainWindow::onStartOrStop);
+	connect(m_ui->loadPushButton, &QPushButton::clicked, this, &MainWindow::onLoad);
+	connect(m_ui->savePushButton, &QPushButton::clicked, this, &MainWindow::onSave);
+	connect(m_ui->positionPushButton, &QPushButton::clicked, this, &MainWindow::onPosition);
 
 	// Systray
 	SystrayIcon *systray = new SystrayIcon(this);
@@ -76,7 +78,7 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 
 	m_model = new SpotModel(this);
 
-	spotsListView->setModel(m_model);
+	m_ui->spotsListView->setModel(m_model);
 
 	connect(this, &MainWindow::mousePosition, this, &MainWindow::onMousePositionChanged);
 
@@ -85,13 +87,13 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	connect(updater, &Updater::newVersionDetected, this, &MainWindow::onNewVersion);
 	updater->checkUpdates();
 
-	spotGroupBox->setVisible(false);
+	m_ui->spotGroupBox->setVisible(false);
 
 	m_mapper = new QDataWidgetMapper(this);
 	m_mapper->setModel(m_model);
-	m_mapper->addMapping(nameLineEdit, 0);
+	m_mapper->addMapping(m_ui->nameLineEdit, 0);
 	// m_mapper->addMapping(positionPushButton, 1);
-	m_mapper->addMapping(delaySpinBox, 2);
+	m_mapper->addMapping(m_ui->delaySpinBox, 2);
 
 	connect(m_ui->spotsListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::onSelectionChanged);
 	connect(m_ui->spotsListView->selectionModel(), &QItemSelectionModel::currentRowChanged, m_mapper, &QDataWidgetMapper::setCurrentModelIndex);
@@ -102,6 +104,7 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 
 MainWindow::~MainWindow()
 {
+	delete m_ui;
 }
 
 void MainWindow::showEvent(QShowEvent *e)
@@ -150,7 +153,7 @@ void MainWindow::onStartKeyChanged(const QKeySequence &keySequence)
 
 void MainWindow::onAdd()
 {
-	QModelIndexList indices = spotsListView->selectionModel()->selectedRows();
+	QModelIndexList indices = m_ui->spotsListView->selectionModel()->selectedRows();
 
 	int row = indices.isEmpty() ? -1:indices.front().row();
 
@@ -159,7 +162,7 @@ void MainWindow::onAdd()
 
 void MainWindow::onRemove()
 {
-	QModelIndexList indices = spotsListView->selectionModel()->selectedRows();
+	QModelIndexList indices = m_ui->spotsListView->selectionModel()->selectedRows();
 
 	if (indices.isEmpty()) return;
 
@@ -180,9 +183,9 @@ void MainWindow::onStartOrStop()
 
 	m_timers.clear();
 
-	if (startPushButton->text() == tr("Stop"))
+	if (m_ui->startPushButton->text() == tr("Stop"))
 	{
-		startPushButton->setText(tr("Start"));
+		m_ui->startPushButton->setText(tr("Start"));
 		return;
 	}
 
@@ -208,7 +211,7 @@ void MainWindow::onStartOrStop()
 		m_timers[i]->start();
 	}
 
-	startPushButton->setText(tr("Stop"));
+	m_ui->startPushButton->setText(tr("Stop"));
 }
 
 void MainWindow::onTimer()
@@ -309,7 +312,13 @@ void MainWindow::onSave()
 
 void MainWindow::onPosition()
 {
-	QModelIndex index = spotsListView->selectionModel()->currentIndex();
+	QModelIndex index = m_ui->spotsListView->selectionModel()->currentIndex();
+
+	m_ui->positionPushButton->setEnabled(false);
+	m_ui->positionPushButton->setText("???");
+
+	QtConcurrent::run(this, &MainWindow::getMousePosition);
+}
 
 void MainWindow::onTestDialog()
 {
@@ -461,7 +470,7 @@ void MainWindow::onStartSimple()
 void MainWindow::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
 	// update controls
-	spotGroupBox->setVisible(!selected.empty());
+	m_ui->spotGroupBox->setVisible(!selected.empty());
 
 	if (selected.empty()) return;
 
@@ -475,19 +484,19 @@ void MainWindow::onSelectionChanged(const QItemSelection& selected, const QItemS
 	// manually update position because not handled by data mapper
 	QPoint pos = m_model->getSpot(row).originalPosition;
 
-	positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
+	m_ui->positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
 }
 
 void MainWindow::onMousePositionChanged(const QPoint& pos)
 {
-	QModelIndex index = spotsListView->selectionModel()->currentIndex();
+	QModelIndex index = m_ui->spotsListView->selectionModel()->currentIndex();
 
 	// update original and last positions
 	m_model->setData(m_model->index(index.row(), 1), pos);
 	m_model->setData(m_model->index(index.row(), 3), pos);
 
-	positionPushButton->setEnabled(true);
-	positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
+	m_ui->positionPushButton->setEnabled(true);
+	m_ui->positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
 }
 
 void MainWindow::onCheckUpdates()
@@ -578,7 +587,7 @@ bool MainWindow::event(QEvent *e)
 	}
 	else if (e->type() == QEvent::LanguageChange)
 	{
-		retranslateUi(this);
+		m_ui->retranslateUi(this);
 	}
 	else if (e->type() == QEvent::WindowStateChange)
 	{

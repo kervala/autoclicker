@@ -20,7 +20,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "ui_mainwindow.h"
 #include "systrayicon.h"
 #include "spot.h"
 
@@ -28,7 +27,12 @@ class QWinTaskbarButton;
 class SpotModel;
 class QDataWidgetMapper;
 
-class MainWindow : public QMainWindow, public Ui::MainWindow
+namespace Ui
+{
+	class MainWindow;
+}
+
+class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 
