@@ -71,7 +71,9 @@ bool SpotModel::setData(const QModelIndex &index, const QVariant &value, int rol
 {
 	if (role == Qt::EditRole)
 	{
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
 		if (!checkIndex(index)) return false;
+#endif
 
 		// save value
 		switch (index.column())
@@ -141,6 +143,11 @@ bool SpotModel::removeRows(int position, int rows, const QModelIndex& parent)
 Spot SpotModel::getSpot(int row) const
 {
 	return m_spots[row];
+}
+
+void SpotModel::setSpot(int row, const Spot& spot)
+{
+	m_spots[row] = spot;
 }
 
 void SpotModel::reset()
@@ -217,21 +224,4 @@ bool SpotModel::save(const QString& filename) const
 	stream << m_spots;
 
 	return true;
-}
-
-QDataStream& operator << (QDataStream& stream, const Spot &spot)
-{
-	stream << spot.name << spot.originalPosition << spot.delay;
-
-	return stream;
-}
-
-QDataStream& operator >> (QDataStream& stream, Spot &spot)
-{
-	stream >> spot.name >> spot.originalPosition >> spot.delay;
-
-	// copy original position
-	spot.lastPosition = spot.originalPosition;
-
-	return stream;
 }

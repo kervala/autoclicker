@@ -20,15 +20,9 @@
 #ifndef SPOTMODEL_H
 #define SPOTMODEL_H
 
-#include <QAbstractTableModel>
+#include "spot.h"
 
-struct Spot
-{
-	QString name;
-	QPoint originalPosition;
-	int delay;
-	QPoint lastPosition;
-};
+#include <QAbstractTableModel>
 
 class SpotModel : public QAbstractTableModel
 {
@@ -47,6 +41,7 @@ public:
 	bool removeRows(int position, int rows, const QModelIndex& index = QModelIndex()) override;
 
 	Spot getSpot(int row) const;
+	void setSpot(int row, const Spot& spot);
 
 	void reset();
 
@@ -56,8 +51,5 @@ public:
 private:
 	QList<Spot> m_spots;
 };
-
-QDataStream& operator << (QDataStream& stream, const Spot& spot);
-QDataStream& operator >> (QDataStream& stream, Spot& spot);
 
 #endif

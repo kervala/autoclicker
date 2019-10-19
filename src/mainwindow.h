@@ -22,6 +22,7 @@
 
 #include "ui_mainwindow.h"
 #include "systrayicon.h"
+#include "spot.h"
 
 class QWinTaskbarButton;
 class SpotModel;
@@ -69,9 +70,12 @@ public slots:
 	void onMousePositionChanged(const QPoint& pos);
 
 	void onTimer();
+	void onStartSimple();
+	void onStartKeyChanged(const QKeySequence& keySequence);
 
 signals:
 	void mousePosition(const QPoint &pos);
+	void startSimple();
 
 protected:
 	void showEvent(QShowEvent *e);
@@ -81,14 +85,20 @@ protected:
 	bool event(QEvent *e);
 
 	void getMousePosition();
+	void listenExternalInputEvents();
 
 	QWinTaskbarButton *m_button;
 	SpotModel *m_model;
 	QDataWidgetMapper *m_mapper;
 	QPoint m_mousePosition;
 	QPoint m_lastMousePosition;
+	QAtomicInt m_stopExternalListener;
 
 	QList<QTimer*> m_timers;
+	Ui::MainWindow *m_ui;
+
+	Spot m_spot;
+	QShortcut *m_startShortcut;
 };
 
 #endif

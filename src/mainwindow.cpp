@@ -35,7 +35,7 @@
 	#define new DEBUG_NEW
 #endif
 
-MainWindow::MainWindow():QMainWindow(nullptr, Qt::WindowStaysOnTopHint)
+MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_stopExternalListener(0), m_startShortcut(nullptr)
 {
 	setupUi(this);
 
@@ -92,8 +92,11 @@ MainWindow::MainWindow():QMainWindow(nullptr, Qt::WindowStaysOnTopHint)
 	// m_mapper->addMapping(positionPushButton, 1);
 	m_mapper->addMapping(delaySpinBox, 2);
 
-	connect(spotsListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::onSelectionChanged);
-	connect(spotsListView->selectionModel(), &QItemSelectionModel::currentRowChanged, m_mapper, &QDataWidgetMapper::setCurrentModelIndex);
+	connect(m_ui->spotsListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::onSelectionChanged);
+	connect(m_ui->spotsListView->selectionModel(), &QItemSelectionModel::currentRowChanged, m_mapper, &QDataWidgetMapper::setCurrentModelIndex);
+
+	connect(this, &MainWindow::startSimple, this, &MainWindow::onStartSimple);
+	connect(m_ui->startKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onStartKeyChanged);
 }
 
 MainWindow::~MainWindow()
@@ -128,6 +131,20 @@ void MainWindow::moveEvent(QMoveEvent *e)
 	ConfigFile::getInstance()->setWindowPosition(QPoint(x(), y()));
 
 	e->accept();
+}
+
+void MainWindow::onStartKeyChanged(const QKeySequence &keySequence)
+{
+	if (m_startShortcut)
+	{
+		m_startShortcut->setKey(keySequence);
+	}
+	else
+	{
+		m_startShortcut = new QShortcut(keySequence, this);
+
+		connect(m_startShortcut, &QShortcut::activated, this, &MainWindow::onStartSimple);
+	}
 }
 
 void MainWindow::onAdd()
@@ -202,7 +219,18 @@ void MainWindow::onTimer()
 
 	int row = timer->property("row").toInt();
 
-	Spot spot = m_model->getSpot(row);
+	Spot spot;
+	
+	if (row < 0)
+	{
+		// simple mode
+		spot = m_spot;
+	}
+	else
+	{
+		// multi mode
+		spot = m_model->getSpot(row);
+	}
 
 	// stop auto-click if move the mouse
 	if (QCursor::pos() != m_lastMousePosition)
@@ -222,6 +250,17 @@ void MainWindow::onTimer()
 		if ((spot.lastPosition.y() + dy > (spot.originalPosition.y() + 5)) || (spot.lastPosition.y() + dx < (spot.originalPosition.y() - 5))) dy = -dy;
 
 		spot.lastPosition += QPoint(dx, dy);
+
+		if (row < 0)
+		{
+			// simple mode
+			m_spot = spot;
+		}
+		else
+		{
+			// multi mode
+			m_model->setSpot(row, spot);
+		}
 	}
 
 	// set cursor position
@@ -289,6 +328,125 @@ void MainWindow::getMousePosition()
 	}
 
 	emit mousePosition(m_mousePosition);
+}
+
+static qint16 QKeySequenceToVK(const QKeySequence &seq)
+{
+	QString str = seq.toString();
+
+	if (str.isEmpty()) return 0;
+
+	static QMap<QString, qint16> s_keyArray;
+
+	if (s_keyArray.isEmpty())
+	{
+		// special characters
+		s_keyArray["Space"] = ' ';
+		s_keyArray["Ins"] = VK_INSERT;
+		s_keyArray["Del"] = VK_DELETE;
+		s_keyArray["Esc"] = VK_ESCAPE;
+		s_keyArray["Tab"] = VK_TAB;
+		// s_keyArray["Backtab"] = VK_BACK;
+		s_keyArray["Backspace"] = VK_BACK;
+		s_keyArray["Return"] = VK_RETURN;
+		s_keyArray["Pause"] = VK_PAUSE;
+		s_keyArray["Print"] = VK_PRINT;
+		// s_keyArray["SysReq"] = VK_SYSREQ;
+		s_keyArray["Home"] = VK_HOME;
+		s_keyArray["End"] = VK_END;
+		s_keyArray["Left"] = VK_LEFT;
+		s_keyArray["Up"] = VK_UP;
+		s_keyArray["Right"] = VK_RIGHT;
+		s_keyArray["Down"] = VK_DOWN;
+/*
+		{ Qt::Key_PageUp,       QT_TRANSLATE_NOOP("QShortcut", "PgUp") },
+		{ Qt::Key_PageDown,     QT_TRANSLATE_NOOP("QShortcut", "PgDown") },
+		{ Qt::Key_CapsLock,     QT_TRANSLATE_NOOP("QShortcut", "CapsLock") },
+		{ Qt::Key_NumLock,      QT_TRANSLATE_NOOP("QShortcut", "NumLock") },
+		{ Qt::Key_ScrollLock,   QT_TRANSLATE_NOOP("QShortcut", "ScrollLock") },
+		{ Qt::Key_Menu,         QT_TRANSLATE_NOOP("QShortcut", "Menu") },
+		{ Qt::Key_Help,         QT_TRANSLATE_NOOP("QShortcut", "Help") },
+*/
+		// numbers
+		for (int i = '0'; i <= '9'; ++i) s_keyArray[QString(i)] = i;
+
+		// letters
+		for (int i = 'A'; i <= 'Z'; ++i) s_keyArray[QString(i)] = i;
+
+		// function keys
+		for (int i = 1; i <= 24; ++i) s_keyArray[QString("F%1").arg(i)] = VK_F1 + i - 1;
+	}
+
+	QMap<QString, qint16>::iterator it = s_keyArray.find(str);
+
+	if (it != s_keyArray.end()) return *it;
+
+	qDebug() << "unable to find" << str;
+
+	return -1;
+}
+
+void MainWindow::listenExternalInputEvents()
+{
+	QKeySequence sequence = m_ui->startKeySequenceEdit->keySequence();
+
+	qint16 key = QKeySequenceToVK(sequence);
+
+	// no key defined
+	if (key == 0) return;
+
+	while (!m_stopExternalListener)
+	{
+		bool buttonPressed = GetAsyncKeyState(key) & 1;
+
+		if (buttonPressed)
+		{
+			qDebug() << "key" << sequence << "pressed (" << key << ")";
+
+			emit startSimple();
+		}
+
+		QThread::currentThread()->msleep(10);
+	}
+}
+
+void MainWindow::onStartSimple()
+{
+	for (int i = 0; i < m_timers.size(); ++i)
+	{
+		m_timers[i]->stop();
+		m_timers[i]->deleteLater();
+		m_timers[i] = nullptr;
+	}
+
+	m_timers.clear();
+
+	if (m_ui->startPushButton->text() == tr("Stop"))
+	{
+		m_ui->startPushButton->setText(tr("Start"));
+		return;
+	}
+
+	QTimer* timer = new QTimer(this);
+	timer->setProperty("row", -1);
+	timer->setSingleShot(true);
+
+	// wait 1 second before to really start
+	timer->setInterval(100);
+
+	connect(timer, &QTimer::timeout, this, &MainWindow::onTimer);
+
+	m_timers << timer;
+
+	m_spot.delay = m_ui->defaultDelaySpinBox->value();
+	m_spot.lastPosition = QCursor::pos();
+	m_spot.originalPosition = m_spot.lastPosition;
+	m_lastMousePosition = m_spot.lastPosition;
+
+	// start all timers
+	m_timers[0]->start();
+
+	m_ui->startPushButton->setText(tr("Stop"));
 }
 
 void MainWindow::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
@@ -395,11 +553,19 @@ bool MainWindow::event(QEvent *e)
 {
 	if (e->type() == QEvent::WindowActivate)
 	{
+		m_stopExternalListener = true;
 	}
 	else if (e->type() == QEvent::WindowDeactivate)
 	{
-		// click outside application
-		m_mousePosition = QCursor::pos();
+		if (!isHidden())
+		{
+			// click outside application
+			m_mousePosition = QCursor::pos();
+
+			m_stopExternalListener = false;
+
+			QtConcurrent::run(this, &MainWindow::listenExternalInputEvents);
+		}
 	}
 	else if (e->type() == QEvent::LanguageChange)
 	{
