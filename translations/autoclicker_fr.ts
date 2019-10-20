@@ -892,7 +892,7 @@ Souhaitez-vous la télécharger maintenant ?</translation>
     <message>
         <location filename="../src/spotmodel.cpp" line="111"/>
         <source>Spot #%1</source>
-        <translation>Endroit #1</translation>
+        <translation>Endroit #%1</translation>
     </message>
 </context>
 <context>
