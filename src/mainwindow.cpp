@@ -46,46 +46,20 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	m_button = new QWinTaskbarButton(this);
 #endif
 
-	// File menu
-	connect(m_ui->actionTestDialog, &QAction::triggered, this, &MainWindow::onTestDialog);
-	connect(m_ui->actionExit, &QAction::triggered, this, &MainWindow::close);
-
-	// Help menu
-	connect(m_ui->actionCheckUpdates, &QAction::triggered, this, &MainWindow::onCheckUpdates);
-	connect(m_ui->actionAbout, &QAction::triggered, this, &MainWindow::onAbout);
-	connect(m_ui->actionAboutQt, &QAction::triggered, this, &MainWindow::onAboutQt);
-
 	QSize size = ConfigFile::getInstance()->getWindowSize();
 	if (!size.isNull()) resize(size);
 
 	QPoint pos = ConfigFile::getInstance()->getWindowPosition();
 	if (!pos.isNull()) move(pos);
 
-	// Buttons
-	connect(m_ui->addPushButton, &QPushButton::clicked, this, &MainWindow::onAdd);
-	connect(m_ui->removePushButton, &QPushButton::clicked, this, &MainWindow::onRemove);
-	connect(m_ui->startPushButton, &QPushButton::clicked, this, &MainWindow::onStartOrStop);
-	connect(m_ui->loadPushButton, &QPushButton::clicked, this, &MainWindow::onLoad);
-	connect(m_ui->savePushButton, &QPushButton::clicked, this, &MainWindow::onSave);
-	connect(m_ui->positionPushButton, &QPushButton::clicked, this, &MainWindow::onPosition);
-
-	// Systray
 	SystrayIcon *systray = new SystrayIcon(this);
-	connect(systray, &SystrayIcon::requestMinimize, this, &MainWindow::onMinimize);
-	connect(systray, &SystrayIcon::requestRestore, this, &MainWindow::onRestore);
-	connect(systray, &SystrayIcon::requestClose, this, &MainWindow::close);
-	connect(systray, &SystrayIcon::requestAction, this, &MainWindow::onSystrayAction);
 
 	m_model = new SpotModel(this);
 
 	m_ui->spotsListView->setModel(m_model);
 
-	connect(this, &MainWindow::mousePosition, this, &MainWindow::onMousePositionChanged);
-
 	// check for a new version
 	Updater *updater = new Updater(this);
-	connect(updater, &Updater::newVersionDetected, this, &MainWindow::onNewVersion);
-	updater->checkUpdates();
 
 	m_ui->spotGroupBox->setVisible(false);
 
@@ -95,11 +69,79 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	// m_mapper->addMapping(positionPushButton, 1);
 	m_mapper->addMapping(m_ui->delaySpinBox, 2);
 
+#if defined(_MSC_VER) && (_MSC_VER > 1900)
+	// File menu
+	connect(m_ui->actionTestDialog, &QAction::triggered, this, &MainWindow::onTestDialog);
+	connect(m_ui->actionExit, &QAction::triggered, this, &MainWindow::close);
+
+	// Help menu
+	connect(m_ui->actionCheckUpdates, &QAction::triggered, this, &MainWindow::onCheckUpdates);
+	connect(m_ui->actionAbout, &QAction::triggered, this, &MainWindow::onAbout);
+	connect(m_ui->actionAboutQt, &QAction::triggered, this, &MainWindow::onAboutQt);
+
+	// Buttons
+	connect(m_ui->addPushButton, &QPushButton::clicked, this, &MainWindow::onAdd);
+	connect(m_ui->removePushButton, &QPushButton::clicked, this, &MainWindow::onRemove);
+	connect(m_ui->startPushButton, &QPushButton::clicked, this, &MainWindow::onStartOrStop);
+	connect(m_ui->loadPushButton, &QPushButton::clicked, this, &MainWindow::onLoad);
+	connect(m_ui->savePushButton, &QPushButton::clicked, this, &MainWindow::onSave);
+	connect(m_ui->positionPushButton, &QPushButton::clicked, this, &MainWindow::onPosition);
+	connect(m_ui->startKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onStartKeyChanged);
+
+	// Systray
+	connect(systray, &SystrayIcon::requestMinimize, this, &MainWindow::onMinimize);
+	connect(systray, &SystrayIcon::requestRestore, this, &MainWindow::onRestore);
+	connect(systray, &SystrayIcon::requestClose, this, &MainWindow::close);
+	connect(systray, &SystrayIcon::requestAction, this, &MainWindow::onSystrayAction);
+
+	// Selection model
 	connect(m_ui->spotsListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::onSelectionChanged);
 	connect(m_ui->spotsListView->selectionModel(), &QItemSelectionModel::currentRowChanged, m_mapper, &QDataWidgetMapper::setCurrentModelIndex);
 
+	// MainWindow
 	connect(this, &MainWindow::startSimple, this, &MainWindow::onStartSimple);
-	connect(m_ui->startKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onStartKeyChanged);
+	connect(this, &MainWindow::mousePosition, this, &MainWindow::onMousePositionChanged);
+
+	// Updater
+	connect(updater, &Updater::newVersionDetected, this, &MainWindow::onNewVersion);
+#else
+	// File menu
+	connect(m_ui->actionTestDialog, SIGNAL(triggered()), this, SLOT(onTestDialog()));
+	connect(m_ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
+
+	// Help menu
+	connect(m_ui->actionCheckUpdates, SIGNAL(triggered()), this, SLOT(onCheckUpdates()));
+	connect(m_ui->actionAbout, SIGNAL(triggered()), this, SLOT(onAbout()));
+	connect(m_ui->actionAboutQt, SIGNAL(triggered()), this, SLOT(onAboutQt()));
+
+	// Buttons
+	connect(m_ui->addPushButton, SIGNAL(clicked()), this, SLOT(onAdd()));
+	connect(m_ui->removePushButton, SIGNAL(clicked()), this, SLOT(onRemove()));
+	connect(m_ui->startPushButton, SIGNAL(clicked()), this, SLOT(onStartOrStop()));
+	connect(m_ui->loadPushButton, SIGNAL(clicked()), this, SLOT(onLoad()));
+	connect(m_ui->savePushButton, SIGNAL(clicked()), this, SLOT(onSave()));
+	connect(m_ui->positionPushButton, SIGNAL(clicked()), this, SLOT(onPosition()));
+	connect(m_ui->startKeySequenceEdit, SIGNAL(keySequenceChanged(QKeySequence)), this, SLOT(onStartKeyChanged(QKeySequence)));
+
+	// Systray
+	connect(systray, SIGNAL(requestMinimize()), this, SLOT(onMinimize()));
+	connect(systray, SIGNAL(requestRestore()), this, SLOT(onRestore()));
+	connect(systray, SIGNAL(requestClose()), this, SLOT(close()));
+	connect(systray, SIGNAL(requestAction()), this, SLOT(onSystrayAction()));
+
+	// Selection model
+	connect(m_ui->spotsListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(onSelectionChanged(QItemSelection, QItemSelection)));
+	connect(m_ui->spotsListView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)), m_mapper, SLOT(setCurrentModelIndex(QModelIndex, QModelIndex)));
+
+	// MainWindow
+	connect(this, SIGNAL(startSimple()), this, SLOT(onStartSimple()));
+	connect(this, SIGNAL(mousePosition(QPoint)), this, SLOT(onMousePositionChanged(QPoint)));
+
+	// Updater
+	connect(updater, SIGNAL(newVersionDetected(QString, QString, uint, QString)), this, SLOT(onNewVersion(QString, QString, uint, QString)));
+#endif
+
+	updater->checkUpdates();
 }
 
 MainWindow::~MainWindow()
