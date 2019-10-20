@@ -11,7 +11,7 @@ call setenv.bat %COMPILER% x86
 
 cd %CURRENTDIR%
 
-set QTDIR=D:/External/%COMPILER%/qt-%QTVERSION%-static-32
+set QTDIR=%WIN32CROSS_PATH%/%COMPILER%/external/qt-%QTVERSION%-static-32
 
 rmdir /s /q package_x32
 
