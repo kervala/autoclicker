@@ -69,6 +69,8 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	// m_mapper->addMapping(positionPushButton, 1);
 	m_mapper->addMapping(m_ui->delaySpinBox, 2);
 
+	m_startShortcut = new QShortcut(QKeySequence(), this);
+
 #if defined(_MSC_VER) && (_MSC_VER > 1900)
 	// File menu
 	connect(m_ui->actionTestDialog, &QAction::triggered, this, &MainWindow::onTestDialog);
@@ -104,6 +106,9 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 
 	// Updater
 	connect(updater, &Updater::newVersionDetected, this, &MainWindow::onNewVersion);
+
+	// Shortcut
+	connect(m_startShortcut, &QShortcut::activated, this, &MainWindow::onStartSimple);
 #else
 	// File menu
 	connect(m_ui->actionTestDialog, SIGNAL(triggered()), this, SLOT(onTestDialog()));
@@ -139,6 +144,9 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 
 	// Updater
 	connect(updater, SIGNAL(newVersionDetected(QString, QString, uint, QString)), this, SLOT(onNewVersion(QString, QString, uint, QString)));
+
+	// Shortcut
+	connect(m_startShortcut, SIGNAL(activated()), this, SLOT(onStartSimple()));
 #endif
 
 	updater->checkUpdates();
@@ -181,16 +189,7 @@ void MainWindow::moveEvent(QMoveEvent *e)
 
 void MainWindow::onStartKeyChanged(const QKeySequence &keySequence)
 {
-	if (m_startShortcut)
-	{
-		m_startShortcut->setKey(keySequence);
-	}
-	else
-	{
-		m_startShortcut = new QShortcut(keySequence, this);
-
-		connect(m_startShortcut, &QShortcut::activated, this, &MainWindow::onStartSimple);
-	}
+	m_startShortcut->setKey(keySequence);
 }
 
 void MainWindow::onAdd()
