@@ -246,9 +246,9 @@ void MainWindow::onStartOrStop()
 		timer->setInterval(1000);
 
 #ifndef USE_OLD_CONNECT
-		connect(timer, SIGNAL(timeout()), this, SLOT(onTimer()));
-#else
 		connect(timer, &QTimer::timeout, this, &MainWindow::onTimer);
+#else
+		connect(timer, SIGNAL(timeout()), this, SLOT(onTimer()));
 #endif
 
 		m_timers.push_back(timer);
@@ -455,9 +455,9 @@ void MainWindow::onStartSimple()
 	timer->setInterval(100);
 
 #ifndef USE_OLD_CONNECT
-	connect(timer, SIGNAL(timeout()), this, SLOT(onTimer()));
-#else
 	connect(timer, &QTimer::timeout, this, &MainWindow::onTimer);
+#else
+	connect(timer, SIGNAL(timeout()), this, SLOT(onTimer()));
 #endif
 
 	m_timers << timer;
