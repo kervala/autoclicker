@@ -37,6 +37,10 @@
 	#define new DEBUG_NEW
 #endif
 
+#if defined(_MSC_VER) && (_MSC_VER < 1900)
+#define USE_OLD_CONNECT
+#endif
+
 MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_stopExternalListener(0), m_startShortcut(nullptr)
 {
 	m_ui = new Ui::MainWindow();
@@ -71,7 +75,7 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 
 	m_startShortcut = new QShortcut(QKeySequence(), this);
 
-#if defined(_MSC_VER) && (_MSC_VER > 1900)
+#ifndef USE_OLD_CONNECT
 	// File menu
 	connect(m_ui->actionTestDialog, &QAction::triggered, this, &MainWindow::onTestDialog);
 	connect(m_ui->actionExit, &QAction::triggered, this, &MainWindow::close);
@@ -241,7 +245,11 @@ void MainWindow::onStartOrStop()
 		// wait 1 second before to really start
 		timer->setInterval(1000);
 
+#ifndef USE_OLD_CONNECT
+		connect(timer, SIGNAL(timeout()), this, SLOT(onTimer()));
+#else
 		connect(timer, &QTimer::timeout, this, &MainWindow::onTimer);
+#endif
 
 		m_timers.push_back(timer);
 	}
@@ -446,7 +454,11 @@ void MainWindow::onStartSimple()
 	// wait 1 second before to really start
 	timer->setInterval(100);
 
+#ifndef USE_OLD_CONNECT
+	connect(timer, SIGNAL(timeout()), this, SLOT(onTimer()));
+#else
 	connect(timer, &QTimer::timeout, this, &MainWindow::onTimer);
+#endif
 
 	m_timers << timer;
 
@@ -604,7 +616,11 @@ void MainWindow::onNewVersion(const QString &url, const QString &date, uint size
 
 	UpdateDialog dialog(this);
 
+#ifndef USE_OLD_CONNECT
+	connect(&dialog, &UpdateDialog::downloadProgress, this, &MainWindow::onProgress);
+#else
 	connect(&dialog, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(onProgress(qint64, qint64)));
+#endif
 
 	dialog.download(url, size);
 
