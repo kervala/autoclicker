@@ -1,5 +1,6 @@
 @echo off
 
+set UPLOADER="C:\Program Files\RedmineUploader\redmineuploader.exe"
 set COMPILER=vc12
 set UNIXDIR=D:\Projects\packaging\unix
 set CURRENTDIR=%cd%
@@ -49,5 +50,9 @@ nmake package
 move *.exe ..
 
 cd ..
+
+pause
+
+%UPLOADER% autoclicker 2.1 autoclicker-*.exe
 
 pause
