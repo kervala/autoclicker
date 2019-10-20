@@ -148,11 +148,11 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	connect(this, SIGNAL(mousePosition(QPoint)), this, SLOT(onMousePositionChanged(QPoint)));
 
 	// Updater
-	connect(updater, SIGNAL(newVersionDetected(QString, QString, uint, QString)), this, SLOT(onNewVersion(QString, QString, uint, QString)));
+	connect(m_updater, SIGNAL(newVersionDetected(QString, QString, uint, QString)), this, SLOT(onNewVersion(QString, QString, uint, QString)));
+	connect(m_updater, SIGNAL(noNewVersionDetected()), this, SLOT(onNoNewVersion()));
 
 	// Shortcut
 	connect(m_startShortcut, SIGNAL(activated()), this, SLOT(onStartSimple()));
-	connect(m_updater, SIGNAL(noNewVersionDetected()), this, SLOT(onNoNewVersion()));
 #endif
 
 	m_updater->checkUpdates(true);
