@@ -40,6 +40,9 @@ void Updater::onReply(QNetworkReply *reply)
 {
 	QByteArray content = reply->readAll();
 
+	// should be notified if no new version found
+	bool noNewVersion = reply->property("noNewVersion").toBool();
+
 	// always delete QNetworkReply to avoid memory leaks
 	reply->deleteLater();
 	reply = NULL;
@@ -71,7 +74,7 @@ void Updater::onReply(QNetworkReply *reply)
 	}
 	else
 	{
-		if (!reply->property("noNewVersion").toBool()) emit noNewVersionDetected();
+		if (!noNewVersion) emit noNewVersionDetected();
 	}
 }
 
