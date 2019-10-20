@@ -30,7 +30,7 @@ public:
 	Updater(QObject *parent);
 	virtual ~Updater();
 
-	bool checkUpdates();
+	bool checkUpdates(bool returnNoNewVersion);
 
 signals:
 	void newVersionDetected(const QString &url, const QString &date, uint size, const QString &version);

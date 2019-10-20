@@ -59,7 +59,7 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	m_ui->spotsListView->setModel(m_model);
 
 	// check for a new version
-	Updater *updater = new Updater(this);
+	m_updater = new Updater(this);
 
 	m_ui->spotGroupBox->setVisible(false);
 
@@ -105,7 +105,8 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	connect(this, &MainWindow::mousePosition, this, &MainWindow::onMousePositionChanged);
 
 	// Updater
-	connect(updater, &Updater::newVersionDetected, this, &MainWindow::onNewVersion);
+	connect(m_updater, &Updater::newVersionDetected, this, &MainWindow::onNewVersion);
+	connect(m_updater, &Updater::noNewVersionDetected, this, &MainWindow::onNoNewVersion);
 
 	// Shortcut
 	connect(m_startShortcut, &QShortcut::activated, this, &MainWindow::onStartSimple);
@@ -147,9 +148,10 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 
 	// Shortcut
 	connect(m_startShortcut, SIGNAL(activated()), this, SLOT(onStartSimple()));
+	connect(m_updater, SIGNAL(noNewVersionDetected()), this, SLOT(onNoNewVersion()));
 #endif
 
-	updater->checkUpdates();
+	m_updater->checkUpdates(true);
 }
 
 MainWindow::~MainWindow()
@@ -493,10 +495,7 @@ void MainWindow::onMousePositionChanged(const QPoint& pos)
 
 void MainWindow::onCheckUpdates()
 {
-	Updater *updater = new Updater(this);
-	connect(updater, SIGNAL(newVersionDetected(QString, QString, uint, QString)), this, SLOT(onNewVersion(QString, QString, uint, QString)));
-	connect(updater, SIGNAL(noNewVersionDetected()), this, SLOT(onNoNewVersion()));
-	updater->checkUpdates();
+	m_updater->checkUpdates(false);
 }
 
 void MainWindow::onAbout()

@@ -27,6 +27,9 @@
 
 Updater::Updater(QObject *parent):QObject(parent), m_manager(NULL)
 {
+	m_manager = new QNetworkAccessManager(this);
+
+	connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onReply(QNetworkReply*)));
 }
 
 Updater::~Updater()
@@ -68,11 +71,11 @@ void Updater::onReply(QNetworkReply *reply)
 	}
 	else
 	{
-		emit noNewVersionDetected();
+		if (!reply->property("noNewVersion").toBool()) emit noNewVersionDetected();
 	}
 }
 
-bool Updater::checkUpdates()
+bool Updater::checkUpdates(bool returnNoNewVersion)
 {
 	QString system;
 
@@ -89,12 +92,6 @@ bool Updater::checkUpdates()
 
 	if (system.isEmpty()) return false;
 
-	if (!m_manager)
-	{
-		m_manager = new QNetworkAccessManager(this);
-		connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onReply(QNetworkReply*)));
-	}
-
 	QString url = QString("%1?system=%2&version=%3&app=%4").arg(UPDATE_URL).arg(system).arg(QApplication::applicationVersion()).arg(QApplication::applicationName());
 
 	QNetworkRequest req;
@@ -107,6 +104,9 @@ bool Updater::checkUpdates()
 #endif
 
 	QNetworkReply *reply = m_manager->get(req);
+	if (!reply) return false;
 
-	return reply != NULL;
+	reply->setProperty("noNewVersion", returnNoNewVersion);
+
+	return true;
 }

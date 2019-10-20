@@ -26,6 +26,7 @@
 class QWinTaskbarButton;
 class SpotModel;
 class QDataWidgetMapper;
+class Updater;
 
 namespace Ui
 {
@@ -104,6 +105,7 @@ protected:
 
 	Spot m_spot;
 	QShortcut *m_startShortcut;
+	Updater *m_updater;
 };
 
 #endif
