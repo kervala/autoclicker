@@ -334,72 +334,16 @@ void MainWindow::onTestDialog()
 
 void MainWindow::getMousePosition()
 {
-	QPoint default(0, 0);
+	QPoint defaultPosition(0, 0);
 
-	m_mousePosition = default;
+	m_mousePosition = defaultPosition;
 
-	while (m_mousePosition == default && QThread::currentThread()->isRunning())
+	while (m_mousePosition == defaultPosition && QThread::currentThread()->isRunning())
 	{
 		QThread::currentThread()->msleep(100);
 	}
 
 	emit mousePosition(m_mousePosition);
-}
-
-static qint16 QKeySequenceToVK(const QKeySequence &seq)
-{
-	QString str = seq.toString();
-
-	if (str.isEmpty()) return 0;
-
-	static QMap<QString, qint16> s_keyArray;
-
-	if (s_keyArray.isEmpty())
-	{
-		// special characters
-		s_keyArray["Space"] = ' ';
-		s_keyArray["Ins"] = VK_INSERT;
-		s_keyArray["Del"] = VK_DELETE;
-		s_keyArray["Esc"] = VK_ESCAPE;
-		s_keyArray["Tab"] = VK_TAB;
-		// s_keyArray["Backtab"] = VK_BACK;
-		s_keyArray["Backspace"] = VK_BACK;
-		s_keyArray["Return"] = VK_RETURN;
-		s_keyArray["Pause"] = VK_PAUSE;
-		s_keyArray["Print"] = VK_PRINT;
-		// s_keyArray["SysReq"] = VK_SYSREQ;
-		s_keyArray["Home"] = VK_HOME;
-		s_keyArray["End"] = VK_END;
-		s_keyArray["Left"] = VK_LEFT;
-		s_keyArray["Up"] = VK_UP;
-		s_keyArray["Right"] = VK_RIGHT;
-		s_keyArray["Down"] = VK_DOWN;
-/*
-		{ Qt::Key_PageUp,       QT_TRANSLATE_NOOP("QShortcut", "PgUp") },
-		{ Qt::Key_PageDown,     QT_TRANSLATE_NOOP("QShortcut", "PgDown") },
-		{ Qt::Key_CapsLock,     QT_TRANSLATE_NOOP("QShortcut", "CapsLock") },
-		{ Qt::Key_NumLock,      QT_TRANSLATE_NOOP("QShortcut", "NumLock") },
-		{ Qt::Key_ScrollLock,   QT_TRANSLATE_NOOP("QShortcut", "ScrollLock") },
-		{ Qt::Key_Menu,         QT_TRANSLATE_NOOP("QShortcut", "Menu") },
-		{ Qt::Key_Help,         QT_TRANSLATE_NOOP("QShortcut", "Help") },
-*/
-		// numbers
-		for (int i = '0'; i <= '9'; ++i) s_keyArray[QString(i)] = i;
-
-		// letters
-		for (int i = 'A'; i <= 'Z'; ++i) s_keyArray[QString(i)] = i;
-
-		// function keys
-		for (int i = 1; i <= 24; ++i) s_keyArray[QString("F%1").arg(i)] = VK_F1 + i - 1;
-	}
-
-	QMap<QString, qint16>::iterator it = s_keyArray.find(str);
-
-	if (it != s_keyArray.end()) return *it;
-
-	qDebug() << "unable to find" << str;
-
-	return -1;
 }
 
 void MainWindow::listenExternalInputEvents()
@@ -413,7 +357,7 @@ void MainWindow::listenExternalInputEvents()
 
 	while (!m_stopExternalListener)
 	{
-		bool buttonPressed = GetAsyncKeyState(key) & 1;
+		bool buttonPressed = isKeyPressed(key);
 
 		if (buttonPressed)
 		{

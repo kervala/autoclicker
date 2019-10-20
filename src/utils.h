@@ -25,6 +25,9 @@ class QAbstractItemModel;
 void mouseLeftClickUp(const QPoint& pos);
 void mouseLeftClickDown(const QPoint& pos);
 
+qint16 QKeySequenceToVK(const QKeySequence& seq);
+bool isKeyPressed(qint16 key);
+
 void CreateWindowsList(QAbstractItemModel *model);
 bool RestoreMinimizedWindow(WId &id);
 void MinimizeWindow(WId id);

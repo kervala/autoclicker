@@ -39,6 +39,24 @@
 	#define new DEBUG_NEW
 #endif
 
+void mouseLeftClickUp(const QPoint& pos)
+{
+}
+
+void mouseLeftClickDown(const QPoint& pos)
+{
+}
+
+qint16 QKeySequenceToVK(const QKeySequence& seq)
+{
+	return 0;
+}
+
+bool isKeyPressed(qint16 key)
+{
+	return false;
+}
+
 static void print_client_properties(Display *dpy, Window w, QAbstractItemModel *model)
 {
 	// retrieve window name
