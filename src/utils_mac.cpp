@@ -22,6 +22,24 @@
 
 #ifdef Q_OS_MAC
 
+void mouseLeftClickUp(const QPoint& pos)
+{
+}
+
+void mouseLeftClickDown(const QPoint& pos)
+{
+}
+
+qint16 QKeySequenceToVK(const QKeySequence& seq)
+{
+	return 0;
+}
+
+bool isKeyPressed(qint16 key)
+{
+	return false;
+}
+
 void CreateWindowsList(QAbstractItemModel *model)
 {
 }
