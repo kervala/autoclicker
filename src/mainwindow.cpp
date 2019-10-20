@@ -37,10 +37,6 @@
 	#define new DEBUG_NEW
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER < 1900)
-#define USE_OLD_CONNECT
-#endif
-
 MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_stopExternalListener(0), m_startShortcut(nullptr)
 {
 	m_ui = new Ui::MainWindow();
@@ -75,7 +71,6 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 
 	m_startShortcut = new QShortcut(QKeySequence(), this);
 
-#ifndef USE_OLD_CONNECT
 	// File menu
 	connect(m_ui->actionTestDialog, &QAction::triggered, this, &MainWindow::onTestDialog);
 	connect(m_ui->actionExit, &QAction::triggered, this, &MainWindow::close);
@@ -114,46 +109,6 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 
 	// Shortcut
 	connect(m_startShortcut, &QShortcut::activated, this, &MainWindow::onStartSimple);
-#else
-	// File menu
-	connect(m_ui->actionTestDialog, SIGNAL(triggered()), this, SLOT(onTestDialog()));
-	connect(m_ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
-
-	// Help menu
-	connect(m_ui->actionCheckUpdates, SIGNAL(triggered()), this, SLOT(onCheckUpdates()));
-	connect(m_ui->actionAbout, SIGNAL(triggered()), this, SLOT(onAbout()));
-	connect(m_ui->actionAboutQt, SIGNAL(triggered()), this, SLOT(onAboutQt()));
-
-	// Buttons
-	connect(m_ui->addPushButton, SIGNAL(clicked()), this, SLOT(onAdd()));
-	connect(m_ui->removePushButton, SIGNAL(clicked()), this, SLOT(onRemove()));
-	connect(m_ui->startPushButton, SIGNAL(clicked()), this, SLOT(onStartOrStop()));
-	connect(m_ui->loadPushButton, SIGNAL(clicked()), this, SLOT(onLoad()));
-	connect(m_ui->savePushButton, SIGNAL(clicked()), this, SLOT(onSave()));
-	connect(m_ui->positionPushButton, SIGNAL(clicked()), this, SLOT(onPosition()));
-	connect(m_ui->startKeySequenceEdit, SIGNAL(keySequenceChanged(QKeySequence)), this, SLOT(onStartKeyChanged(QKeySequence)));
-
-	// Systray
-	connect(systray, SIGNAL(requestMinimize()), this, SLOT(onMinimize()));
-	connect(systray, SIGNAL(requestRestore()), this, SLOT(onRestore()));
-	connect(systray, SIGNAL(requestClose()), this, SLOT(close()));
-	connect(systray, SIGNAL(requestAction()), this, SLOT(onSystrayAction()));
-
-	// Selection model
-	connect(m_ui->spotsListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), this, SLOT(onSelectionChanged(QItemSelection, QItemSelection)));
-	connect(m_ui->spotsListView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex, QModelIndex)), m_mapper, SLOT(setCurrentModelIndex(QModelIndex, QModelIndex)));
-
-	// MainWindow
-	connect(this, SIGNAL(startSimple()), this, SLOT(onStartSimple()));
-	connect(this, SIGNAL(mousePosition(QPoint)), this, SLOT(onMousePositionChanged(QPoint)));
-
-	// Updater
-	connect(m_updater, SIGNAL(newVersionDetected(QString, QString, uint, QString)), this, SLOT(onNewVersion(QString, QString, uint, QString)));
-	connect(m_updater, SIGNAL(noNewVersionDetected()), this, SLOT(onNoNewVersion()));
-
-	// Shortcut
-	connect(m_startShortcut, SIGNAL(activated()), this, SLOT(onStartSimple()));
-#endif
 
 	m_updater->checkUpdates(true);
 }
@@ -245,11 +200,7 @@ void MainWindow::onStartOrStop()
 		// wait 1 second before to really start
 		timer->setInterval(1000);
 
-#ifndef USE_OLD_CONNECT
 		connect(timer, &QTimer::timeout, this, &MainWindow::onTimer);
-#else
-		connect(timer, SIGNAL(timeout()), this, SLOT(onTimer()));
-#endif
 
 		m_timers.push_back(timer);
 	}
@@ -454,11 +405,7 @@ void MainWindow::onStartSimple()
 	// wait 1 second before to really start
 	timer->setInterval(100);
 
-#ifndef USE_OLD_CONNECT
 	connect(timer, &QTimer::timeout, this, &MainWindow::onTimer);
-#else
-	connect(timer, SIGNAL(timeout()), this, SLOT(onTimer()));
-#endif
 
 	m_timers << timer;
 
@@ -616,11 +563,7 @@ void MainWindow::onNewVersion(const QString &url, const QString &date, uint size
 
 	UpdateDialog dialog(this);
 
-#ifndef USE_OLD_CONNECT
 	connect(&dialog, &UpdateDialog::downloadProgress, this, &MainWindow::onProgress);
-#else
-	connect(&dialog, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(onProgress(qint64, qint64)));
-#endif
 
 	dialog.download(url, size);
 
