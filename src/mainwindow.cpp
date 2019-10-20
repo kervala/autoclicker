@@ -547,8 +547,6 @@ bool MainWindow::event(QEvent *e)
 		}
 	}
 
-	qDebug() << e->type();
-
 	return QMainWindow::event(e);
 }
 
