@@ -69,7 +69,8 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	// m_mapper->addMapping(positionPushButton, 1);
 	m_mapper->addMapping(m_ui->delaySpinBox, 2);
 
-#if defined(_MSC_VER) && (_MSC_VER > 1900)
+//#if defined(_MSC_VER) && (_MSC_VER > 1900)
+#if 1
 	// File menu
 	connect(m_ui->actionTestDialog, &QAction::triggered, this, &MainWindow::onTestDialog);
 	connect(m_ui->actionExit, &QAction::triggered, this, &MainWindow::close);
