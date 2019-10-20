@@ -214,6 +214,15 @@ void MainWindow::onStartOrStop()
 	m_ui->startPushButton->setText(tr("Stop"));
 }
 
+static int randomNumber(int min, int max)
+{
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+	return QRandomGenerator::global()->bounded(min, max);
+#else
+	return 0;
+#endif
+}
+
 void MainWindow::onTimer()
 {
 	// do this because sometimes, the mouse move when clicking
@@ -243,11 +252,11 @@ void MainWindow::onTimer()
 	}
 
 	// 50% change position
-	if (QRandomGenerator::global()->bounded(0, 1) == 0)
+	if (randomNumber(0, 1) == 0)
 	{
 		// randomize position
-		int dx = QRandomGenerator::global()->bounded(0, 2) - 1;
-		int dy = QRandomGenerator::global()->bounded(0, 2) - 1;
+		int dx = randomNumber(0, 2) - 1;
+		int dy = randomNumber(0, 2) - 1;
 
 		// invert sign
 		if ((spot.lastPosition.x() + dx > (spot.originalPosition.x() + 5)) || (spot.lastPosition.x() + dx < (spot.originalPosition.x() - 5))) dx = -dx;
@@ -279,12 +288,12 @@ void MainWindow::onTimer()
 	// between 6 and 14 clicks/second = 125-166
 
 	// wait a little before releasing the mouse
-	QThread::currentThread()->msleep(QRandomGenerator::global()->bounded(10, 25));
+	QThread::currentThread()->msleep(randomNumber(10, 25));
 
 	// left click up
 	mouseLeftClickUp(spot.lastPosition);
 
-	int delay = QRandomGenerator::global()->bounded(30, spot.delay) - 10 /* Qt latency */;
+	int delay = randomNumber(30, spot.delay) - 10 /* Qt latency */;
 
 	// restart timer
 	timer->start(delay);
@@ -538,6 +547,8 @@ bool MainWindow::event(QEvent *e)
 			QTimer::singleShot(250, this, SLOT(onMinimize()));
 		}
 	}
+
+	qDebug() << e->type();
 
 	return QMainWindow::event(e);
 }
