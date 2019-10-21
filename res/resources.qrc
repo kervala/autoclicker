@@ -1,10 +1,6 @@
 <RCC>
   <qresource prefix="icons">
     <file>icon.svg</file>
-    <file>icon_blue.svg</file>
-    <file>icon_red.svg</file>
-  </qresource>
-  <qresource prefix="images">
-    <file>blank.png</file>
+    <file>icon_click.svg</file>
   </qresource>
 </RCC>

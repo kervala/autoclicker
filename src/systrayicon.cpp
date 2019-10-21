@@ -19,7 +19,6 @@
 
 #include "common.h"
 #include "systrayicon.h"
-#include "configfile.h"
 
 #ifdef USE_QT5
 
@@ -95,27 +94,12 @@ bool SystrayIcon::release()
 
 void SystrayIcon::updateStatus()
 {
-	SystrayStatus status = StatusNormal;
-
-	SystrayStatusesIterator it = m_rooms.begin();
-
-	while(it != m_rooms.end())
-	{
-		if (it.value() > status) status = it.value();
-
-		++it;
-	}
-
 	QString iconImage;
 
-	switch(status)
+	switch(m_status)
 	{
-		case StatusTalkOther:
-		iconImage = ":/icons/icon_blue.svg";
-		break;
-
-		case StatusTalkMe:
-		iconImage = ":/icons/icon_red.svg";
+		case StatusClick:
+		iconImage = ":/icons/icon_click.svg";
 		break;
 
 		case StatusNormal:
@@ -126,8 +110,6 @@ void SystrayIcon::updateStatus()
 
 	QIcon icon(iconImage);
 
-	QApplication::setWindowIcon(icon);
-
 	if (m_icon)
 	{
 		m_icon->setIcon(icon);
@@ -135,18 +117,14 @@ void SystrayIcon::updateStatus()
 	}
 }
 
-SystrayIcon::SystrayStatus SystrayIcon::getStatus(const QString &room) const
+SystrayIcon::SystrayStatus SystrayIcon::getStatus() const
 {
-	SystrayStatusesConstIterator it = m_rooms.find(room);
-
-	if (it == m_rooms.end()) return StatusUndefined;
-
-	return it.value();
+	return m_status;
 }
 
-void SystrayIcon::setStatus(const QString &room, SystrayStatus status)
+void SystrayIcon::setStatus(SystrayStatus status)
 {
-	m_rooms[room] = status;
+	m_status = status;
 
 	updateStatus();
 }

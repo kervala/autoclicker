@@ -102,6 +102,8 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	// MainWindow
 	connect(this, &MainWindow::startSimple, this, &MainWindow::onStartSimple);
 	connect(this, &MainWindow::mousePosition, this, &MainWindow::onMousePositionChanged);
+	connect(this, &MainWindow::clickerStopped, this, &MainWindow::onStartOrStop);
+	connect(this, &MainWindow::changeSystrayIcon, this, &MainWindow::onChangeSystrayIcon);
 
 	// Updater
 	connect(m_updater, &Updater::newVersionDetected, this, &MainWindow::onNewVersion);
@@ -214,6 +216,20 @@ void MainWindow::onStartOrStop()
 	}
 
 	m_ui->startPushButton->setText(tr("Stop"));
+
+	hide();
+
+	// reset stop flag
+	m_stopClicker = 0;
+
+	QtConcurrent::run(this, &MainWindow::clicker, -1);
+}
+
+void MainWindow::onChangeSystrayIcon()
+{
+	SystrayIcon::SystrayStatus status = SystrayIcon::getInstance()->getStatus() == SystrayIcon::StatusClick ? SystrayIcon::StatusNormal : SystrayIcon::StatusClick;
+
+	SystrayIcon::getInstance()->setStatus(status);
 }
 
 static int randomNumber(int min, int max)

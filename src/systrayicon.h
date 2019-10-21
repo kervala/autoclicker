@@ -31,8 +31,7 @@ public:
 	{
 		StatusUndefined,
 		StatusNormal,
-		StatusTalkOther,
-		StatusTalkMe
+		StatusClick
 	};
 
 	typedef QMap<QString, SystrayStatus> SystrayStatuses;
@@ -42,8 +41,7 @@ public:
 	enum SystrayAction
 	{
 		ActionNone,
-		ActionReadLastNote,
-		ActionOpenURL
+		ActionUpdate
 	};
 
 	SystrayIcon(QWidget* parent);
@@ -51,8 +49,8 @@ public:
 
 	static SystrayIcon* getInstance() { return s_instance; }
 
-	SystrayStatus getStatus(const QString &room) const;
-	void setStatus(const QString &room, SystrayStatus status);
+	SystrayStatus getStatus() const;
+	void setStatus(SystrayStatus status);
 
 	void displayMessage(const QString &message, SystrayAction action);
 	void update();
@@ -75,7 +73,6 @@ private:
 
 	static SystrayIcon* s_instance;
 
-	SystrayStatuses m_rooms;
 	SystrayStatus m_status;
 	QSystemTrayIcon *m_icon;
 	SystrayAction m_action;

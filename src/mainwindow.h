@@ -77,11 +77,13 @@ public slots:
 
 	void onTimer();
 	void onStartSimple();
-	void onStartKeyChanged(const QKeySequence& keySequence);
+	void onChangeSystrayIcon();
 
 signals:
 	void mousePosition(const QPoint &pos);
 	void startSimple();
+	void clickerStopped();
+	void changeSystrayIcon();
 
 protected:
 	void showEvent(QShowEvent *e);
