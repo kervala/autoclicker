@@ -148,6 +148,8 @@ Spot SpotModel::getSpot(int row) const
 void SpotModel::setSpot(int row, const Spot& spot)
 {
 	m_spots[row] = spot;
+
+	emit dataChanged(index(row, 0), index(row, 3), { Qt::DisplayRole, Qt::EditRole });
 }
 
 void SpotModel::reset()
