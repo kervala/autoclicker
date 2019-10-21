@@ -37,7 +37,7 @@
 	#define new DEBUG_NEW
 #endif
 
-MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_stopExternalListener(0), m_startShortcut(nullptr)
+MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_stopExternalListener(0), m_stopClicker(0)
 {
 	m_ui = new Ui::MainWindow();
 	m_ui->setupUi(this);
@@ -182,42 +182,30 @@ void MainWindow::onRemove()
 
 void MainWindow::onStartOrStop()
 {
-	for (int i = 0; i < m_timers.size(); ++i)
-	{
-		m_timers[i]->stop();
-		m_timers[i]->deleteLater();
-		m_timers[i] = nullptr;
-	}
-
-	m_timers.clear();
-
 	if (m_ui->startPushButton->text() == tr("Stop"))
 	{
 		m_ui->startPushButton->setText(tr("Start"));
 		return;
 	}
 
+	m_ui->startPushButton->setText(tr("Stop"));
+
+	hide();
+
+	// reset stop flag
+	m_stopClicker = 0;
+
 	for (int row = 0; row < m_model->rowCount(); ++row)
 	{
-		QTimer* timer = new QTimer(this);
-		timer->setProperty("row", row);
-		timer->setSingleShot(true);
-		
-		// wait 1 second before to really start
-		timer->setInterval(1000);
-
-		connect(timer, &QTimer::timeout, this, &MainWindow::onTimer);
-
-		m_timers.push_back(timer);
+		QtConcurrent::run(this, &MainWindow::clicker, row);
 	}
+}
 
-	m_lastMousePosition = QPoint();
-
-	// start all timers
-	for (int i = 0; i < m_timers.size(); ++i)
-	{
-		m_timers[i]->start();
-	}
+void MainWindow::onStartSimple()
+{
+	m_spot.delay = m_ui->defaultDelaySpinBox->value();
+	m_spot.lastPosition = QCursor::pos();
+	m_spot.originalPosition = m_spot.lastPosition;
 
 	m_ui->startPushButton->setText(tr("Stop"));
 
@@ -245,80 +233,87 @@ static int randomNumber(int min, int max)
 #endif
 }
 
-void MainWindow::onTimer()
+void MainWindow::clicker(int row)
 {
-	// do this because sometimes, the mouse move when clicking
-	if (m_lastMousePosition == QPoint()) m_lastMousePosition = QCursor::pos();
+	// wait a little
+	if (row > -1) QThread::currentThread()->sleep(1);
 
-	QTimer* timer = qobject_cast<QTimer*>(sender());
-
-	int row = timer->property("row").toInt();
-
-	Spot spot;
-	
-	if (row < 0)
+	while(m_stopClicker == 0)
 	{
-		// simple mode
-		spot = m_spot;
-	}
-	else
-	{
-		// multi mode
-		spot = m_model->getSpot(row);
-	}
-
-	// stop auto-click if move the mouse
-	if (QCursor::pos() != m_lastMousePosition)
-	{
-		onStartOrStop();
-	}
-
-	// 50% change position
-	if (randomNumber(0, 1) == 0)
-	{
-		// randomize position
-		int dx = randomNumber(0, 2) - 1;
-		int dy = randomNumber(0, 2) - 1;
-
-		// invert sign
-		if ((spot.lastPosition.x() + dx > (spot.originalPosition.x() + 5)) || (spot.lastPosition.x() + dx < (spot.originalPosition.x() - 5))) dx = -dx;
-		if ((spot.lastPosition.y() + dy > (spot.originalPosition.y() + 5)) || (spot.lastPosition.y() + dx < (spot.originalPosition.y() - 5))) dy = -dy;
-
-		spot.lastPosition += QPoint(dx, dy);
+		Spot spot;
 
 		if (row < 0)
 		{
 			// simple mode
-			m_spot = spot;
+			spot = m_spot;
 		}
 		else
 		{
 			// multi mode
-			m_model->setSpot(row, spot);
+			spot = m_model->getSpot(row);
 		}
+
+		{
+			// use a lock to avoid wrong mouse moving check between spots
+			QMutexLocker lock(&m_clickerMutex);
+
+			// 50% change position
+			if (randomNumber(0, 1) == 0)
+			{
+				// randomize position
+				int dx = randomNumber(0, 2) - 1;
+				int dy = randomNumber(0, 2) - 1;
+
+				// invert sign
+				if ((spot.lastPosition.x() + dx > (spot.originalPosition.x() + 5)) || (spot.lastPosition.x() + dx < (spot.originalPosition.x() - 5))) dx = -dx;
+				if ((spot.lastPosition.y() + dy > (spot.originalPosition.y() + 5)) || (spot.lastPosition.y() + dx < (spot.originalPosition.y() - 5))) dy = -dy;
+
+				spot.lastPosition += QPoint(dx, dy);
+
+				if (row < 0)
+				{
+					// simple mode
+					m_spot = spot;
+				}
+				else
+				{
+					// multi mode
+					m_model->setSpot(row, spot);
+				}
+			}
+
+			// set cursor position
+			QCursor::setPos(spot.lastPosition);
+
+			// left click down
+			mouseLeftClickDown(spot.lastPosition);
+
+			// between 6 and 14 clicks/second = 125-166
+
+			// wait a little before releasing the mouse
+			QThread::currentThread()->msleep(randomNumber(10, 25));
+
+			// left click up
+			mouseLeftClickUp(spot.lastPosition);
+
+			// stop auto-click if move the mouse
+			if (QCursor::pos() != spot.lastPosition)
+			{
+				m_stopClicker = row + 1;
+				break;
+			}
+
+			emit changeSystrayIcon();
+		}
+
+		// wait before next click
+		QThread::currentThread()->msleep(randomNumber(30, spot.delay));
 	}
 
-	// set cursor position
-	QCursor::setPos(spot.lastPosition);
-
-	// update last mouse position
-	m_lastMousePosition = spot.lastPosition;
-
-	// left click down
-	mouseLeftClickDown(spot.lastPosition);
-
-	// between 6 and 14 clicks/second = 125-166
-
-	// wait a little before releasing the mouse
-	QThread::currentThread()->msleep(randomNumber(10, 25));
-
-	// left click up
-	mouseLeftClickUp(spot.lastPosition);
-
-	int delay = randomNumber(30, spot.delay) - 10 /* Qt latency */;
-
-	// restart timer
-	timer->start(delay);
+	if (m_stopClicker == row + 1)
+	{
+		emit clickerStopped();
+	}
 }
 
 void MainWindow::onLoad()
@@ -394,45 +389,6 @@ void MainWindow::listenExternalInputEvents()
 
 		QThread::currentThread()->msleep(10);
 	}
-}
-
-void MainWindow::onStartSimple()
-{
-	for (int i = 0; i < m_timers.size(); ++i)
-	{
-		m_timers[i]->stop();
-		m_timers[i]->deleteLater();
-		m_timers[i] = nullptr;
-	}
-
-	m_timers.clear();
-
-	if (m_ui->startPushButton->text() == tr("Stop"))
-	{
-		m_ui->startPushButton->setText(tr("Start"));
-		return;
-	}
-
-	QTimer* timer = new QTimer(this);
-	timer->setProperty("row", -1);
-	timer->setSingleShot(true);
-
-	// wait 1 second before to really start
-	timer->setInterval(100);
-
-	connect(timer, &QTimer::timeout, this, &MainWindow::onTimer);
-
-	m_timers << timer;
-
-	m_spot.delay = m_ui->defaultDelaySpinBox->value();
-	m_spot.lastPosition = QCursor::pos();
-	m_spot.originalPosition = m_spot.lastPosition;
-	m_lastMousePosition = m_spot.lastPosition;
-
-	// start all timers
-	m_timers[0]->start();
-
-	m_ui->startPushButton->setText(tr("Stop"));
 }
 
 void MainWindow::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
