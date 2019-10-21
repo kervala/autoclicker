@@ -459,7 +459,7 @@ void MainWindow::onAbout()
 	QMessageBox::about(this,
 		tr("About %1").arg(QApplication::applicationName()),
 		QString("%1 %2<br>").arg(QApplication::applicationName()).arg(QApplication::applicationVersion())+
-		tr("deviantART Messaging Network (dAmn) chat client")+
+		tr("Tool to click automatically")+
 		QString("<br><br>")+
 		tr("Author: %1").arg("<a href=\"http://kervala.deviantart.com\">Kervala</a><br>")+
 		tr("Support: %1").arg("<a href=\"http://dev.kervala.net/projects/autoclicker\">http://dev.kervala.net/projects/autoclicker</a>"));
