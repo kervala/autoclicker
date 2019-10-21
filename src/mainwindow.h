@@ -110,7 +110,6 @@ protected:
 	Ui::MainWindow *m_ui;
 
 	Spot m_spot;
-	QShortcut *m_startShortcut;
 	Updater *m_updater;
 };
 

@@ -113,9 +113,6 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	connect(m_updater, &Updater::newVersionDetected, this, &MainWindow::onNewVersion);
 	connect(m_updater, &Updater::noNewVersionDetected, this, &MainWindow::onNoNewVersion);
 
-	// Shortcut
-	connect(m_startShortcut, &QShortcut::activated, this, &MainWindow::onStartSimple);
-
 	m_updater->checkUpdates(true);
 }
 
@@ -152,11 +149,6 @@ void MainWindow::moveEvent(QMoveEvent *e)
 	ConfigFile::getInstance()->setWindowPosition(QPoint(x(), y()));
 
 	e->accept();
-}
-
-void MainWindow::onStartKeyChanged(const QKeySequence &keySequence)
-{
-	m_startShortcut->setKey(keySequence);
 }
 
 void MainWindow::onAdd()
