@@ -178,6 +178,10 @@ void MainWindow::onStartOrStop()
 {
 	if (m_ui->startPushButton->text() == tr("Stop"))
 	{
+		show();
+
+		SystrayIcon::getInstance()->setStatus(SystrayIcon::StatusNormal);
+
 		m_ui->startPushButton->setText(tr("Start"));
 		return;
 	}
@@ -497,12 +501,7 @@ void MainWindow::onSystrayAction(SystrayIcon::SystrayAction action)
 {
 	switch(action)
 	{
-		case SystrayIcon::ActionOpenURL:
-		//if (!m_urlToCheck.isEmpty()) QDesktopServices::openUrl(m_urlToCheck);
-		break;
-
-		case SystrayIcon::ActionReadLastNote:
-		//QDesktopServices::openUrl(QUrl("https://www.deviantart.com/messages/notes/"));
+		case SystrayIcon::ActionUpdate:
 		break;
 
 		default:
