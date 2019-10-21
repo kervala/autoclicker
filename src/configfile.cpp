@@ -57,6 +57,34 @@ type ConfigFile::get##function() const\
 	return m_##var;\
 }
 
+#define IMPLEMENT_SIZE_VAR(function, var) \
+void ConfigFile::set##function(const QSize &size)\
+{\
+	if (m_##var == size || size.width() < 10 || size.height() < 10) return;\
+	\
+	m_##var = size;\
+	modified(true);\
+}\
+\
+QSize ConfigFile::get##function() const\
+{\
+	return m_##var;\
+}
+
+#define IMPLEMENT_POINT_VAR(function, var) \
+void ConfigFile::set##function(const QPoint &pos)\
+{\
+	if (m_##var == pos || pos.isNull()) return;\
+	\
+	m_##var = pos;\
+	modified(true);\
+}\
+\
+QPoint ConfigFile::get##function() const\
+{\
+	return m_##var;\
+}
+
 #define IMPLEMENT_QSTRING_VAR(function, var) \
 IMPLEMENT_TYPED_VAR(QString, function, var)
 
@@ -108,6 +136,29 @@ bool ConfigFile::loadVersion1()
 
 	m_settings.endGroup();
 
+	// test parameters
+	m_settings.beginGroup("test");
+
+	m_testDialogSize = QSize(m_settings.value("width", 0).toInt(), m_settings.value("height", 0).toInt());
+	m_testDialogPosition = QPoint(m_settings.value("x", 0).toInt(), m_settings.value("y", 0).toInt());
+
+	m_settings.endGroup();
+
+	// keys parameters
+	m_settings.beginGroup("keys");
+
+	m_startKey = m_settings.value("start", "").toString();
+	m_positionKey = m_settings.value("position", "").toString();
+
+	m_settings.endGroup();
+
+	// simple parameters
+	m_settings.beginGroup("simple");
+
+	m_delay = m_settings.value("delay", 150).toInt();
+
+	m_settings.endGroup();
+
 	updateSettings();
 
 	return true;
@@ -137,35 +188,34 @@ bool ConfigFile::save()
 
 	m_settings.endGroup();
 
+	// test dialog parameters
+	m_settings.beginGroup("test");
+
+	m_settings.setValue("width", m_testDialogSize.width());
+	m_settings.setValue("height", m_testDialogSize.height());
+	m_settings.setValue("x", m_testDialogPosition.x());
+	m_settings.setValue("y", m_testDialogPosition.y());
+
+	m_settings.endGroup();
+
+	// keys parameters
+	m_settings.beginGroup("keys");
+
+	m_settings.setValue("start", m_startKey);
+	m_settings.setValue("position", m_positionKey);
+
+	m_settings.endGroup();
+
+	// simple parameters
+	m_settings.beginGroup("simple");
+
+	m_settings.setValue("delay", m_delay);
+
+	m_settings.endGroup();
+
 	modified(false);
 
 	return true;
-}
-
-QSize ConfigFile::getWindowSize() const
-{
-	return m_size;
-}
-
-void ConfigFile::setWindowSize(const QSize &size)
-{
-	if (m_size == size || size.width() < 10 || size.height() < 10) return;
-
-	m_size = size;
-	modified(true);
-}
-
-QPoint ConfigFile::getWindowPosition() const
-{
-	return m_position;
-}
-
-void ConfigFile::setWindowPosition(const QPoint &pos)
-{
-	if (m_position == pos || pos.isNull()) return;
-
-	m_position = pos;
-	modified(true);
 }
 
 void ConfigFile::initDirectories()
@@ -319,3 +369,13 @@ IMPLEMENT_QSTRING_VAR(CacheDirectory, cacheDirectory);
 IMPLEMENT_QSTRING_VAR(DownloadDirectory, downloadDirectory);
 IMPLEMENT_QSTRING_VAR(GlobalDataDirectory, globalDataDirectory);
 IMPLEMENT_QSTRING_VAR(LocalDataDirectory, localDataDirectory);
+IMPLEMENT_QSTRING_VAR(StartKey, startKey);
+IMPLEMENT_QSTRING_VAR(PositionKey, positionKey);
+
+IMPLEMENT_SIZE_VAR(WindowSize, size);
+IMPLEMENT_POINT_VAR(WindowPosition, position);
+
+IMPLEMENT_SIZE_VAR(TestDialogSize, testDialogSize);
+IMPLEMENT_POINT_VAR(TestDialogPosition, testDialogPosition);
+
+IMPLEMENT_INT_VAR(Delay, delay);

@@ -69,7 +69,9 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	// m_mapper->addMapping(positionPushButton, 1);
 	m_mapper->addMapping(m_ui->delaySpinBox, 2);
 
-	m_startShortcut = new QShortcut(QKeySequence(), this);
+	m_ui->startKeySequenceEdit->setKeySequence(QKeySequence(ConfigFile::getInstance()->getStartKey()));
+	m_ui->positionKeySequenceEdit->setKeySequence(QKeySequence(ConfigFile::getInstance()->getPositionKey()));
+	m_ui->defaultDelaySpinBox->setValue(ConfigFile::getInstance()->getDelay());
 
 	// File menu
 	connect(m_ui->actionTestDialog, &QAction::triggered, this, &MainWindow::onTestDialog);
@@ -88,6 +90,8 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	connect(m_ui->savePushButton, &QPushButton::clicked, this, &MainWindow::onSave);
 	connect(m_ui->positionPushButton, &QPushButton::clicked, this, &MainWindow::onPosition);
 	connect(m_ui->startKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onStartKeyChanged);
+	connect(m_ui->positionKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onPositionKeyChanged);
+	connect(m_ui->defaultDelaySpinBox, qOverload<int>(&QSpinBox::valueChanged), this, &MainWindow::onDelayChanged);
 
 	// Systray
 	connect(systray, &SystrayIcon::requestMinimize, this, &MainWindow::onMinimize);
@@ -359,18 +363,13 @@ void MainWindow::onTestDialog()
 	s_dialog->show();
 }
 
-void MainWindow::getMousePosition()
-{
-	QPoint defaultPosition(0, 0);
+	QSize size = ConfigFile::getInstance()->getTestDialogSize();
+	if (!size.isNull()) s_dialog->resize(size);
 
-	m_mousePosition = defaultPosition;
+	QPoint pos = ConfigFile::getInstance()->getTestDialogPosition();
+	if (!pos.isNull()) s_dialog->move(pos);
 
-	while (m_mousePosition == defaultPosition && QThread::currentThread()->isRunning())
-	{
-		QThread::currentThread()->msleep(100);
-	}
-
-	emit mousePosition(m_mousePosition);
+	s_dialog->show();
 }
 
 void MainWindow::listenExternalInputEvents()
@@ -466,6 +465,21 @@ void MainWindow::onMousePositionChanged(const QPoint& pos)
 
 	m_ui->positionPushButton->setEnabled(true);
 	m_ui->positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
+}
+
+void MainWindow::onStartKeyChanged(const QKeySequence &seq)
+{
+	ConfigFile::getInstance()->setStartKey(seq.toString());
+}
+
+void MainWindow::onPositionKeyChanged(const QKeySequence &seq)
+{
+	ConfigFile::getInstance()->setPositionKey(seq.toString());
+}
+
+void MainWindow::onDelayChanged(int delay)
+{
+	ConfigFile::getInstance()->setDelay(delay);
 }
 
 void MainWindow::onCheckUpdates()

@@ -33,16 +33,23 @@ public:
 	void reset();
 
 private:
-	void mousePressEvent(QMouseEvent* event);
-	void mouseReleaseEvent(QMouseEvent* event);
-	void mouseMoveEvent(QMouseEvent* event);
-
 	QDateTime m_firstPress;
 	QDateTime m_lastPress;
 	QDateTime m_lastRelease;
 	qint64 m_clicks;
 	double m_minClickDelay;
 	double m_maxClickDelay;
+
+protected:
+	// mouse events
+	void mousePressEvent(QMouseEvent* event);
+	void mouseReleaseEvent(QMouseEvent* event);
+	void mouseMoveEvent(QMouseEvent* event);
+
+	// dialog events
+	void closeEvent(QCloseEvent* e);
+	void resizeEvent(QResizeEvent* e);
+	void moveEvent(QMoveEvent* e);
 };
 
 #endif

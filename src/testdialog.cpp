@@ -20,6 +20,7 @@
 #include "common.h"
 #include "testdialog.h"
 #include "moc_testdialog.cpp"
+#include "configfile.h"
 
 #ifdef DEBUG_NEW
 	#define new DEBUG_NEW
@@ -83,4 +84,25 @@ void TestDialog::mouseReleaseEvent(QMouseEvent* event)
 void TestDialog::mouseMoveEvent(QMouseEvent* event)
 {
 	positionLabel->setText(tr("Mouse position: (%1, %2)").arg(event->globalPos().x()).arg(event->globalPos().y()));
+}
+
+void TestDialog::closeEvent(QCloseEvent* e)
+{
+	hide();
+
+	e->accept();
+}
+
+void TestDialog::resizeEvent(QResizeEvent* e)
+{
+	ConfigFile::getInstance()->setTestDialogSize(e->size());
+
+	e->accept();
+}
+
+void TestDialog::moveEvent(QMoveEvent* e)
+{
+	ConfigFile::getInstance()->setTestDialogPosition(QPoint(x(), y()));
+
+	e->accept();
 }

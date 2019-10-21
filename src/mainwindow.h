@@ -73,7 +73,10 @@ public slots:
 	void onProgress(qint64 readBytes, qint64 totalBytes);
 
 	void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-	void onMousePositionChanged(const QPoint& pos);
+	void onMousePositionChanged(const QPoint &pos);
+	void onStartKeyChanged(const QKeySequence &seq);
+	void onPositionKeyChanged(const QKeySequence &seq);
+	void onDelayChanged(int delay);
 
 	void onTimer();
 	void onStartSimple();

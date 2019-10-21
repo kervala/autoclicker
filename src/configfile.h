@@ -66,8 +66,13 @@ DECLARE_QSTRING_VAR(CacheDirectory, cacheDirectory);
 DECLARE_QSTRING_VAR(DownloadDirectory, downloadDirectory);
 DECLARE_QSTRING_VAR(GlobalDataDirectory, globalDataDirectory);
 DECLARE_QSTRING_VAR(LocalDataDirectory, localDataDirectory);
+DECLARE_QSTRING_VAR(StartKey, startKey);
+DECLARE_QSTRING_VAR(PositionKey, positionKey);
 DECLARE_TYPED_VAR(QSize, WindowSize, size);
 DECLARE_TYPED_VAR(QPoint, WindowPosition, position);
+DECLARE_TYPED_VAR(QSize, TestDialogSize, testDialogSize);
+DECLARE_TYPED_VAR(QPoint, TestDialogPosition, testDialogPosition);
+DECLARE_INT_VAR(Delay, delay);
 
 public slots:
 	bool load();
