@@ -78,7 +78,6 @@ public slots:
 	void onPositionKeyChanged(const QKeySequence &seq);
 	void onDelayChanged(int delay);
 
-	void onTimer();
 	void onStartSimple();
 	void onChangeSystrayIcon();
 
@@ -97,6 +96,7 @@ protected:
 
 	void getMousePosition();
 	void listenExternalInputEvents();
+	void clicker(int row);
 
 	QWinTaskbarButton *m_button;
 	SpotModel *m_model;
@@ -104,8 +104,9 @@ protected:
 	QPoint m_mousePosition;
 	QPoint m_lastMousePosition;
 	QAtomicInt m_stopExternalListener;
+	QAtomicInt m_stopClicker;
+	QMutex m_clickerMutex;
 
-	QList<QTimer*> m_timers;
 	Ui::MainWindow *m_ui;
 
 	Spot m_spot;
