@@ -77,8 +77,8 @@ void TestDialog::mouseReleaseEvent(QMouseEvent* event)
 	m_lastRelease = now;
 
 	clicksLabel->setText(tr("Number of clicks: %1").arg(m_clicks));
-	releaseLabel->setText(tr("Click delay: %2 ms (min: %3 / max: %4)").arg(lastClickDelay).arg(m_minClickDelay).arg(m_maxClickDelay));
-	averageLabel->setText(tr("Average: %1 cps (%2 ms)").arg(averageCPS).arg(averageClicksDelay));
+	releaseLabel->setText(tr("Click delay: %1 ms (average: %2 / min: %3 / max: %4)").arg(lastClickDelay).arg(averageClicksDelay).arg(m_minClickDelay).arg(m_maxClickDelay));
+	averageLabel->setText(tr("CPS: %1 cps").arg(averageCPS));
 }
 
 void TestDialog::mouseMoveEvent(QMouseEvent* event)
