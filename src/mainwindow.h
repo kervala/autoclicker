@@ -94,15 +94,13 @@ protected:
 	void moveEvent(QMoveEvent *e);
 	bool event(QEvent *e);
 
-	void getMousePosition();
 	void listenExternalInputEvents();
 	void clicker(int row);
 
 	QWinTaskbarButton *m_button;
 	SpotModel *m_model;
 	QDataWidgetMapper *m_mapper;
-	QPoint m_mousePosition;
-	QPoint m_lastMousePosition;
+
 	QAtomicInt m_stopExternalListener;
 	QAtomicInt m_stopClicker;
 	QMutex m_clickerMutex;
