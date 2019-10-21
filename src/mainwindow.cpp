@@ -132,6 +132,8 @@ void MainWindow::showEvent(QShowEvent *e)
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
+	m_stopExternalListener = 1;
+
 	hide();
 
 	e->accept();
@@ -328,12 +330,8 @@ void MainWindow::onSave()
 
 void MainWindow::onPosition()
 {
-	QModelIndex index = m_ui->spotsListView->selectionModel()->currentIndex();
-
 	m_ui->positionPushButton->setEnabled(false);
 	m_ui->positionPushButton->setText("???");
-
-	QtConcurrent::run(this, &MainWindow::getMousePosition);
 }
 
 void MainWindow::onTestDialog()
@@ -347,8 +345,6 @@ void MainWindow::onTestDialog()
 	}
 
 	s_dialog->reset();
-	s_dialog->show();
-}
 
 	QSize size = ConfigFile::getInstance()->getTestDialogSize();
 	if (!size.isNull()) s_dialog->resize(size);
@@ -361,22 +357,36 @@ void MainWindow::onTestDialog()
 
 void MainWindow::listenExternalInputEvents()
 {
-	QKeySequence sequence = m_ui->startKeySequenceEdit->keySequence();
+	QKeySequence startKeySequence = m_ui->startKeySequenceEdit->keySequence();
+	QKeySequence positionKeySequence = m_ui->positionKeySequenceEdit->keySequence();
 
-	qint16 key = QKeySequenceToVK(sequence);
+	qint16 startKey = QKeySequenceToVK(startKeySequence);
+	qint16 positionKey = QKeySequenceToVK(positionKeySequence);
 
 	// no key defined
-	if (key == 0) return;
+	if (startKey == 0 && positionKey == 0) return;
 
-	while (!m_stopExternalListener)
+	while (m_stopExternalListener == 0 && QThread::currentThread()->isRunning())
 	{
-		bool buttonPressed = isKeyPressed(key);
+		QPoint pos = QCursor::pos();
 
-		if (buttonPressed)
+		if (!underMouse())
 		{
-			qDebug() << "key" << sequence << "pressed (" << key << ")";
+			bool buttonPressed = isKeyPressed(startKey);
 
-			emit startSimple();
+			if (buttonPressed)
+			{
+				emit startSimple();
+			}
+
+			buttonPressed = isKeyPressed(positionKey);
+
+			if (buttonPressed)
+			{
+				emit mousePosition(pos);
+
+				return;
+			}
 		}
 
 		QThread::currentThread()->msleep(10);
@@ -405,11 +415,16 @@ void MainWindow::onSelectionChanged(const QItemSelection& selected, const QItemS
 
 void MainWindow::onMousePositionChanged(const QPoint& pos)
 {
+	// only when position button is disabled
+	if (m_ui->positionPushButton->isEnabled()) return;
+
 	QModelIndex index = m_ui->spotsListView->selectionModel()->currentIndex();
 
 	// update original and last positions
-	m_model->setData(m_model->index(index.row(), 1), pos);
-	m_model->setData(m_model->index(index.row(), 3), pos);
+	Spot spot = m_model->getSpot(index.row());
+	spot.lastPosition = pos;
+	spot.originalPosition = pos;
+	m_model->setSpot(index.row(), spot);
 
 	m_ui->positionPushButton->setEnabled(true);
 	m_ui->positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
@@ -497,20 +512,36 @@ void MainWindow::onSystrayAction(SystrayIcon::SystrayAction action)
 
 bool MainWindow::event(QEvent *e)
 {
-	if (e->type() == QEvent::WindowActivate)
-	{
-		m_stopExternalListener = true;
-	}
-	else if (e->type() == QEvent::WindowDeactivate)
+	if (e->type() == QEvent::WindowDeactivate)
 	{
 		if (!isHidden())
 		{
-			// click outside application
-			m_mousePosition = QCursor::pos();
+			if (!m_ui->positionPushButton->isEnabled())
+			{
+				// don't need to listen for a key anymore
+				m_stopExternalListener = 1;
 
-			m_stopExternalListener = false;
+				// click outside application
+				emit mousePosition(QCursor::pos());
+			}
+		}
+	}
+	else if (e->type() == QEvent::Enter)
+	{
+		m_stopExternalListener = 1;
+	}
+	else if (e->type() == QEvent::Leave)
+	{
+		if (!isHidden())
+		{
+			if (!m_ui->positionPushButton->isEnabled() || m_ui->startKeySequenceEdit->keySequence() != QKeySequence::UnknownKey)
+			{
+				// reset external listener
+				m_stopExternalListener = 0;
 
-			QtConcurrent::run(this, &MainWindow::listenExternalInputEvents);
+				// start to listen for a key
+				QtConcurrent::run(this, &MainWindow::listenExternalInputEvents);
+			}
 		}
 	}
 	else if (e->type() == QEvent::LanguageChange)
