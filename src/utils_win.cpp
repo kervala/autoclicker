@@ -66,7 +66,7 @@ int QKeySequenceToVK(const QKeySequence& seq)
 	if (s_keyArray.isEmpty())
 	{
 		// special characters
-		s_keyArray["Space"] = ' ';
+		s_keyArray["Space"] = VK_SPACE;
 		s_keyArray["Ins"] = VK_INSERT;
 		s_keyArray["Del"] = VK_DELETE;
 		s_keyArray["Esc"] = VK_ESCAPE;
@@ -74,6 +74,7 @@ int QKeySequenceToVK(const QKeySequence& seq)
 		// s_keyArray["Backtab"] = VK_BACK;
 		s_keyArray["Backspace"] = VK_BACK;
 		s_keyArray["Return"] = VK_RETURN;
+		// s_keyArray["Enter"] = VK_ENTER;
 		s_keyArray["Pause"] = VK_PAUSE;
 		s_keyArray["Print"] = VK_PRINT;
 		// s_keyArray["SysReq"] = VK_SYSREQ;
@@ -83,17 +84,26 @@ int QKeySequenceToVK(const QKeySequence& seq)
 		s_keyArray["Up"] = VK_UP;
 		s_keyArray["Right"] = VK_RIGHT;
 		s_keyArray["Down"] = VK_DOWN;
-		/*
-				{ Qt::Key_PageUp,       QT_TRANSLATE_NOOP("QShortcut", "PgUp") },
-				{ Qt::Key_PageDown,     QT_TRANSLATE_NOOP("QShortcut", "PgDown") },
-				{ Qt::Key_CapsLock,     QT_TRANSLATE_NOOP("QShortcut", "CapsLock") },
-				{ Qt::Key_NumLock,      QT_TRANSLATE_NOOP("QShortcut", "NumLock") },
-				{ Qt::Key_ScrollLock,   QT_TRANSLATE_NOOP("QShortcut", "ScrollLock") },
-				{ Qt::Key_Menu,         QT_TRANSLATE_NOOP("QShortcut", "Menu") },
-				{ Qt::Key_Help,         QT_TRANSLATE_NOOP("QShortcut", "Help") },
-		*/
-		// numbers
-		for (int i = '0'; i <= '9'; ++i) s_keyArray[QString(i)] = i;
+		s_keyArray["PgUp"] = VK_PRIOR;
+		s_keyArray["PgDown"] = VK_NEXT;
+		s_keyArray["Help"] = VK_HELP;
+		s_keyArray["Menu"] = VK_MENU;
+		s_keyArray["NumLock"] = VK_CAPITAL;
+		s_keyArray["CapsLock"] = VK_NUMLOCK;
+		s_keyArray["ScrollLock"] = VK_SCROLL;
+		s_keyArray["+"] = VK_ADD;
+		s_keyArray["-"] = VK_SUBTRACT;
+		s_keyArray["*"] = VK_MULTIPLY;
+		s_keyArray["/"] = VK_DIVIDE;
+		s_keyArray["/"] = VK_SNAPSHOT;
+
+		// modifiers
+		s_keyArray["Shift"] = VK_SHIFT;
+		s_keyArray["Control"] = VK_CONTROL;
+		s_keyArray["Alt"] = VK_MENU;
+
+		// numbers numpad
+		for (int i = '0'; i <= '9'; ++i) s_keyArray[QString(i)] = VK_NUMPAD0 + i;
 
 		// letters
 		for (int i = 'A'; i <= 'Z'; ++i) s_keyArray[QString(i)] = i;
