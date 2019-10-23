@@ -45,140 +45,6 @@ QPixmap qt_pixmapFromWinHBITMAP(HBITMAP bitmap, int hbitmapFormat = 0);
 #define new DEBUG_NEW
 #endif
 
-/*
-#define min(a,b) (((a)<(b))?(a):(b))
-#define max(a,b) (((a)>(b))?(a):(b))
-
-#include <gdiplus.h>
-#include <d3d.h>
-#include <d3d9.h>
-#include <d3d9helper.h>
-
-#define WIDEN2(x) L ## x
-#define WIDEN(x) WIDEN2(x)
-#define __WFILE__ WIDEN(__FILE__)
-#define HRCHECK(__expr) {hr=(__expr);if(FAILED(hr)){wprintf(L"FAILURE 0x%08X (%i)\n\tline: %u file: '%s'\n\texpr: '" WIDEN(#__expr) L"'\n",hr, hr, __LINE__,__WFILE__);goto cleanup;}}
-#define RELEASE(__p) {if(__p!=nullptr){__p->Release();__p=nullptr;}}
-
-
-QPixmap grabWindow(WId window)
-{
-	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
-	ULONG_PTR gdiplusToken;
-	GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, 0);
-	HDC desktopdc = GetDC((HWND)window);
-	HDC hdc = CreateCompatibleDC(desktopdc);
-	int width = GetSystemMetrics(SM_CXSCREEN);
-	int height = GetSystemMetrics(SM_CYSCREEN);
-	HBITMAP mybmp = CreateCompatibleBitmap(desktopdc, width, height);
-	HBITMAP oldbmp = (HBITMAP)SelectObject(hdc, mybmp);
-	BitBlt(hdc, 0, 0, width, height, desktopdc, 0, 0, SRCCOPY | CAPTUREBLT);
-	SelectObject(hdc, oldbmp);
-
-	QPixmap	res = QtWin::fromHBITMAP(mybmp);
-
-	Gdiplus::GdiplusShutdown(gdiplusToken);
-	ReleaseDC((HWND)window, desktopdc);
-	DeleteObject(mybmp);
-	DeleteDC(hdc);
-
-	return res;
-}
-
-
-HRESULT Direct3D9TakeScreenshots(UINT adapter)
-{
-	HRESULT hr = S_OK;
-	IDirect3D9* d3d = nullptr;
-	IDirect3DDevice9* device = nullptr;
-	IDirect3DSurface9* surface = nullptr;
-	D3DPRESENT_PARAMETERS parameters = { 0 };
-	D3DDISPLAYMODE mode;
-	D3DLOCKED_RECT rc;
-	UINT pitch;
-	SYSTEMTIME st;
-	LPBYTE shots = nullptr;
-
-	// init D3D and get screen size
-	d3d = Direct3DCreate9(D3D_SDK_VERSION);
-	HRCHECK(d3d->GetAdapterDisplayMode(adapter, &mode));
-
-	parameters.Windowed = TRUE;
-	parameters.BackBufferCount = 1;
-	parameters.BackBufferHeight = mode.Height;
-	parameters.BackBufferWidth = mode.Width;
-	parameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	parameters.hDeviceWindow = NULL;
-
-	// create device & capture surface
-	HRCHECK(d3d->CreateDevice(adapter, D3DDEVTYPE_HAL, NULL, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &parameters, &device));
-	HRCHECK(device->CreateOffscreenPlainSurface(mode.Width, mode.Height, D3DFMT_A8R8G8B8, D3DPOOL_SYSTEMMEM, &surface, nullptr));
-
-	// compute the required buffer size
-	HRCHECK(surface->LockRect(&rc, NULL, 0));
-	pitch = rc.Pitch;
-	HRCHECK(surface->UnlockRect());
-
-	// allocate screenshots buffers
-	shots = new BYTE[pitch * mode.Height];
-
-	// get the data
-	HRCHECK(device->GetFrontBufferData(0, surface));
-
-	// copy it into our buffers
-	HRCHECK(surface->LockRect(&rc, NULL, 0));
-	CopyMemory(shots, rc.pBits, rc.Pitch * mode.Height);
-	HRCHECK(surface->UnlockRect());
-
-cleanup:
-	if (shots != nullptr)
-	{
-		delete shots;
-	}
-	RELEASE(surface);
-	RELEASE(device);
-	RELEASE(d3d);
-
-	return hr;
-}
-
-HRESULT SavePixelsToFile32bppPBGRA(UINT width, UINT height, UINT stride, LPBYTE pixels, LPWSTR filePath, const GUID& format)
-{
-	if (!filePath || !pixels)
-		return E_INVALIDARG;
-
-	HRESULT hr = S_OK;
-	IWICImagingFactory* factory = nullptr;
-	IWICBitmapEncoder* encoder = nullptr;
-	IWICBitmapFrameEncode* frame = nullptr;
-	IWICStream* stream = nullptr;
-	GUID pf = GUID_WICPixelFormat32bppPBGRA;
-	BOOL coInit = CoInitialize(nullptr);
-
-	HRCHECK(CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&factory)));
-	HRCHECK(factory->CreateStream(&stream));
-	HRCHECK(stream->InitializeFromFilename(filePath, GENERIC_WRITE));
-	HRCHECK(factory->CreateEncoder(format, nullptr, &encoder));
-	HRCHECK(encoder->Initialize(stream, WICBitmapEncoderNoCache));
-	HRCHECK(encoder->CreateNewFrame(&frame, nullptr)); // we don't use options here
-	HRCHECK(frame->Initialize(nullptr)); // we dont' use any options here
-	HRCHECK(frame->SetSize(width, height));
-	HRCHECK(frame->SetPixelFormat(&pf));
-	HRCHECK(frame->WritePixels(height, stride, stride * height, pixels));
-	HRCHECK(frame->Commit());
-	HRCHECK(encoder->Commit());
-
-cleanup:
-	RELEASE(stream);
-	RELEASE(frame);
-	RELEASE(encoder);
-	RELEASE(factory);
-	if (coInit) CoUninitialize();
-	return hr;
-}
-
-*/
-
 void mouseLeftClickUp(const QPoint& pos)
 {
 	mouse_event(MOUSEEVENTF_LEFTUP, pos.x(), pos.y(), 0, 0);
@@ -189,7 +55,7 @@ void mouseLeftClickDown(const QPoint& pos)
 	mouse_event(MOUSEEVENTF_LEFTDOWN, pos.x(), pos.y(), 0, 0);
 }
 
-qint16 QKeySequenceToVK(const QKeySequence& seq)
+int QKeySequenceToVK(const QKeySequence& seq)
 {
 	QString str = seq.toString();
 
@@ -245,7 +111,7 @@ qint16 QKeySequenceToVK(const QKeySequence& seq)
 	return -1;
 }
 
-bool isKeyPressed(qint16 key)
+bool isKeyPressed(int key)
 {
 	return GetAsyncKeyState(key) & 1;
 }

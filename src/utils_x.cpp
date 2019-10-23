@@ -47,12 +47,12 @@ void mouseLeftClickDown(const QPoint& pos)
 {
 }
 
-qint16 QKeySequenceToVK(const QKeySequence& seq)
+int QKeySequenceToVK(const QKeySequence& seq)
 {
 	return 0;
 }
 
-bool isKeyPressed(qint16 key)
+bool isKeyPressed(int key)
 {
 	return false;
 }
