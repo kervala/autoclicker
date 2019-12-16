@@ -343,6 +343,24 @@ void MainWindow::clicker()
 	}
 }
 
+void MainWindow::emitMousePosition()
+{
+	QPoint pos = QCursor::pos();
+
+	QWindow* window = QGuiApplication::topLevelAt(pos);
+
+	if (window)
+	{
+		qDebug() << window->title();
+	}
+	else
+	{
+		qDebug() << "No window under cursor";
+	}
+
+	emit mousePosition(pos);
+}
+
 void MainWindow::onLoad()
 {
 	QString filename = QFileDialog::getOpenFileName(this, tr("Load actions"), ConfigFile::getInstance()->getLocalDataDirectory(), "AutoClicker Files (*.acf)");
@@ -401,8 +419,6 @@ void MainWindow::listenExternalInputEvents()
 
 	while (m_stopExternalListener == 0 && QThread::currentThread()->isRunning())
 	{
-		QPoint pos = QCursor::pos();
-
 		if (!underMouse())
 		{
 			bool buttonPressed = isKeyPressed(startKey);
@@ -416,7 +432,7 @@ void MainWindow::listenExternalInputEvents()
 
 			if (buttonPressed)
 			{
-				emit mousePosition(pos);
+				emitMousePosition();
 
 				return;
 			}
@@ -549,8 +565,7 @@ bool MainWindow::event(QEvent *e)
 				// don't need to listen for a key anymore
 				m_stopExternalListener = 1;
 
-				// click outside application
-				emit mousePosition(QCursor::pos());
+				emitMousePosition();
 			}
 		}
 	}
