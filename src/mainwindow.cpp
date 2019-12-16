@@ -233,7 +233,8 @@ void MainWindow::onChangeSystrayIcon()
 static int randomNumber(int min, int max)
 {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-	return QRandomGenerator::global()->bounded(min, max);
+	// max can't be less or equal to min
+	return QRandomGenerator::global()->bounded(min, qMax(min + 1, max));
 #else
 	return 0;
 #endif
