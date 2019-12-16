@@ -93,7 +93,7 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	connect(m_ui->startKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onStartKeyChanged);
 	connect(m_ui->positionKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onPositionKeyChanged);
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 7, 0)
+#if FALSE && QT_VERSION >= QT_VERSION_CHECK(5, 7, 0)
 	connect(m_ui->defaultDelaySpinBox, qOverload<int>(&QSpinBox::valueChanged), this, &MainWindow::onDelayChanged);
 #else
 	connect(m_ui->defaultDelaySpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::onDelayChanged);
