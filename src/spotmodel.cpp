@@ -56,6 +56,8 @@ int SpotModel::columnCount(const QModelIndex &parent) const
 
 QVariant SpotModel::data(const QModelIndex &index, int role) const
 {
+	if (!index.isValid()) return QVariant();
+
 	if (role == Qt::DisplayRole || role == Qt::EditRole)
 	{
 		switch (index.column())
@@ -67,13 +69,13 @@ QVariant SpotModel::data(const QModelIndex &index, int role) const
 			case 4: return m_spots[index.row()].lastPosition;
 		}
 	}
-
+	
 	return QVariant();
 }
 
 bool SpotModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-	if (role == Qt::EditRole)
+	if (role == Qt::DisplayRole || role == Qt::EditRole)
 	{
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
 		if (!checkIndex(index)) return false;

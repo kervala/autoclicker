@@ -96,7 +96,8 @@ int QKeySequenceToVK(const QKeySequence& seq)
 		s_keyArray["*"] = VK_MULTIPLY;
 		s_keyArray["/"] = VK_DIVIDE;
 		s_keyArray["/"] = VK_SNAPSHOT;
-
+		s_keyArray["\xC2\xB2"] = VK_OEM_7;
+		
 		// modifiers
 		s_keyArray["Shift"] = VK_SHIFT;
 		s_keyArray["Control"] = VK_CONTROL;
@@ -123,7 +124,14 @@ int QKeySequenceToVK(const QKeySequence& seq)
 
 bool isKeyPressed(int key)
 {
-	return GetAsyncKeyState(key) & 1;
+	SHORT res = GetAsyncKeyState(key);
+
+	if (key)
+	{
+		// qDebug() << "key" << res;
+	}
+
+	return res & 1;
 }
 
 QPixmap grabWindow(WId window)
