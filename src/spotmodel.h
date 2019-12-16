@@ -40,6 +40,11 @@ public:
 	bool insertRows(int position, int rows, const QModelIndex& index = QModelIndex()) override;
 	bool removeRows(int position, int rows, const QModelIndex& index = QModelIndex()) override;
 
+	Qt::DropActions supportedDropActions() const override;
+	QStringList mimeTypes() const override;
+	QMimeData* mimeData(const QModelIndexList& indexes) const override;
+	bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) override;
+
 	Spot getSpot(int row) const;
 	void setSpot(int row, const Spot& spot);
 

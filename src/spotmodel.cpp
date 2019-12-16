@@ -99,7 +99,11 @@ bool SpotModel::setData(const QModelIndex &index, const QVariant &value, int rol
 
 Qt::ItemFlags SpotModel::flags(const QModelIndex &index) const
 {
-	return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
+	Qt::ItemFlags flags = Qt::ItemIsDropEnabled | QAbstractTableModel::flags(index);
+
+	if (index.isValid()) flags |= Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
+
+	return flags;
 }
 
 bool SpotModel::insertRows(int position, int rows, const QModelIndex& parent)
@@ -143,6 +147,73 @@ bool SpotModel::removeRows(int position, int rows, const QModelIndex& parent)
 	}
 
 	endRemoveRows();
+	return true;
+}
+
+Qt::DropActions SpotModel::supportedDropActions() const
+{
+	return Qt::MoveAction | Qt::CopyAction;
+}
+
+QStringList SpotModel::mimeTypes() const
+{
+	QStringList types;
+	types << "application/x-autoclicker";
+	return types;
+}
+
+QMimeData* SpotModel::mimeData(const QModelIndexList &indexes) const
+{
+	QMimeData* mimeData = new QMimeData();
+	QByteArray encodedData;
+
+	QDataStream stream(&encodedData, QIODevice::WriteOnly);
+
+	foreach(const QModelIndex &index, indexes)
+	{
+		if (index.isValid())
+		{
+			stream << m_spots[index.row()];
+		}
+	}
+
+	mimeData->setData("application/x-autoclicker", encodedData);
+
+	return mimeData;
+}
+
+bool SpotModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
+{
+	qDebug() << "draopMiniData" << data << action << row << column;
+
+	if (!data->hasFormat("application/x-autoclicker")) return false;
+
+	if (action == Qt::IgnoreAction) return true;
+
+	bool insertAtTheEnd = row == -1;
+
+	if (row == -1) row = rowCount();
+
+	QByteArray encodedData = data->data("application/x-autoclicker");
+	QDataStream stream(&encodedData, QIODevice::ReadOnly);
+
+	Spot spot;
+
+	stream >> spot;
+
+	beginInsertRows(QModelIndex(), row, row);
+
+	if (insertAtTheEnd)
+	{
+		m_spots.push_back(spot);
+	}
+	else
+	{
+		m_spots.insert(row, spot);
+	}
+
+	endInsertRows();
+
 	return true;
 }
 
