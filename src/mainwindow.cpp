@@ -37,7 +37,7 @@
 	#define new DEBUG_NEW
 #endif
 
-MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_stopExternalListener(0), m_stopClicker(0)
+MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_stopExternalListener(0), m_stopClicker(0), m_useSimpleMode(true)
 {
 	m_ui = new Ui::MainWindow();
 	m_ui->setupUi(this);
@@ -163,7 +163,7 @@ void MainWindow::onAdd()
 {
 	QModelIndexList indices = m_ui->spotsListView->selectionModel()->selectedRows();
 
-	int row = indices.isEmpty() ? -1:indices.front().row();
+	int row = indices.isEmpty() ? -1:indices.front().row()+1;
 
 	m_model->insertRow(row);
 }
@@ -182,8 +182,11 @@ void MainWindow::onRemove()
 
 void MainWindow::onStartOrStop()
 {
-	if (m_ui->startPushButton->text() == tr("Stop"))
+	// stop clicker is greater than 0 when stopped
+	if (m_stopClicker)
 	{
+		m_stopClicker = 0;
+
 		show();
 
 		SystrayIcon::getInstance()->setStatus(SystrayIcon::StatusNormal);
@@ -198,11 +201,9 @@ void MainWindow::onStartOrStop()
 
 	// reset stop flag
 	m_stopClicker = 0;
+	m_useSimpleMode = false;
 
-	for (int row = 0; row < m_model->rowCount(); ++row)
-	{
-		QtConcurrent::run(this, &MainWindow::clicker, row);
-	}
+	QtConcurrent::run(this, &MainWindow::clicker);
 }
 
 void MainWindow::onStartSimple()
@@ -217,8 +218,9 @@ void MainWindow::onStartSimple()
 
 	// reset stop flag
 	m_stopClicker = 0;
+	m_useSimpleMode = true;
 
-	QtConcurrent::run(this, &MainWindow::clicker, -1);
+	QtConcurrent::run(this, &MainWindow::clicker);
 }
 
 void MainWindow::onChangeSystrayIcon()
@@ -237,84 +239,105 @@ static int randomNumber(int min, int max)
 #endif
 }
 
-void MainWindow::clicker(int row)
+void MainWindow::clicker()
 {
 	// wait a little
-	if (row > -1) QThread::currentThread()->sleep(1);
+	if (!m_useSimpleMode) QThread::currentThread()->sleep(1);
 
-	while(m_stopClicker == 0)
+	int row = 0;
+
+	Spot spot;
+	QTime startTime = QTime::currentTime();
+	QTime endTime;
+
+	if (m_useSimpleMode)
 	{
-		Spot spot;
+		// simple mode
+		spot = m_spot;
+	}
+	else
+	{
+		// multi mode
+		spot = m_model->getSpot(row);
+	}
 
-		if (row < 0)
+	while(!m_stopClicker)
+	{
+		// 50% change position
+		if (randomNumber(0, 1) == 0)
 		{
-			// simple mode
-			spot = m_spot;
-		}
-		else
-		{
-			// multi mode
-			spot = m_model->getSpot(row);
-		}
+			// randomize position
+			int dx = randomNumber(0, 2) - 1;
+			int dy = randomNumber(0, 2) - 1;
 
-		{
-			// use a lock to avoid wrong mouse moving check between spots
-			QMutexLocker lock(&m_clickerMutex);
+			// invert sign
+			if ((spot.lastPosition.x() + dx > (spot.originalPosition.x() + 5)) || (spot.lastPosition.x() + dx < (spot.originalPosition.x() - 5))) dx = -dx;
+			if ((spot.lastPosition.y() + dy > (spot.originalPosition.y() + 5)) || (spot.lastPosition.y() + dx < (spot.originalPosition.y() - 5))) dy = -dy;
 
-			// 50% change position
-			if (randomNumber(0, 1) == 0)
+			spot.lastPosition += QPoint(dx, dy);
+
+			if (m_useSimpleMode)
 			{
-				// randomize position
-				int dx = randomNumber(0, 2) - 1;
-				int dy = randomNumber(0, 2) - 1;
-
-				// invert sign
-				if ((spot.lastPosition.x() + dx > (spot.originalPosition.x() + 5)) || (spot.lastPosition.x() + dx < (spot.originalPosition.x() - 5))) dx = -dx;
-				if ((spot.lastPosition.y() + dy > (spot.originalPosition.y() + 5)) || (spot.lastPosition.y() + dx < (spot.originalPosition.y() - 5))) dy = -dy;
-
-				spot.lastPosition += QPoint(dx, dy);
-
-				if (row < 0)
-				{
-					// simple mode
-					m_spot = spot;
-				}
-				else
-				{
-					// multi mode
-					m_model->setSpot(row, spot);
-				}
+				// simple mode
+				m_spot = spot;
 			}
-
-			// set cursor position
-			QCursor::setPos(spot.lastPosition);
-
-			// left click down
-			mouseLeftClickDown(spot.lastPosition);
-
-			// between 6 and 14 clicks/second = 125-166
-
-			// wait a little before releasing the mouse
-			QThread::currentThread()->msleep(randomNumber(10, 25));
-
-			// left click up
-			mouseLeftClickUp(spot.lastPosition);
-
-			// stop auto-click if move the mouse
-			if (QCursor::pos() != spot.lastPosition)
+			else
 			{
-				m_stopClicker = row + 1;
-				break;
+				// multi mode
+				m_model->setSpot(row, spot);
 			}
-
-			emit changeSystrayIcon();
 		}
+
+		// set cursor position
+		QCursor::setPos(spot.lastPosition);
+
+		// left click down
+		mouseLeftClickDown(spot.lastPosition);
+
+		// between 6 and 14 clicks/second = 125-166
+
+		// wait a little before releasing the mouse
+		QThread::currentThread()->msleep(randomNumber(10, 25));
+
+		// left click up
+		mouseLeftClickUp(spot.lastPosition);
 
 		// wait before next click
 		QThread::currentThread()->msleep(randomNumber(30, spot.delay));
+
+		// stop auto-click if move the mouse
+		if (QCursor::pos() != spot.lastPosition)
+		{
+			m_stopClicker = 1;
+			break;
+		}
+
+		emit changeSystrayIcon();
+
+		// if not using simple mode
+		if (!m_useSimpleMode)
+		{
+			endTime = QTime::currentTime();
+
+			// check if we should pass to next spot
+			if (startTime.msecsTo(endTime) > (spot.duration * 1000))
+			{
+				// next spot
+				++row;
+
+				// new duration
+				startTime = QTime::currentTime();
+
+				// last spot, restart to first one
+				if (row >= m_model->rowCount()) row = 0;
+
+				// new spot
+				spot = m_model->getSpot(row);
+			}
+		}
 	}
 
-	if (m_stopClicker == row + 1)
+	if (m_stopClicker)
 	{
 		emit clickerStopped();
 	}

@@ -95,7 +95,8 @@ protected:
 	bool event(QEvent *e);
 
 	void listenExternalInputEvents();
-	void clicker(int row);
+	void clicker();
+	void emitMousePosition();
 
 	QWinTaskbarButton *m_button;
 	SpotModel *m_model;
@@ -103,12 +104,12 @@ protected:
 
 	QAtomicInt m_stopExternalListener;
 	QAtomicInt m_stopClicker;
-	QMutex m_clickerMutex;
 
 	Ui::MainWindow *m_ui;
 
 	Spot m_spot;
 	Updater *m_updater;
+	bool m_useSimpleMode;
 };
 
 #endif
