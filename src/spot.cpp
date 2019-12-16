@@ -22,14 +22,23 @@
 
 QDataStream& operator << (QDataStream& stream, const Spot &spot)
 {
-	stream << spot.name << spot.originalPosition << spot.delay;
+	stream << spot.name << spot.originalPosition << spot.delay << spot.duration;
 
 	return stream;
 }
 
-QDataStream& operator >> (QDataStream& stream, Spot &spot)
+QDataStream& operator >> (QDataStream& stream, Spot& spot)
 {
 	stream >> spot.name >> spot.originalPosition >> spot.delay;
+
+	if (stream.device()->property("version") == 2)
+	{
+		stream >> spot.duration;
+	}
+	else
+	{
+		spot.duration = 0;
+	}
 
 	// copy original position
 	spot.lastPosition = spot.originalPosition;

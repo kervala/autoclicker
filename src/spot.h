@@ -26,6 +26,7 @@ struct Spot
 	QPoint originalPosition;
 	int delay;
 	QPoint lastPosition;
+	int duration;
 };
 
 QDataStream& operator << (QDataStream& stream, const Spot& spot);

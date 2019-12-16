@@ -30,7 +30,10 @@ struct SMagicHeader
 };
 
 SMagicHeader s_header = { "ACFK" };
-quint32 s_version = 1;
+
+// version 2:
+// - added duration to a spot
+quint32 s_version = 2;
 
 SpotModel::SpotModel(QObject* parent) : QAbstractTableModel(parent)
 {
@@ -47,8 +50,8 @@ int SpotModel::rowCount(const QModelIndex &parent) const
 
 int SpotModel::columnCount(const QModelIndex &parent) const
 {
-	// name, original position, delay, last position
-	return 4;
+	// name, original position, delay, duration, last position
+	return 5;
 }
 
 QVariant SpotModel::data(const QModelIndex &index, int role) const
@@ -60,7 +63,8 @@ QVariant SpotModel::data(const QModelIndex &index, int role) const
 			case 0: return m_spots[index.row()].name;
 			case 1: return m_spots[index.row()].originalPosition;
 			case 2: return m_spots[index.row()].delay;
-			case 3: return m_spots[index.row()].lastPosition;
+			case 3: return m_spots[index.row()].duration;
+			case 4: return m_spots[index.row()].lastPosition;
 		}
 	}
 
@@ -81,7 +85,8 @@ bool SpotModel::setData(const QModelIndex &index, const QVariant &value, int rol
 			case 0: m_spots[index.row()].name = value.toString(); break;
 			case 1: m_spots[index.row()].originalPosition = value.toPoint(); break;
 			case 2: m_spots[index.row()].delay = value.toInt(); break;
-			case 3: m_spots[index.row()].lastPosition = value.toPoint(); break;
+			case 3: m_spots[index.row()].duration = value.toInt(); break;
+			case 4: m_spots[index.row()].lastPosition = value.toPoint(); break;
 			default: return false;
 		}
 
@@ -111,6 +116,7 @@ bool SpotModel::insertRows(int position, int rows, const QModelIndex& parent)
 		spot.name = tr("Spot #%1").arg(rowCount() + 1);
 		spot.originalPosition = QPoint(0, 0);
 		spot.delay = 150;
+		spot.duration = 0;
 		spot.lastPosition = QPoint(0, 0);
 
 		if (insertAtTheEnd)
@@ -149,7 +155,7 @@ void SpotModel::setSpot(int row, const Spot& spot)
 {
 	m_spots[row] = spot;
 
-	emit dataChanged(index(row, 0), index(row, 3), { Qt::DisplayRole, Qt::EditRole });
+	emit dataChanged(index(row, 0), index(row, 4), { Qt::DisplayRole, Qt::EditRole });
 }
 
 void SpotModel::reset()
