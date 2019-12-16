@@ -120,6 +120,13 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	connect(m_updater, &Updater::noNewVersionDetected, this, &MainWindow::onNoNewVersion);
 
 	m_updater->checkUpdates(true);
+
+	// if cursor is outside window, begin to listen on keys
+	if (!rect().contains(mapFromGlobal(QCursor::pos())) && m_ui->startKeySequenceEdit->keySequence() != QKeySequence::UnknownKey)
+	{
+		// start to listen for a key
+		QtConcurrent::run(this, &MainWindow::listenExternalInputEvents);
+	}
 }
 
 MainWindow::~MainWindow()
