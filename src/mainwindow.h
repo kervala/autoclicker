@@ -94,6 +94,7 @@ protected:
 	void moveEvent(QMoveEvent *e);
 	bool event(QEvent *e);
 
+	void startListeningExternalInputEvents();
 	void listenExternalInputEvents();
 	void clicker();
 	void emitMousePosition();

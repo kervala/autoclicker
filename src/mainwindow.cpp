@@ -121,12 +121,7 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 
 	m_updater->checkUpdates(true);
 
-	// if cursor is outside window, begin to listen on keys
-	if (!rect().contains(mapFromGlobal(QCursor::pos())) && m_ui->startKeySequenceEdit->keySequence() != QKeySequence::UnknownKey)
-	{
-		// start to listen for a key
-		QtConcurrent::run(this, &MainWindow::listenExternalInputEvents);
-	}
+	startListeningExternalInputEvents();
 }
 
 MainWindow::~MainWindow()
@@ -199,6 +194,10 @@ void MainWindow::onStartOrStop()
 		SystrayIcon::getInstance()->setStatus(SystrayIcon::StatusNormal);
 
 		m_ui->startPushButton->setText(tr("Start"));
+
+		// listen again for external input
+		startListeningExternalInputEvents();
+
 		return;
 	}
 
@@ -414,6 +413,19 @@ void MainWindow::onTestDialog()
 	s_dialog->show();
 }
 
+void MainWindow::startListeningExternalInputEvents()
+{
+	// if cursor is outside window, begin to listen on keys
+	if (!isHidden() && !rect().contains(mapFromGlobal(QCursor::pos())) && m_ui->startKeySequenceEdit->keySequence() != QKeySequence::UnknownKey)
+	{
+		// reset external listener
+		m_stopExternalListener = 0;
+
+		// start to listen for a key
+		QtConcurrent::run(this, &MainWindow::listenExternalInputEvents);
+	}
+}
+
 void MainWindow::listenExternalInputEvents()
 {
 	QKeySequence startKeySequence = m_ui->startKeySequenceEdit->keySequence();
@@ -583,17 +595,7 @@ bool MainWindow::event(QEvent *e)
 	}
 	else if (e->type() == QEvent::Leave)
 	{
-		if (!isHidden())
-		{
-			if (!m_ui->positionPushButton->isEnabled() || m_ui->startKeySequenceEdit->keySequence() != QKeySequence::UnknownKey)
-			{
-				// reset external listener
-				m_stopExternalListener = 0;
-
-				// start to listen for a key
-				QtConcurrent::run(this, &MainWindow::listenExternalInputEvents);
-			}
-		}
+		startListeningExternalInputEvents();
 	}
 	else if (e->type() == QEvent::LanguageChange)
 	{
