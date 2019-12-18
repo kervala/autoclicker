@@ -182,7 +182,7 @@ void MainWindow::onRemove()
 
 }
 
-void MainWindow::onStartOrStop()
+void MainWindow::startOrStop(bool simpleMode)
 {
 	// stop clicker is greater than 0 when stopped
 	if (m_stopClicker)
@@ -207,26 +207,24 @@ void MainWindow::onStartOrStop()
 
 	// reset stop flag
 	m_stopClicker = 0;
-	m_useSimpleMode = false;
+	m_useSimpleMode = simpleMode;
 
 	QtConcurrent::run(this, &MainWindow::clicker);
 }
 
+void MainWindow::onStartOrStop()
+{
+	startOrStop(false);
+}
+
 void MainWindow::onStartSimple()
 {
+	// define unique spot parameters
 	m_spot.delay = m_ui->defaultDelaySpinBox->value();
 	m_spot.lastPosition = QCursor::pos();
 	m_spot.originalPosition = m_spot.lastPosition;
 
-	m_ui->startPushButton->setText(tr("Stop"));
-
-	hide();
-
-	// reset stop flag
-	m_stopClicker = 0;
-	m_useSimpleMode = true;
-
-	QtConcurrent::run(this, &MainWindow::clicker);
+	startOrStop(true);
 }
 
 void MainWindow::onChangeSystrayIcon()
@@ -446,6 +444,8 @@ void MainWindow::listenExternalInputEvents()
 			if (buttonPressed)
 			{
 				emit startSimple();
+
+				return;
 			}
 
 			buttonPressed = isKeyPressed(positionKey);
