@@ -38,7 +38,7 @@
 	#define new DEBUG_NEW
 #endif
 
-MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_stopExternalListener(0), m_stopClicker(0), m_useSimpleMode(true)
+MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_stopExternalListener(0), m_stopClicker(0), m_waitingAction(ActionNone), m_useSimpleMode(true)
 {
 	m_ui = new Ui::MainWindow();
 	m_ui->setupUi(this);
@@ -411,6 +411,9 @@ void MainWindow::clicker()
 
 void MainWindow::emitMousePosition()
 {
+	m_waitingAction = ActionNone;
+
+	// absolute coordinates
 	QPoint pos = QCursor::pos();
 
 	QString title = m_model->getWindowTitle();
@@ -553,16 +556,29 @@ void MainWindow::listenExternalInputEvents()
 			{
 				emit startSimple();
 
+				// if we were waiting for position key, send current position too
+				if (m_waitingAction == ActionPosition)
+				{
+					emitMousePosition();
+				}
+
+				// we need to stop autoclicking to relaunch thread
 				return;
 			}
 
-			buttonPressed = isKeyPressed(positionKey);
-
-			if (buttonPressed)
+			if (m_waitingAction)
 			{
-				emitMousePosition();
+				buttonPressed = isKeyPressed(positionKey);
 
-				return;
+				if (buttonPressed)
+				{
+					if (m_waitingAction == ActionPosition)
+					{
+						emitMousePosition();
+					}
+				}
+
+				// continue thread
 			}
 		}
 
@@ -703,11 +719,8 @@ bool MainWindow::event(QEvent *e)
 	{
 		if (!isHidden())
 		{
-			if (!m_ui->positionPushButton->isEnabled())
+			if (m_waitingAction == ActionPosition)
 			{
-				// don't need to listen for a key anymore
-				m_stopExternalListener = 1;
-
 				emitMousePosition();
 			}
 		}
