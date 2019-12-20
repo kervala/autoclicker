@@ -139,6 +139,61 @@ QPixmap grabWindow(WId window)
 	return QPixmap();
 }
 
+Window getWindowWithTitle(const QString& title)
+{
+	if (title.isEmpty()) return Window();
+
+	Windows windows;
+	createWindowsList(windows);
+
+	for (int i = 0; i < windows.size(); ++i)
+	{
+		if (windows[i].title == title)
+		{
+			return windows[i];
+		}
+	}
+
+	return Window();
+}
+
+bool isSameWindowAtPos(Window window, const QPoint& pos)
+{
+	POINT p;
+	p.x = pos.x();
+	p.y = pos.y();
+
+	HWND underCursorWindowId = WindowFromPoint(p);
+
+#ifdef _DEBUG
+	QString underCursorWindowTitle;
+
+	if (underCursorWindowId)
+	{
+		wchar_t buffer[1025];
+
+		int len = GetWindowTextW(underCursorWindowId, buffer, 1024);
+
+		if (len > 0) underCursorWindowTitle = QString::fromWCharArray(buffer);
+	}
+#endif
+
+	if (((HWND)window.id == underCursorWindowId) || IsChild((HWND)window.id, underCursorWindowId))
+	{
+#ifdef _DEBUG
+		qDebug() << "same window" << underCursorWindowTitle;
+#endif
+
+		return true;
+	}
+
+#ifdef _DEBUG
+	qDebug() << "different window" << underCursorWindowTitle;
+#endif
+
+	return false;
+}
+
 static QPixmap fancyPants( ICONINFO const &icon_info )
 {
 	int result;
@@ -268,12 +323,6 @@ QPixmap associatedIcon( const QString &path )
 	return pixmap( file_info.hIcon );
 }
 
-struct TmpWindow
-{
-	HWND hWnd;
-	QString name;
-};
-
 static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM inst)
 {
 	if (IsWindowVisible(hWnd) && IsWindowEnabled(hWnd))
@@ -288,12 +337,13 @@ static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM inst)
 
 			if (len > 0)
 			{
-				QVector<TmpWindow> *windows = (QVector<TmpWindow>*)inst;
+				Windows *windows = (Windows*)inst;
 
-				TmpWindow window;
+				Window window;
 
-				window.hWnd = hWnd;
-				window.name = QString::fromWCharArray(WindowName);
+				// define minimum information because some of these windows won't be processed
+				window.id = (WId)hWnd;
+				window.title = QString::fromWCharArray(WindowTitle);
 
 				windows->push_back(window);
 			}
@@ -313,7 +363,7 @@ typedef DWORD (WINAPI *GetProcessImageFileNamePtr)(HANDLE hProcess, LPTSTR lpIma
 static QueryFullProcessImageNamePtr pQueryFullProcessImageName = NULL;
 static GetProcessImageFileNamePtr pGetProcessImageFileName = NULL;
 
-void CreateWindowsList(QAbstractItemModel *model)
+void createWindowsList(Windows &windows)
 {
 	if (pQueryFullProcessImageName == NULL)
 	{
@@ -326,9 +376,8 @@ void CreateWindowsList(QAbstractItemModel *model)
 	}
 
 	HMODULE module = GetModuleHandle(NULL);
-	QFileIconProvider icon;
 
-	QVector<TmpWindow> currentWindows;
+	Windows currentWindows;
 
 	// list hWnd
 	HANDLE hThreadSnap = INVALID_HANDLE_VALUE;
@@ -356,7 +405,7 @@ void CreateWindowsList(QAbstractItemModel *model)
 			{
 				for(int i = 0; i < currentWindows.size(); ++i)
 				{
-					HWND hWnd = currentWindows[i].hWnd;
+					HWND hWnd = (HWND)currentWindows[i].id;
 
 					// get process handle
 					DWORD pidwin;
@@ -397,16 +446,15 @@ void CreateWindowsList(QAbstractItemModel *model)
 
 					DestroyIcon(hIcon);
 
-					if (pixmap.isNull()) pixmap = icon.icon(QFileIconProvider::File).pixmap(32, 32);
+					currentWindows[i].icon = pixmap;
 
-					if (model->insertRow(0))
-					{
-						QModelIndex index = model->index(0, 0);
+					// rectangle
+					RECT r;
+					BOOL res2 = GetWindowRect(hWnd, &r);
 
-						model->setData(index, currentWindows[i].name);
-						model->setData(index, pixmap, Qt::DecorationRole);
-						model->setData(index, qVariantFromValue((void*)currentWindows[i].hWnd), Qt::UserRole);
-					}
+					if (res) currentWindows[i].rect = QRect(QPoint(r.left, r.top), QPoint(r.right, r.bottom));
+
+					windows << currentWindows[i];
 				}
 			}
 		}
@@ -414,36 +462,72 @@ void CreateWindowsList(QAbstractItemModel *model)
 
 		CloseHandle(hThreadSnap);
 
-		model->sort(0);
+void createWindowsList(QAbstractItemModel* model)
+{
+	QFileIconProvider icon;
+	QPixmap filePixmap = icon.icon(QFileIconProvider::File).pixmap(32, 32);
+	QPixmap desktopPixmap = icon.icon(QFileIconProvider::Desktop).pixmap(32, 32);
+
+	Windows currentWindows;
+
+	createWindowsList(currentWindows);
+
+	for (int i = 0; i < currentWindows.size(); ++i)
+	{
+		HWND hWnd = (HWND)currentWindows[i].id;
+
+		if (model->insertRow(0))
+		{
+			QModelIndex index = model->index(0, 0);
+
+			model->setData(index, currentWindows[i].title);
+			model->setData(index, currentWindows[i].icon.isNull() ? filePixmap: currentWindows[i].icon, Qt::DecorationRole);
+			model->setData(index, qVariantFromValue(currentWindows[i]), Qt::UserRole);
+		}
 	}
+
+	model->sort(0);
 
 	if (model->insertRow(0))
 	{
 		QModelIndex index = model->index(0, 0);
 
 		model->setData(index, QObject::tr("Whole screen"));
-		model->setData(index, icon.icon(QFileIconProvider::Desktop).pixmap(32, 32), Qt::DecorationRole);
+		model->setData(index, desktopPixmap, Qt::DecorationRole);
 		model->setData(index, qVariantFromValue((void*)NULL), Qt::UserRole);
 	}
 }
 
-bool RestoreMinimizedWindow(WId &id)
+bool isWindowMinimized(WId id)
+{
+	if (!id) return false;
+
+	WINDOWPLACEMENT placement;
+	memset(&placement, 0, sizeof(placement));
+
+	if (GetWindowPlacement((HWND)id, &placement))
+	{
+		if (placement.showCmd == SW_SHOWMINIMIZED)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool RestoreMinimizedWindow(WId id)
 {
 	if (id)
 	{
-		WINDOWPLACEMENT placement;
-		memset(&placement, 0, sizeof(placement));
-
-		if (GetWindowPlacement((HWND)id, &placement))
+		if (isWindowMinimized(id))
 		{
-			if (placement.showCmd == SW_SHOWMINIMIZED)
-			{
-				ShowWindow((HWND)id, SW_RESTORE);
-				// time needed to restore window
-				Sleep(500);
+			ShowWindow((HWND)id, SW_RESTORE);
 
-				return true;
-			}
+			// time needed to restore window
+			Sleep(500);
+
+			return true;
 		}
 	}
 	else

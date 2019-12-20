@@ -1,6 +1,6 @@
 /*
- *  kdAmn is a deviantART Messaging Network client
- *  Copyright (C) 2013-2015  Cedric OCHS
+ *  AutoClicker is a tool to click automatically
+ *  Copyright (C) 2017-2019  Cedric OCHS
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,27 +17,25 @@
  *
  */
 
-#ifndef CAPTUREDIALOG_H
-#define CAPTUREDIALOG_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
-#include "ui_capturedialog.h"
-#include "window.h"
+#include <QtCore/QtCore>
 
-class CaptureDialog : public QDialog, public Ui::CaptureDialog
+class Window
 {
-	Q_OBJECT
-
 public:
-	CaptureDialog(QWidget *parent);
+    WId id;
+    QString title;
+    QString path;
+    QPixmap icon;
+    QRect rect;
 
-	Window getWindow() const { return m_window; }
-
-public slots:
-	void enableButton(const QModelIndex &index);
-	void validateButton(const QModelIndex &index);
-
-private:
-	Window m_window;
+    Window():id(0)
+    {
+    }
 };
+
+Q_DECLARE_METATYPE(Window);
 
 #endif

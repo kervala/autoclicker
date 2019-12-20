@@ -20,6 +20,10 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include "window.h"
+
+typedef QVector<Window> Windows;
+
 class QAbstractItemModel;
 
 void mouseLeftClickUp(const QPoint& pos);
@@ -28,15 +32,18 @@ void mouseLeftClickDown(const QPoint& pos);
 int QKeySequenceToVK(const QKeySequence& seq);
 bool isKeyPressed(int key);
 
-void CreateWindowsList(QAbstractItemModel *model);
-bool RestoreMinimizedWindow(WId &id);
+void createWindowsList(Windows &windows);
+void createWindowsList(QAbstractItemModel *model);
+bool RestoreMinimizedWindow(WId id);
 void MinimizeWindow(WId id);
 void PutForegroundWindow(WId id);
 bool IsUsingComposition();
 bool IsOS64bits();
+bool isWindowMinimized(WId id);
+bool isSameWindowAtPos(Window window, const QPoint& pos);
 
 QPixmap grabWindow(WId window);
-
+Window getWindowWithTitle(const QString& title);
 
 QString GetUserAgent();
 QString GetSupportedImageFormatsFilter();

@@ -22,7 +22,7 @@
 #include "moc_capturedialog.cpp"
 #include "utils.h"
 
-CaptureDialog::CaptureDialog(QWidget *parent):QDialog(parent), m_handle(0)
+CaptureDialog::CaptureDialog(QWidget *parent):QDialog(parent)
 {
 	setupUi(this);
 
@@ -47,15 +47,7 @@ void CaptureDialog::enableButton(const QModelIndex &index)
 {
 	buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 
-	QVariant val = windowsListView->model()->data(index, Qt::UserRole);
-
-#ifdef Q_OS_WIN
-	m_handle = (WId)val.value<void*>();
-#else
-	m_handle = (WId)val.value<WId>();
-#endif
-
-	m_name = windowsListView->model()->data(index).toString();
+	m_window = windowsListView->model()->data(index, Qt::UserRole).value<Window>();
 }
 
 void CaptureDialog::validateButton(const QModelIndex &index)

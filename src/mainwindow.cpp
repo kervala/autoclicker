@@ -256,6 +256,8 @@ static int randomNumber(int min, int max)
 
 void MainWindow::clicker()
 {
+	QRect rect;
+
 	// wait a little
 	if (!m_useSimpleMode) QThread::currentThread()->sleep(1);
 
@@ -269,11 +271,60 @@ void MainWindow::clicker()
 	{
 		// simple mode
 		spot = m_spot;
+
+		// always use absolute coordinates
+		rect = QRect(0, 0, 10, 10);
 	}
 	else
 	{
-		// multi mode
-		spot = m_model->getSpot(row);
+		QString title = m_model->getWindowTitle();
+		Window window;
+
+		if (!title.isEmpty())
+		{
+			Windows windows;
+			createWindowsList(windows);
+
+			for (int i = 0; i < windows.size(); ++i)
+			{
+				if (windows[i].title == title)
+				{
+					window = windows[i];
+					break;
+				}
+			}
+
+			rect = window.rect;
+		}
+		else
+		{
+			// only top left position is used
+			rect = QRect(0, 0, 10, 10);
+		}
+
+		// no window with that name
+		if (rect.isNull())
+		{
+			m_stopClicker = 1;
+		}
+		else
+		{
+			// multi mode
+			spot = m_model->getSpot(row);
+
+			if (window.id)
+			{
+			}
+
+			// apply window offset
+			spot.originalPosition += rect.topLeft();
+			spot.lastPosition = spot.originalPosition;
+
+			if (!isSameWindowAtPos(window, spot.originalPosition))
+			{
+				m_stopClicker = 1;
+			}
+		}
 	}
 
 	while(!m_stopClicker)
@@ -362,15 +413,23 @@ void MainWindow::emitMousePosition()
 {
 	QPoint pos = QCursor::pos();
 
-	QWindow* window = QGuiApplication::topLevelAt(pos);
+	QString title = m_model->getWindowTitle();
 
-	if (window)
+	if (!title.isEmpty())
 	{
-		qDebug() << window->title();
-	}
-	else
-	{
-		qDebug() << "No window under cursor";
+		// search a window with title
+		Window window = getWindowWithTitle(title);
+
+		// if found
+		if (window.id)
+		{
+			// convert to relative coordinates
+			pos -= window.rect.topLeft();
+		}
+		else
+		{
+			qDebug() << "No window with title" << title;
+		}
 	}
 
 	emit mousePosition(pos);
@@ -419,28 +478,24 @@ void MainWindow::onPosition()
 
 void MainWindow::onWindowName()
 {
-	WId id = 0;
-	QString name;
+	Window window;
 
 	{
 		CaptureDialog dlg(this);
 
 		if (!dlg.exec()) return;
 
-		id = dlg.getWindowId();
-		name = dlg.getWindowName();
+		window = dlg.getWindow();
 	}
 
 	// don't process window if minimized
-	if (isWindowMinimized(id)) return;
+	if (isWindowMinimized(window.id)) return;
 
-	QRect rect = getWindowRect(id);
-
-	m_model->setWindowName(name);
-	m_model->updateSpotsPosition(rect.topLeft());
+	m_model->setWindowTitle(window.title);
+	m_model->updateSpotsPosition(window.rect.topLeft());
 
 	// only update the push button label
-	setWindowName(name);
+	setWindowTitleButton(window.title);
 }
 
 void MainWindow::onTestDialog()
