@@ -19,7 +19,6 @@
 
 #include "common.h"
 #include "spotmodel.h"
-#include "utils.h"
 
 struct SMagicHeader
 {
@@ -236,19 +235,19 @@ void SpotModel::setSpot(int row, const Spot& spot)
 	emit dataChanged(index(row, 0), index(row, 4), { Qt::DisplayRole, Qt::EditRole });
 }
 
-QString SpotModel::getWindowName() const
+QString SpotModel::getWindowTitle() const
 {
-	return m_windowName;
+	return m_windowTitle;
 }
 
-void SpotModel::setWindowName(const QString& name)
+void SpotModel::setWindowTitle(const QString& title)
 {
-	m_windowName = name;
+	m_windowTitle = title;
 }
 
 void SpotModel::reset()
 {
-	m_windowName.clear();
+	m_windowTitle.clear();
 	m_filename.clear();
 
 	beginResetModel();
@@ -300,12 +299,12 @@ bool SpotModel::load(const QString& filename)
 	// deserialize window name
 	if (version >= 3)
 	{
-		stream >> m_windowName;
+		stream >> m_windowTitle;
 	}
 	else
 	{
 		// clear any previous window name
-		m_windowName.clear();
+		m_windowTitle.clear();
 	}
 
 	m_filename = filename;
@@ -335,8 +334,8 @@ bool SpotModel::save(const QString& filename)
 
 	stream << m_spots;
 
-	// serialize window name
-	stream << m_windowName;
+	// serialize window title
+	stream << m_windowTitle;
 
 	m_filename = filename;
 

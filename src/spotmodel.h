@@ -48,8 +48,8 @@ public:
 	Spot getSpot(int row) const;
 	void setSpot(int row, const Spot& spot);
 
-	QString getWindowName() const;
-	void setWindowName(const QString& name);
+	QString getWindowTitle() const;
+	void setWindowTitle(const QString& name);
 
 	void reset();
 
@@ -62,7 +62,7 @@ public:
 
 private:
 	QList<Spot> m_spots;
-	QString m_windowName;
+	QString m_windowTitle;
 	QString m_filename;
 };
 

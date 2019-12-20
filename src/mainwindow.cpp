@@ -91,7 +91,7 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	// Buttons
 	connect(m_ui->startPushButton, &QPushButton::clicked, this, &MainWindow::onStartOrStop);
 	connect(m_ui->positionPushButton, &QPushButton::clicked, this, &MainWindow::onPosition);
-	connect(m_ui->windowNamePushButton, &QPushButton::clicked, this, &MainWindow::onWindowName);
+	connect(m_ui->windowTitlePushButton, &QPushButton::clicked, this, &MainWindow::onWindowTitleChanged);
 
 	// Keys
 	connect(m_ui->startKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onStartKeyChanged);
@@ -121,8 +121,8 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 
 	// MainWindow
 	connect(this, &MainWindow::startSimple, this, &MainWindow::onStartSimple);
-	connect(this, &MainWindow::mousePosition, this, &MainWindow::onMousePositionChanged);
-	connect(this, &MainWindow::windowName, this, &MainWindow::setWindowName);
+	connect(this, &MainWindow::mousePositionChanged, this, &MainWindow::onMousePositionChanged);
+	connect(this, &MainWindow::windowTitleChanged, this, &MainWindow::setWindowTitleButton);
 	connect(this, &MainWindow::clickerStopped, this, &MainWindow::onStartOrStop);
 	connect(this, &MainWindow::changeSystrayIcon, this, &MainWindow::onChangeSystrayIcon);
 
@@ -432,14 +432,14 @@ void MainWindow::emitMousePosition()
 		}
 	}
 
-	emit mousePosition(pos);
+	emit mousePositionChanged(pos);
 }
 
 void MainWindow::onNew()
 {
 	m_model->reset();
 
-	setWindowName("");
+	setWindowTitleButton("");
 }
 
 void MainWindow::onOpen()
@@ -450,7 +450,7 @@ void MainWindow::onOpen()
 
 	if (m_model->load(filename))
 	{
-		setWindowName(m_model->getWindowName());
+		setWindowTitleButton(m_model->getWindowTitle());
 	}
 }
 
@@ -476,7 +476,7 @@ void MainWindow::onPosition()
 	m_waitingAction = ActionPosition;
 }
 
-void MainWindow::onWindowName()
+void MainWindow::onWindowTitleChanged()
 {
 	Window window;
 
@@ -607,19 +607,19 @@ void MainWindow::onMousePositionChanged(const QPoint& pos)
 	m_ui->positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
 }
 
-void MainWindow::setWindowName(const QString& name)
+void MainWindow::setWindowTitleButton(const QString& title)
 {
-	QFontMetrics fm = m_ui->windowNamePushButton->fontMetrics();
-	const int usableWidth = qRound(0.9 * m_ui->windowNamePushButton->width());
+	QFontMetrics fm = m_ui->windowTitlePushButton->fontMetrics();
+	const int usableWidth = qRound(0.9 * m_ui->windowTitlePushButton->width());
 
-	QString elidedText = fm.elidedText(name, Qt::ElideRight, usableWidth);
-	bool elided = (elidedText != name);
+	QString elidedText = fm.elidedText(title, Qt::ElideRight, usableWidth);
+	bool elided = (elidedText != title);
 
-	QString text = elided ? elidedText : name;
+	QString text = elided ? elidedText : title;
 
 	if (text.isEmpty()) text = tr("Unknown");
 
-	m_ui->windowNamePushButton->setText(text);
+	m_ui->windowTitlePushButton->setText(text);
 }
 
 void MainWindow::onStartKeyChanged(const QKeySequence &seq)

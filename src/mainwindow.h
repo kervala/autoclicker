@@ -51,7 +51,7 @@ public slots:
 	void onInsertSpot();
 	void onDeleteSpot();
 	void onPosition();
-	void onWindowName();
+	void onWindowTitleChanged();
 
 	// file menu
 	void onNew();
@@ -84,11 +84,11 @@ public slots:
 	void onStartSimple();
 	void onChangeSystrayIcon();
 
-	void setWindowName(const QString& name);
+	void setWindowTitleButton(const QString& title);
 
 signals:
-	void mousePosition(const QPoint &pos);
-	void windowName(const QString& name);
+	void mousePositionChanged(const QPoint &pos);
+	void windowTitleChanged(const QString& title);
 	void startSimple();
 	void clickerStopped();
 	void changeSystrayIcon();
