@@ -19,6 +19,7 @@
 
 #include "common.h"
 #include "spotmodel.h"
+#include "utils.h"
 
 struct SMagicHeader
 {
@@ -192,8 +193,6 @@ QMimeData* SpotModel::mimeData(const QModelIndexList &indexes) const
 
 bool SpotModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
 {
-	qDebug() << "draopMiniData" << data << action << row << column;
-
 	if (!data->hasFormat("application/x-autoclicker")) return false;
 
 	if (action == Qt::IgnoreAction) return true;
@@ -342,4 +341,22 @@ bool SpotModel::save(const QString& filename)
 	m_filename = filename;
 
 	return true;
+}
+
+bool SpotModel::updateSpotsPosition(const QPoint& offset)
+{
+	for (int i = 0; i < m_spots.size(); ++i)
+	{
+		Spot &spot = m_spots[i];
+
+		spot.originalPosition -= offset;
+		spot.lastPosition = spot.originalPosition;
+	}
+
+	return true;
+}
+
+QString SpotModel::getFilename() const
+{
+	return m_filename;
 }
