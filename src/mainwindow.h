@@ -50,8 +50,8 @@ public slots:
 	void onStartOrStop();
 
 	// spots
-	void onAdd();
-	void onRemove();
+	void onInsertSpot();
+	void onDeleteSpot();
 	void onPosition();
 
 	// file menu

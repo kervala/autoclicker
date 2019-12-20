@@ -85,8 +85,6 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	connect(m_ui->actionAboutQt, &QAction::triggered, this, &MainWindow::onAboutQt);
 
 	// Buttons
-	connect(m_ui->addPushButton, &QPushButton::clicked, this, &MainWindow::onAdd);
-	connect(m_ui->removePushButton, &QPushButton::clicked, this, &MainWindow::onRemove);
 	connect(m_ui->startPushButton, &QPushButton::clicked, this, &MainWindow::onStartOrStop);
 	connect(m_ui->loadPushButton, &QPushButton::clicked, this, &MainWindow::onLoad);
 	connect(m_ui->savePushButton, &QPushButton::clicked, this, &MainWindow::onSave);
@@ -96,6 +94,12 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	// Keys
 	connect(m_ui->startKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onStartKeyChanged);
 	connect(m_ui->positionKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onPositionKeyChanged);
+
+	QShortcut *shortcutDelete = new QShortcut(QKeySequence(Qt::Key_Delete), m_ui->spotsListView);
+	connect(shortcutDelete, &QShortcut::activated, this, &MainWindow::onDeleteSpot);
+
+	QShortcut* shortcutInsert = new QShortcut(QKeySequence(Qt::Key_Insert), m_ui->spotsListView);
+	connect(shortcutInsert, &QShortcut::activated, this, &MainWindow::onInsertSpot);
 
 #if FALSE && QT_VERSION >= QT_VERSION_CHECK(5, 7, 0)
 	connect(m_ui->defaultDelaySpinBox, qOverload<int>(&QSpinBox::valueChanged), this, &MainWindow::onDelayChanged);
@@ -165,7 +169,7 @@ void MainWindow::moveEvent(QMoveEvent *e)
 	e->accept();
 }
 
-void MainWindow::onAdd()
+void MainWindow::onInsertSpot()
 {
 	QModelIndexList indices = m_ui->spotsListView->selectionModel()->selectedRows();
 
@@ -174,7 +178,7 @@ void MainWindow::onAdd()
 	m_model->insertRow(row);
 }
 
-void MainWindow::onRemove()
+void MainWindow::onDeleteSpot()
 {
 	QModelIndexList indices = m_ui->spotsListView->selectionModel()->selectedRows();
 
@@ -183,7 +187,6 @@ void MainWindow::onRemove()
 	int row = indices.front().row();
 
 	m_model->removeRow(row);
-
 }
 
 void MainWindow::startOrStop(bool simpleMode)
