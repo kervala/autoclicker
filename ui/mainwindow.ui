@@ -159,7 +159,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="windowLineEdit"/>
+        <widget class="QPushButton" name="windowNamePushButton">
+         <property name="text">
+          <string>Unknown</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

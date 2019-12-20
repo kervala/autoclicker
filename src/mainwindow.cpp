@@ -27,6 +27,7 @@
 #include "spotmodel.h"
 #include "utils.h"
 #include "testdialog.h"
+#include "capturedialog.h"
 
 #ifdef Q_OS_WIN32
 #include <QtWinExtras/QWinTaskbarProgress>
@@ -90,6 +91,9 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	connect(m_ui->loadPushButton, &QPushButton::clicked, this, &MainWindow::onLoad);
 	connect(m_ui->savePushButton, &QPushButton::clicked, this, &MainWindow::onSave);
 	connect(m_ui->positionPushButton, &QPushButton::clicked, this, &MainWindow::onPosition);
+	connect(m_ui->windowNamePushButton, &QPushButton::clicked, this, &MainWindow::onWindowName);
+
+	// Keys
 	connect(m_ui->startKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onStartKeyChanged);
 	connect(m_ui->positionKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onPositionKeyChanged);
 
@@ -388,6 +392,34 @@ void MainWindow::onPosition()
 {
 	m_ui->positionPushButton->setEnabled(false);
 	m_ui->positionPushButton->setText("???");
+
+	m_waitingAction = ActionPosition;
+}
+
+void MainWindow::onWindowName()
+{
+	WId id = 0;
+	QString name;
+
+	{
+		CaptureDialog dlg(this);
+
+		if (!dlg.exec()) return;
+
+		id = dlg.getWindowId();
+		name = dlg.getWindowName();
+	}
+
+	// don't process window if minimized
+	if (isWindowMinimized(id)) return;
+
+	QRect rect = getWindowRect(id);
+
+	m_model->setWindowName(name);
+	m_model->updateSpotsPosition(rect.topLeft());
+
+	// only update the push button label
+	setWindowName(name);
 }
 
 void MainWindow::onTestDialog()
