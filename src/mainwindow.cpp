@@ -388,6 +388,10 @@ void MainWindow::clicker()
 
 				// new spot
 				spot = m_model->getSpot(row);
+
+				// apply window offset
+				spot.originalPosition += rect.topLeft();
+				spot.lastPosition = spot.originalPosition;
 			}
 		}
 	}
