@@ -571,7 +571,7 @@ void MainWindow::listenExternalInputEvents()
 			}
 		}
 
-		QThread::currentThread()->msleep(10);
+		QThread::currentThread()->msleep(100);
 	}
 }
 
