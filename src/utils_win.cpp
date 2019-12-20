@@ -25,9 +25,9 @@
 #ifdef USE_QT5
 enum HBitmapFormat
 {
-    HBitmapNoAlpha,
-    HBitmapPremultipliedAlpha,
-    HBitmapAlpha
+	HBitmapNoAlpha,
+	HBitmapPremultipliedAlpha,
+	HBitmapAlpha
 };
 
 QPixmap qt_pixmapFromWinHBITMAP(HBITMAP bitmap, int hbitmapFormat = 0);
@@ -220,16 +220,16 @@ static QPixmap fancyPants( ICONINFO const &icon_info )
 	BITMAPINFO info;
 	memset( &info, 0, sizeof(info) );
 
-	info.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
-	info.bmiHeader.biWidth       = w;
+	info.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	info.bmiHeader.biWidth = w;
 
-	info.bmiHeader.biHeight      = -h;
-	info.bmiHeader.biPlanes      = 1;
+	info.bmiHeader.biHeight = -h;
+	info.bmiHeader.biPlanes = 1;
 
-	info.bmiHeader.biBitCount    = 32;
+	info.bmiHeader.biBitCount = 32;
 	info.bmiHeader.biCompression = BI_RGB;
 
-	info.bmiHeader.biSizeImage   = w * h * 4;
+	info.bmiHeader.biSizeImage = w * h * 4;
 
 	// Get bitmap bits
 	uchar *data = new uchar[info.bmiHeader.biSizeImage];
@@ -331,7 +331,7 @@ static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM inst)
 
 		if (style & (WS_THICKFRAME|WS_DLGFRAME|WS_POPUP))
 		{
-			wchar_t WindowName[80];
+			wchar_t WindowTitle[80];
 
 			int len = GetWindowTextW(hWnd, WindowName, 80);
 
@@ -434,6 +434,7 @@ void createWindowsList(Windows &windows)
 
 					processPath = QString::fromLatin1(szProcessPath, bufSize);
 
+					// icon
 					HICON hIcon = NULL;
 
 					UINT count = ExtractIconEx(processPath.toLatin1().data(), -1, NULL, NULL, 1);
@@ -461,6 +462,8 @@ void createWindowsList(Windows &windows)
 		while(Thread32Next(hThreadSnap, &te32));
 
 		CloseHandle(hThreadSnap);
+	}
+}
 
 void createWindowsList(QAbstractItemModel* model)
 {

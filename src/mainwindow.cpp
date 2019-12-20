@@ -67,7 +67,6 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	m_mapper = new QDataWidgetMapper(this);
 	m_mapper->setModel(m_model);
 	m_mapper->addMapping(m_ui->nameLineEdit, 0);
-	// m_mapper->addMapping(positionPushButton, 1);
 	m_mapper->addMapping(m_ui->delaySpinBox, 2);
 	m_mapper->addMapping(m_ui->durationSpinBox, 3);
 
