@@ -48,13 +48,22 @@ public:
 	Spot getSpot(int row) const;
 	void setSpot(int row, const Spot& spot);
 
+	QString getWindowName() const;
+	void setWindowName(const QString& name);
+
 	void reset();
 
 	bool load(const QString& filename);
-	bool save(const QString& filename) const;
+	bool save(const QString& filename);
+
+	bool updateSpotsPosition(const QPoint& offset);
+
+	QString getFilename() const;
 
 private:
 	QList<Spot> m_spots;
+	QString m_windowName;
+	QString m_filename;
 };
 
 #endif

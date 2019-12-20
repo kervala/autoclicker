@@ -31,9 +31,15 @@ struct SMagicHeader
 
 SMagicHeader s_header = { "ACFK" };
 
+// version 1:
+// - initial version
+//
 // version 2:
 // - added duration to a spot
-quint32 s_version = 2;
+//
+// version 3:
+// - added window name
+quint32 s_version = 3;
 
 SpotModel::SpotModel(QObject* parent) : QAbstractTableModel(parent)
 {
@@ -231,8 +237,21 @@ void SpotModel::setSpot(int row, const Spot& spot)
 	emit dataChanged(index(row, 0), index(row, 4), { Qt::DisplayRole, Qt::EditRole });
 }
 
+QString SpotModel::getWindowName() const
+{
+	return m_windowName;
+}
+
+void SpotModel::setWindowName(const QString& name)
+{
+	m_windowName = name;
+}
+
 void SpotModel::reset()
 {
+	m_windowName.clear();
+	m_filename.clear();
+
 	beginResetModel();
 
 	m_spots.clear();
@@ -279,10 +298,23 @@ bool SpotModel::load(const QString& filename)
 
 	endResetModel();
 
+	// deserialize window name
+	if (version >= 3)
+	{
+		stream >> m_windowName;
+	}
+	else
+	{
+		// clear any previous window name
+		m_windowName.clear();
+	}
+
+	m_filename = filename;
+
 	return true;
 }
 
-bool SpotModel::save(const QString& filename) const
+bool SpotModel::save(const QString& filename)
 {
 	if (filename.isEmpty()) return false;
 
@@ -303,6 +335,11 @@ bool SpotModel::save(const QString& filename) const
 #endif
 
 	stream << m_spots;
+
+	// serialize window name
+	stream << m_windowName;
+
+	m_filename = filename;
 
 	return true;
 }

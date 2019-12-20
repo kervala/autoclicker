@@ -122,6 +122,7 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	// MainWindow
 	connect(this, &MainWindow::startSimple, this, &MainWindow::onStartSimple);
 	connect(this, &MainWindow::mousePosition, this, &MainWindow::onMousePositionChanged);
+	connect(this, &MainWindow::windowName, this, &MainWindow::setWindowName);
 	connect(this, &MainWindow::clickerStopped, this, &MainWindow::onStartOrStop);
 	connect(this, &MainWindow::changeSystrayIcon, this, &MainWindow::onChangeSystrayIcon);
 
@@ -549,6 +550,21 @@ void MainWindow::onMousePositionChanged(const QPoint& pos)
 
 	m_ui->positionPushButton->setEnabled(true);
 	m_ui->positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
+}
+
+void MainWindow::setWindowName(const QString& name)
+{
+	QFontMetrics fm = m_ui->windowNamePushButton->fontMetrics();
+	const int usableWidth = qRound(0.9 * m_ui->windowNamePushButton->width());
+
+	QString elidedText = fm.elidedText(name, Qt::ElideRight, usableWidth);
+	bool elided = (elidedText != name);
+
+	QString text = elided ? elidedText : name;
+
+	if (text.isEmpty()) text = tr("Unknown");
+
+	m_ui->windowNamePushButton->setText(text);
 }
 
 void MainWindow::onStartKeyChanged(const QKeySequence &seq)
