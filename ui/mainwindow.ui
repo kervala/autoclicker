@@ -92,6 +92,9 @@
          <property name="acceptDrops">
           <bool>true</bool>
          </property>
+         <property name="toolTip">
+          <string>Press &lt;Ins&gt; or &lt;Del&gt; to add or remove a spot.</string>
+         </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
