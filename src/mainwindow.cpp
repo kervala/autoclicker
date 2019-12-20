@@ -76,6 +76,10 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 	m_ui->defaultDelaySpinBox->setValue(ConfigFile::getInstance()->getDelay());
 
 	// File menu
+	connect(m_ui->actionNew, &QAction::triggered, this, &MainWindow::onNew);
+	connect(m_ui->actionOpen, &QAction::triggered, this, &MainWindow::onOpen);
+	connect(m_ui->actionSave, &QAction::triggered, this, &MainWindow::onSave);
+	connect(m_ui->actionSaveAs, &QAction::triggered, this, &MainWindow::onSaveAs);
 	connect(m_ui->actionTestDialog, &QAction::triggered, this, &MainWindow::onTestDialog);
 	connect(m_ui->actionExit, &QAction::triggered, this, &MainWindow::close);
 
@@ -86,8 +90,6 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_sto
 
 	// Buttons
 	connect(m_ui->startPushButton, &QPushButton::clicked, this, &MainWindow::onStartOrStop);
-	connect(m_ui->loadPushButton, &QPushButton::clicked, this, &MainWindow::onLoad);
-	connect(m_ui->savePushButton, &QPushButton::clicked, this, &MainWindow::onSave);
 	connect(m_ui->positionPushButton, &QPushButton::clicked, this, &MainWindow::onPosition);
 	connect(m_ui->windowNamePushButton, &QPushButton::clicked, this, &MainWindow::onWindowName);
 
@@ -373,18 +375,33 @@ void MainWindow::emitMousePosition()
 	emit mousePosition(pos);
 }
 
-void MainWindow::onLoad()
+void MainWindow::onNew()
 {
-	QString filename = QFileDialog::getOpenFileName(this, tr("Load actions"), ConfigFile::getInstance()->getLocalDataDirectory(), "AutoClicker Files (*.acf)");
+	m_model->reset();
+
+	setWindowName("");
+}
+
+void MainWindow::onOpen()
+{
+	QString filename = QFileDialog::getOpenFileName(this, tr("Open actions"), ConfigFile::getInstance()->getLocalDataDirectory(), "AutoClicker Files (*.acf)");
 
 	if (filename.isEmpty()) return;
 
-	m_model->load(filename);
+	if (m_model->load(filename))
+	{
+		setWindowName(m_model->getWindowName());
+	}
 }
 
 void MainWindow::onSave()
 {
-	QString filename = QFileDialog::getSaveFileName(this, tr("Save actions"), ConfigFile::getInstance()->getLocalDataDirectory(), "AutoClicker Files (*.acf)");
+	m_model->save(m_model->getFilename());
+}
+
+void MainWindow::onSaveAs()
+{
+	QString filename = QFileDialog::getSaveFileName(this, tr("Save actions"), /* ConfigFile::getInstance()->getLocalDataDirectory() */ m_model->getFilename(), "AutoClicker Files (*.acf)");
 
 	if (filename.isEmpty()) return;
 

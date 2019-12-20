@@ -45,8 +45,6 @@ public slots:
 	// buttons
 
 	// actions
-	void onLoad();
-	void onSave();
 	void onStartOrStop();
 
 	// spots
@@ -55,6 +53,10 @@ public slots:
 	void onPosition();
 
 	// file menu
+	void onNew();
+	void onOpen();
+	void onSave();
+	void onSaveAs();
 	void onTestDialog();
 
 	// help menu
