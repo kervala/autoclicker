@@ -31,7 +31,7 @@ QDataStream& operator >> (QDataStream& stream, Spot& spot)
 {
 	stream >> spot.name >> spot.originalPosition >> spot.delay;
 
-	if (stream.device()->property("version") == 2)
+	if (stream.device()->property("version") >= 2)
 	{
 		stream >> spot.duration;
 	}
