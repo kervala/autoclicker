@@ -357,12 +357,12 @@
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="128"/>
-        <source>Window name</source>
+        <source>Window title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="135"/>
-        <location filename="../src/mainwindow.cpp" line="622"/>
+        <location filename="../src/mainwindow.cpp" line="628"/>
         <source>Unknown</source>
         <translation type="unfinished">Unknown</translation>
     </message>
@@ -493,7 +493,7 @@
         <translation>E&amp;xit</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="650"/>
+        <location filename="../src/mainwindow.cpp" line="656"/>
         <source>About %1</source>
         <translation>About %1</translation>
     </message>
@@ -502,7 +502,7 @@
         <translation type="vanished">deviantART Messaging Network (dAmn) chat client</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="654"/>
+        <location filename="../src/mainwindow.cpp" line="660"/>
         <source>Author: %1</source>
         <translation>Author: %1</translation>
     </message>
@@ -511,7 +511,7 @@
         <translation type="vanished">Homepage: %1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="655"/>
+        <location filename="../src/mainwindow.cpp" line="661"/>
         <source>Support: %1</source>
         <translation>Support: %1</translation>
     </message>
@@ -541,27 +541,27 @@
         <translation type="vanished">Load actions</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="432"/>
+        <location filename="../src/mainwindow.cpp" line="442"/>
         <source>Open actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="449"/>
+        <location filename="../src/mainwindow.cpp" line="459"/>
         <source>Save actions</source>
         <translation>Save actions</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="652"/>
+        <location filename="../src/mainwindow.cpp" line="658"/>
         <source>Tool to click automatically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="740"/>
+        <location filename="../src/mainwindow.cpp" line="746"/>
         <source>New version</source>
         <translation>New version</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="741"/>
+        <location filename="../src/mainwindow.cpp" line="747"/>
         <source>Version %1 is available since %2.
 
 Do you want to download it now?</source>
@@ -570,12 +570,12 @@ Do you want to download it now?</source>
 Do you want to download it now?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="762"/>
+        <location filename="../src/mainwindow.cpp" line="768"/>
         <source>No update found</source>
         <translation>No update found</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="763"/>
+        <location filename="../src/mainwindow.cpp" line="769"/>
         <source>You already have the last %1 version (%2).</source>
         <translation>You already have the last %1 version (%2).</translation>
     </message>
@@ -751,7 +751,7 @@ Do you want to download it now?</translation>
     <name>QObject</name>
     <message>
         <location filename="../src/utils_x.cpp" line="106"/>
-        <location filename="../src/utils_win.cpp" line="510"/>
+        <location filename="../src/utils_win.cpp" line="491"/>
         <source>Whole screen</source>
         <translation>Whole screen</translation>
     </message>
@@ -957,7 +957,7 @@ Do you want to download it now?</translation>
 <context>
     <name>SpotModel</name>
     <message>
-        <location filename="../src/spotmodel.cpp" line="129"/>
+        <location filename="../src/spotmodel.cpp" line="128"/>
         <source>Spot #%1</source>
         <translation>Spot #%1</translation>
     </message>
