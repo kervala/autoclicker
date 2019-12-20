@@ -333,7 +333,7 @@ static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM inst)
 		{
 			wchar_t WindowTitle[80];
 
-			int len = GetWindowTextW(hWnd, WindowName, 80);
+			int len = GetWindowTextW(hWnd, WindowTitle, 80);
 
 			if (len > 0)
 			{
@@ -357,8 +357,8 @@ static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM inst)
 // Windows XP x32 = GetProcessImageFileName()
 // Windows XP x64 = GetProcessImageFileName()
 
-typedef BOOL (WINAPI *QueryFullProcessImageNamePtr)(HANDLE hProcess, DWORD dwFlags, LPTSTR lpExeName, PDWORD lpdwSize);
-typedef DWORD (WINAPI *GetProcessImageFileNamePtr)(HANDLE hProcess, LPTSTR lpImageFileName, DWORD nSize);
+typedef BOOL (WINAPI *QueryFullProcessImageNamePtr)(HANDLE hProcess, DWORD dwFlags, LPWSTR lpExeName, PDWORD lpdwSize);
+typedef DWORD (WINAPI *GetProcessImageFileNamePtr)(HANDLE hProcess, LPWSTR lpImageFileName, DWORD nSize);
 
 static QueryFullProcessImageNamePtr pQueryFullProcessImageName = NULL;
 static GetProcessImageFileNamePtr pGetProcessImageFileName = NULL;
@@ -367,12 +367,12 @@ void createWindowsList(Windows &windows)
 {
 	if (pQueryFullProcessImageName == NULL)
 	{
-		pQueryFullProcessImageName = (QueryFullProcessImageNamePtr) QLibrary::resolve("kernel32", "QueryFullProcessImageNameA");
+		pQueryFullProcessImageName = (QueryFullProcessImageNamePtr) QLibrary::resolve("kernel32", "QueryFullProcessImageNameW");
 	}
 
 	if (pGetProcessImageFileName == NULL)
 	{
-		pGetProcessImageFileName = (GetProcessImageFileNamePtr) QLibrary::resolve("psapi", "GetProcessImageFileNameA");
+		pGetProcessImageFileName = (GetProcessImageFileNamePtr) QLibrary::resolve("psapi", "GetProcessImageFileNameW");
 	}
 
 	HMODULE module = GetModuleHandle(NULL);
@@ -380,14 +380,13 @@ void createWindowsList(Windows &windows)
 	Windows currentWindows;
 
 	// list hWnd
-	HANDLE hThreadSnap = INVALID_HANDLE_VALUE;
 	THREADENTRY32 te32;
 
 	// Fill in the size of the structure before using it.
 	te32.dwSize = sizeof(THREADENTRY32);
 
 	// Take a snapshot of all running threads
-	hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+	HANDLE hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
 
 	// Retrieve information about the first thread,
 	if ((hThreadSnap != INVALID_HANDLE_VALUE) && Thread32First(hThreadSnap, &te32))
@@ -413,14 +412,12 @@ void createWindowsList(Windows &windows)
 					HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pidwin);
 
 					// get process path
-					char szProcessPath[MAX_PATH];
+					wchar_t szProcessPath[MAX_PATH];
 					DWORD bufSize = MAX_PATH;
-
-					QString processPath;
 
 					if (pQueryFullProcessImageName != NULL)
 					{
-						if (pQueryFullProcessImageName(hProcess, 0, (LPTSTR)&szProcessPath, &bufSize) == 0)
+						if (pQueryFullProcessImageName(hProcess, 0, (LPWSTR)&szProcessPath, &bufSize) == 0)
 						{
 							DWORD error = GetLastError();
 
@@ -429,22 +426,18 @@ void createWindowsList(Windows &windows)
 					}
 					else if (pGetProcessImageFileName != NULL)
 					{
-						bufSize = pGetProcessImageFileName(hProcess, (LPTSTR)&szProcessPath, bufSize);
+						bufSize = pGetProcessImageFileName(hProcess, (LPWSTR)&szProcessPath, bufSize);
 					}
 
-					processPath = QString::fromLatin1(szProcessPath, bufSize);
+					currentWindows[i].path = QString::fromWCharArray(szProcessPath, bufSize);
 
 					// icon
 					HICON hIcon = NULL;
-
-					UINT count = ExtractIconEx(processPath.toLatin1().data(), -1, NULL, NULL, 1);
-
+					UINT count = ExtractIconExW(szProcessPath, -1, NULL, NULL, 1);
 					if (count < 1) continue;
 
-					UINT res = ExtractIconEx(processPath.toLatin1().data(), 0, &hIcon, NULL, 1);
-
+					UINT res = ExtractIconExW(szProcessPath, 0, &hIcon, NULL, 1);
 					QPixmap pixmap = ::pixmap(hIcon);
-
 					DestroyIcon(hIcon);
 
 					currentWindows[i].icon = pixmap;
