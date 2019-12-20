@@ -341,17 +341,6 @@ void MainWindow::clicker()
 			if ((spot.lastPosition.y() + dy > (spot.originalPosition.y() + 5)) || (spot.lastPosition.y() + dx < (spot.originalPosition.y() - 5))) dy = -dy;
 
 			spot.lastPosition += QPoint(dx, dy);
-
-			if (m_useSimpleMode)
-			{
-				// simple mode
-				m_spot = spot;
-			}
-			else
-			{
-				// multi mode
-				m_model->setSpot(row, spot);
-			}
 		}
 
 		// set cursor position
