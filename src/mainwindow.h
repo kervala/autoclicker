@@ -113,6 +113,14 @@ protected:
 	QAtomicInt m_stopExternalListener;
 	QAtomicInt m_stopClicker;
 
+	enum eWaitingAction
+	{
+		ActionNone,
+		ActionPosition
+	};
+
+	QAtomicInt m_waitingAction;
+
 	Ui::MainWindow *m_ui;
 
 	Spot m_spot;
