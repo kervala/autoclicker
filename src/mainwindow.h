@@ -105,6 +105,7 @@ protected:
 	void clicker();
 	void emitMousePosition();
 	void startOrStop(bool simpleMode);
+	void updateStartButton();
 
 	QWinTaskbarButton *m_button;
 	SpotModel *m_model;

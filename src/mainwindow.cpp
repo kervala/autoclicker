@@ -178,6 +178,8 @@ void MainWindow::onInsertSpot()
 	int row = indices.isEmpty() ? -1:indices.front().row()+1;
 
 	m_model->insertRow(row);
+
+	updateStartButton();
 }
 
 void MainWindow::onDeleteSpot()
@@ -189,6 +191,8 @@ void MainWindow::onDeleteSpot()
 	int row = indices.front().row();
 
 	m_model->removeRow(row);
+
+	updateStartButton();
 }
 
 void MainWindow::startOrStop(bool simpleMode)
@@ -219,6 +223,11 @@ void MainWindow::startOrStop(bool simpleMode)
 	m_useSimpleMode = simpleMode;
 
 	QtConcurrent::run(this, &MainWindow::clicker);
+}
+
+void MainWindow::updateStartButton()
+{
+	m_ui->startPushButton->setEnabled(m_model->rowCount() > 0);
 }
 
 void MainWindow::onStartOrStop()
@@ -435,6 +444,7 @@ void MainWindow::onNew()
 	m_model->reset();
 
 	setWindowTitleButton("");
+	updateStartButton();
 }
 
 void MainWindow::onOpen()
@@ -446,6 +456,8 @@ void MainWindow::onOpen()
 	if (m_model->load(filename))
 	{
 		setWindowTitleButton(m_model->getWindowTitle());
+
+		updateStartButton();
 	}
 }
 
