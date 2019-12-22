@@ -131,7 +131,8 @@ bool isKeyPressed(int key)
 		// qDebug() << "key" << res;
 	}
 
-	return res & 1;
+	// only take current keypresses (0x8000) and not previous ones (0x0001)
+	return res & 0x8000;
 }
 
 QPixmap grabWindow(WId window)
