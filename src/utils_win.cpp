@@ -126,9 +126,9 @@ bool isKeyPressed(int key)
 {
 	SHORT res = GetAsyncKeyState(key);
 
-	if (key)
+	if (res)
 	{
-		// qDebug() << "key" << res;
+		qDebug() << "key" << res;
 	}
 
 	// only take current keypresses (0x8000) and not previous ones (0x0001)
