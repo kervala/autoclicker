@@ -38,7 +38,7 @@
 	#define new DEBUG_NEW
 #endif
 
-MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint), m_stopExternalListener(0), m_stopClicker(0), m_waitingAction(ActionNone), m_useSimpleMode(true)
+MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::WindowCloseButtonHint), m_stopExternalListener(0), m_stopClicker(0), m_waitingAction(ActionNone), m_useSimpleMode(true)
 {
 	m_ui = new Ui::MainWindow();
 	m_ui->setupUi(this);
