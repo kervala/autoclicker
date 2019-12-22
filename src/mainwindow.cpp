@@ -691,14 +691,7 @@ void MainWindow::onRestore()
 {
 	if (!isVisible())
 	{
-		if (isMaximized())
-		{
-			showMaximized();
-		}
-		else if (isMinimized())
-		{
-			showNormal();
-		}
+		showNormal();
 	}
 
 	raise();
