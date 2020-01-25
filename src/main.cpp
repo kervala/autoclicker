@@ -35,6 +35,9 @@
 	Q_IMPORT_PLUGIN(QWindowsVistaStylePlugin);
 #endif
 #elif defined(Q_OS_MAC)
+	// forward declaration because this function is not exposed
+	extern void qt_set_sequence_auto_mnemonic(bool b);
+
 	Q_IMPORT_PLUGIN(QCocoaIntegrationPlugin)
 #else
 	Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)
@@ -79,6 +82,10 @@ int main(int argc, char *argv[])
 	{
 		QApplication::installTranslator(&qtTranslator);
 	}
+
+#ifdef Q_OS_MAC
+	qt_set_sequence_auto_mnemonic(true);
+#endif
 
 	MainWindow mainWindow;
 	mainWindow.setWindowTitle(QApplication::applicationName());
