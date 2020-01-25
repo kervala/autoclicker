@@ -42,7 +42,7 @@ void mouseLeftClickDown(const QPoint& pos)
 	CFRelease(click);
 }
 
-qint16 QKeySequenceToVK(const QKeySequence& seq)
+int QKeySequenceToVK(const QKeySequence& seq)
 {
 	/*
 	kVK_Return = 0x24,
