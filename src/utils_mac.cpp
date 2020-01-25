@@ -103,8 +103,22 @@ bool isKeyPressed(int key)
 	return (0 != ((keyMap[key >> 3] >> (key & 7)) & 1));
 }
 
-void CreateWindowsList(QAbstractItemModel *model)
+bool isSameWindowAtPos(Window window, const QPoint& pos)
 {
+	return false;
+}
+
+void createWindowsList(Windows& windows)
+{
+}
+
+void createWindowsList(QAbstractItemModel* model)
+{
+}
+
+bool isWindowMinimized(WId id)
+{
+	return false;
 }
 
 bool RestoreMinimizedWindow(WId &id)
@@ -128,31 +142,6 @@ void PutForegroundWindow(WId id)
 bool IsOS64bits()
 {
 	return true;
-}
-
-bool InitSystemProgress()
-{
-	return false;
-}
-
-bool UninitSystemProgress()
-{
-	return false;
-}
-
-bool BeginSystemProgress()
-{
-	return false;
-}
-
-bool UpdateSystemProgress(qint64 value, qint64 total)
-{
-	return false;
-}
-
-bool EndSystemProgress()
-{
-	return false;
 }
 
 #endif
