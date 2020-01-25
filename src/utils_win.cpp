@@ -140,24 +140,6 @@ QPixmap grabWindow(WId window)
 	return QPixmap();
 }
 
-Window getWindowWithTitle(const QString& title)
-{
-	if (title.isEmpty()) return Window();
-
-	Windows windows;
-	createWindowsList(windows);
-
-	for (int i = 0; i < windows.size(); ++i)
-	{
-		if (windows[i].title == title)
-		{
-			return windows[i];
-		}
-	}
-
-	return Window();
-}
-
 bool isSameWindowAtPos(Window window, const QPoint& pos)
 {
 	POINT p;

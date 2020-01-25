@@ -242,3 +242,21 @@ QString GetSupportedImageFormatsFilter()
 
 	return s_imagesFilter;
 }
+
+Window getWindowWithTitle(const QString& title)
+{
+	if (title.isEmpty()) return Window();
+
+	Windows windows;
+	createWindowsList(windows);
+
+	for (int i = 0; i < windows.size(); ++i)
+	{
+		if (windows[i].title == title)
+		{
+			return windows[i];
+		}
+	}
+
+	return Window();
+}
