@@ -17,20 +17,20 @@
  *
  */
 
-#ifndef SPOTMODEL_H
-#define SPOTMODEL_H
+#ifndef ACTIONMODEL_H
+#define ACTIONMODEL_H
 
 #include "spot.h"
 
 #include <QAbstractTableModel>
 
-class SpotModel : public QAbstractTableModel
+class ActionModel : public QAbstractTableModel
 {
 	Q_OBJECT
 
 public:
-	SpotModel(QObject* parent = nullptr);
-	virtual ~SpotModel();
+	ActionModel(QObject* parent = nullptr);
+	virtual ~ActionModel();
 
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	int columnCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -45,8 +45,8 @@ public:
 	QMimeData* mimeData(const QModelIndexList& indexes) const override;
 	bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) override;
 
-	Spot getSpot(int row) const;
-	void setSpot(int row, const Spot& spot);
+	Action getAction(int row) const;
+	void setAction(int row, const Action& action);
 
 	QString getWindowTitle() const;
 	void setWindowTitle(const QString& name);
@@ -61,7 +61,7 @@ public:
 	QString getFilename() const;
 
 private:
-	QList<Spot> m_spots;
+	QList<Action> m_actions;
 	QString m_windowTitle;
 	QString m_filename;
 };

@@ -35,32 +35,37 @@ SMagicHeader s_header = { "ACFK" };
 // - initial version
 //
 // version 2:
-// - added duration to a spot
+// - added duration to a click
 //
 // version 3:
 // - added window name
-quint32 s_version = 3;
+//
+// version 4:
+// - added action types
+// - added Repeat action type
 
-SpotModel::SpotModel(QObject* parent) : QAbstractTableModel(parent)
+quint32 s_version = 4;
+
+ActionModel::ActionModel(QObject* parent) : QAbstractTableModel(parent)
 {
 }
 
-SpotModel::~SpotModel()
+ActionModel::~ActionModel()
 {
 }
 
-int SpotModel::rowCount(const QModelIndex &parent) const
+int ActionModel::rowCount(const QModelIndex &parent) const
 {
-	return m_spots.size();
+	return m_actions.size();
 }
 
-int SpotModel::columnCount(const QModelIndex &parent) const
+int ActionModel::columnCount(const QModelIndex &parent) const
 {
 	// name, original position, delay, duration, last position
 	return 5;
 }
 
-QVariant SpotModel::data(const QModelIndex &index, int role) const
+QVariant ActionModel::data(const QModelIndex &index, int role) const
 {
 	if (!index.isValid()) return QVariant();
 
@@ -79,7 +84,7 @@ QVariant SpotModel::data(const QModelIndex &index, int role) const
 	return QVariant();
 }
 
-bool SpotModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool ActionModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
 	if (role == Qt::DisplayRole || role == Qt::EditRole)
 	{
@@ -105,7 +110,7 @@ bool SpotModel::setData(const QModelIndex &index, const QVariant &value, int rol
 	return false;
 }
 
-Qt::ItemFlags SpotModel::flags(const QModelIndex &index) const
+Qt::ItemFlags ActionModel::flags(const QModelIndex &index) const
 {
 	Qt::ItemFlags flags = Qt::ItemIsDropEnabled | QAbstractTableModel::flags(index);
 
@@ -114,7 +119,7 @@ Qt::ItemFlags SpotModel::flags(const QModelIndex &index) const
 	return flags;
 }
 
-bool SpotModel::insertRows(int position, int rows, const QModelIndex& parent)
+bool ActionModel::insertRows(int position, int rows, const QModelIndex& parent)
 {
 	bool insertAtTheEnd = position == -1;
 
@@ -133,11 +138,11 @@ bool SpotModel::insertRows(int position, int rows, const QModelIndex& parent)
 
 		if (insertAtTheEnd)
 		{
-			m_spots.push_back(spot);
+			m_actions.push_back(action);
 		}
 		else
 		{
-			m_spots.insert(row + position, spot);
+			m_actions.insert(row + position, action);
 		}
 	}
 
@@ -145,32 +150,32 @@ bool SpotModel::insertRows(int position, int rows, const QModelIndex& parent)
 	return true;
 }
 
-bool SpotModel::removeRows(int position, int rows, const QModelIndex& parent)
+bool ActionModel::removeRows(int position, int rows, const QModelIndex& parent)
 {
 	beginRemoveRows(QModelIndex(), position, position + rows - 1);
 
 	for (int row = 0; row < rows; ++row)
 	{
-		m_spots.removeAt(position + row);
+		m_actions.removeAt(position + row);
 	}
 
 	endRemoveRows();
 	return true;
 }
 
-Qt::DropActions SpotModel::supportedDropActions() const
+Qt::DropActions ActionModel::supportedDropActions() const
 {
 	return Qt::MoveAction | Qt::CopyAction;
 }
 
-QStringList SpotModel::mimeTypes() const
+QStringList ActionModel::mimeTypes() const
 {
 	QStringList types;
 	types << "application/x-autoclicker";
 	return types;
 }
 
-QMimeData* SpotModel::mimeData(const QModelIndexList &indexes) const
+QMimeData* ActionModel::mimeData(const QModelIndexList &indexes) const
 {
 	QMimeData* mimeData = new QMimeData();
 	QByteArray encodedData;
@@ -181,7 +186,7 @@ QMimeData* SpotModel::mimeData(const QModelIndexList &indexes) const
 	{
 		if (index.isValid())
 		{
-			stream << m_spots[index.row()];
+			stream << m_actions[index.row()];
 		}
 	}
 
@@ -190,11 +195,11 @@ QMimeData* SpotModel::mimeData(const QModelIndexList &indexes) const
 	return mimeData;
 }
 
-bool SpotModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
+bool ActionModel::dropMimeData(const QMimeData* data, Qt::DropAction actionType, int row, int column, const QModelIndex& parent)
 {
 	if (!data->hasFormat("application/x-autoclicker")) return false;
 
-	if (action == Qt::IgnoreAction) return true;
+	if (actionType == Qt::IgnoreAction) return true;
 
 	bool insertAtTheEnd = row == -1;
 
@@ -203,19 +208,19 @@ bool SpotModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int r
 	QByteArray encodedData = data->data("application/x-autoclicker");
 	QDataStream stream(&encodedData, QIODevice::ReadOnly);
 
-	Spot spot;
+	Action action;
 
-	stream >> spot;
+	stream >> action;
 
 	beginInsertRows(QModelIndex(), row, row);
 
 	if (insertAtTheEnd)
 	{
-		m_spots.push_back(spot);
+		m_actions.push_back(action);
 	}
 	else
 	{
-		m_spots.insert(row, spot);
+		m_actions.insert(row, action);
 	}
 
 	endInsertRows();
@@ -223,41 +228,41 @@ bool SpotModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int r
 	return true;
 }
 
-Spot SpotModel::getSpot(int row) const
+Action ActionModel::getAction(int row) const
 {
-	return m_spots[row];
+	return m_actions[row];
 }
 
-void SpotModel::setSpot(int row, const Spot& spot)
+void ActionModel::setAction(int row, const Action& action)
 {
-	m_spots[row] = spot;
+	m_actions[row] = action;
 
 	emit dataChanged(index(row, 0), index(row, 4), { Qt::DisplayRole, Qt::EditRole });
 }
 
-QString SpotModel::getWindowTitle() const
+QString ActionModel::getWindowTitle() const
 {
 	return m_windowTitle;
 }
 
-void SpotModel::setWindowTitle(const QString& title)
+void ActionModel::setWindowTitle(const QString& title)
 {
 	m_windowTitle = title;
 }
 
-void SpotModel::reset()
+void ActionModel::reset()
 {
 	m_windowTitle.clear();
 	m_filename.clear();
 
 	beginResetModel();
 
-	m_spots.clear();
+	m_actions.clear();
 
 	endResetModel();
 }
 
-bool SpotModel::load(const QString& filename)
+bool ActionModel::load(const QString& filename)
 {
 	if (filename.isEmpty()) return false;
 
@@ -291,8 +296,8 @@ bool SpotModel::load(const QString& filename)
 
 	beginResetModel();
 
-	// spots
-	stream >> m_spots;
+	// actions
+	stream >> m_actions;
 
 	endResetModel();
 
@@ -312,7 +317,7 @@ bool SpotModel::load(const QString& filename)
 	return true;
 }
 
-bool SpotModel::save(const QString& filename)
+bool ActionModel::save(const QString& filename)
 {
 	if (filename.isEmpty()) return false;
 
@@ -332,7 +337,7 @@ bool SpotModel::save(const QString& filename)
 	stream.setVersion(QDataStream::Qt_5_6);
 #endif
 
-	stream << m_spots;
+	stream << m_actions;
 
 	// serialize window title
 	stream << m_windowTitle;
@@ -342,20 +347,20 @@ bool SpotModel::save(const QString& filename)
 	return true;
 }
 
-bool SpotModel::updateSpotsPosition(const QPoint& offset)
+bool ActionModel::updateSpotsPosition(const QPoint& offset)
 {
-	for (int i = 0; i < m_spots.size(); ++i)
+	for (int i = 0; i < m_actions.size(); ++i)
 	{
-		Spot &spot = m_spots[i];
+		Action &action = m_actions[i];
 
-		spot.originalPosition -= offset;
-		spot.lastPosition = spot.originalPosition;
+		action.originalPosition -= offset;
+		action.lastPosition = action.originalPosition;
 	}
 
 	return true;
 }
 
-QString SpotModel::getFilename() const
+QString ActionModel::getFilename() const
 {
 	return m_filename;
 }

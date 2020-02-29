@@ -20,16 +20,16 @@
 #include "common.h"
 #include "spot.h"
 
-QDataStream& operator << (QDataStream& stream, const Spot &spot)
+QDataStream& operator << (QDataStream& stream, const Action &action)
 {
 	stream << spot.name << spot.originalPosition << spot.delay << spot.duration;
 
 	return stream;
 }
 
-QDataStream& operator >> (QDataStream& stream, Spot& spot)
+QDataStream& operator >> (QDataStream& stream, Action& action)
 {
-	stream >> spot.name >> spot.originalPosition >> spot.delay;
+	stream >> action.name >> action.originalPosition >> action.delay;
 
 	if (stream.device()->property("version") >= 2)
 	{
@@ -37,11 +37,11 @@ QDataStream& operator >> (QDataStream& stream, Spot& spot)
 	}
 	else
 	{
-		spot.duration = 0;
+		action.duration = 0;
 	}
 
 	// copy original position
-	spot.lastPosition = spot.originalPosition;
+	action.lastPosition = action.originalPosition;
 
 	return stream;
 }

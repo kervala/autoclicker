@@ -24,7 +24,7 @@
 #include "spot.h"
 
 class QWinTaskbarButton;
-class SpotModel;
+class ActionModel;
 class QDataWidgetMapper;
 class Updater;
 
@@ -108,7 +108,7 @@ protected:
 	void updateStartButton();
 
 	QWinTaskbarButton *m_button;
-	SpotModel *m_model;
+	ActionModel *m_model;
 	QDataWidgetMapper *m_mapper;
 
 	QAtomicInt m_stopExternalListener;
@@ -124,7 +124,7 @@ protected:
 
 	Ui::MainWindow *m_ui;
 
-	Spot m_spot;
+	Action m_action;
 	Updater *m_updater;
 	bool m_useSimpleMode;
 };

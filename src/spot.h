@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef SPOT_H
-#define SPOT_H
+#ifndef ACTION_H
+#define ACTION_H
 
 struct Spot
 {
@@ -29,7 +29,10 @@ struct Spot
 	int duration;
 };
 
-QDataStream& operator << (QDataStream& stream, const Spot& spot);
-QDataStream& operator >> (QDataStream& stream, Spot& spot);
+QDataStream& operator << (QDataStream& stream, const Action& action);
+QDataStream& operator >> (QDataStream& stream, Action& action);
+
+QDataStream& operator << (QDataStream& stream, const ActionType& type);
+QDataStream& operator >> (QDataStream& stream, ActionType& type);
 
 #endif

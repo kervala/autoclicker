@@ -55,14 +55,14 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::W
 
 	SystrayIcon *systray = new SystrayIcon(this);
 
-	m_model = new SpotModel(this);
+	m_model = new ActionModel(this);
 
 	m_ui->spotsListView->setModel(m_model);
 
 	// check for a new version
 	m_updater = new Updater(this);
 
-	m_ui->spotGroupBox->setVisible(false);
+	m_ui->actionGroupBox->setVisible(false);
 
 	m_mapper = new QDataWidgetMapper(this);
 	m_mapper->setModel(m_model);
@@ -238,9 +238,9 @@ void MainWindow::onStartOrStop()
 void MainWindow::onStartSimple()
 {
 	// define unique spot parameters
-	m_spot.delay = m_ui->defaultDelaySpinBox->value();
-	m_spot.lastPosition = QCursor::pos();
-	m_spot.originalPosition = m_spot.lastPosition;
+	m_action.delay = m_ui->defaultDelaySpinBox->value();
+	m_action.lastPosition = QCursor::pos();
+	m_action.originalPosition = m_action.lastPosition;
 
 	startOrStop(true);
 }
@@ -271,14 +271,14 @@ void MainWindow::clicker()
 
 	int row = 0;
 
-	Spot spot;
+	Action spot;
 	QTime startTime = QTime::currentTime();
 	QTime endTime;
 
 	if (m_useSimpleMode)
 	{
 		// simple mode
-		spot = m_spot;
+		spot = m_action;
 
 		// always use absolute coordinates
 		rect = QRect(0, 0, 10, 10);
@@ -318,7 +318,7 @@ void MainWindow::clicker()
 		else
 		{
 			// multi mode
-			spot = m_model->getSpot(row);
+			spot = m_model->getAction(row);
 
 			if (window.id)
 			{
@@ -395,7 +395,7 @@ void MainWindow::clicker()
 				if (row >= m_model->rowCount()) row = 0;
 
 				// new spot
-				spot = m_model->getSpot(row);
+				spot = m_model->getAction(row);
 
 				// apply window offset
 				spot.originalPosition += rect.topLeft();
@@ -593,7 +593,7 @@ void MainWindow::listenExternalInputEvents()
 void MainWindow::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
 	// update controls
-	m_ui->spotGroupBox->setVisible(!selected.empty());
+	m_ui->actionGroupBox->setVisible(!selected.empty());
 
 	if (selected.empty()) return;
 
@@ -605,7 +605,7 @@ void MainWindow::onSelectionChanged(const QItemSelection& selected, const QItemS
 	int row = indices.front().row();
 
 	// manually update position because not handled by data mapper
-	QPoint pos = m_model->getSpot(row).originalPosition;
+	QPoint pos = m_model->getAction(row).originalPosition;
 
 	m_ui->positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
 }
@@ -618,10 +618,10 @@ void MainWindow::onMousePositionChanged(const QPoint& pos)
 	QModelIndex index = m_ui->spotsListView->selectionModel()->currentIndex();
 
 	// update original and last positions
-	Spot spot = m_model->getSpot(index.row());
+	Action spot = m_model->getAction(index.row());
 	spot.lastPosition = pos;
 	spot.originalPosition = pos;
-	m_model->setSpot(index.row(), spot);
+	m_model->setAction(index.row(), spot);
 
 	m_ui->positionPushButton->setEnabled(true);
 	m_ui->positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
