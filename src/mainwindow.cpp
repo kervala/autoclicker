@@ -103,8 +103,6 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::W
 	connect(m_updater, &Updater::noNewVersionDetected, this, &MainWindow::onNoNewVersion);
 
 	m_updater->checkUpdates(true);
-
-	startListeningExternalInputEvents();
 }
 
 MainWindow::~MainWindow()
@@ -119,6 +117,8 @@ void MainWindow::showEvent(QShowEvent *e)
 #endif
 
 	e->accept();
+
+	startListeningExternalInputEvents();
 }
 
 void MainWindow::closeEvent(QCloseEvent *e)
