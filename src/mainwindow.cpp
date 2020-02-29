@@ -85,6 +85,7 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::W
 	connect(m_ui->positionKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onPositionKeyChanged);
 
 	connect(m_ui->defaultDelaySpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::onDelayChanged);
+	connect(this, &MainWindow::updateActionLabel, m_ui->scriptLabel, &QLabel::setText);
 
 	// Systray
 	connect(systray, &SystrayIcon::requestMinimize, this, &MainWindow::onMinimize);
@@ -375,11 +376,7 @@ void MainWindow::clicker()
 				// if next action is a repeat
 				if (action.type == TypeRepeat)
 				{
-					// no more repeat
-					if (action.lastCount < 1)
-					{
-						// next spot
-						++row;
+					emit updateActionLabel(QString("[%1] %2 (%3)").arg(row).arg(action.name).arg(action.lastCount));
 
 						// last spot, restart to first one
 						if (row >= m_model->rowCount())
@@ -407,6 +404,9 @@ void MainWindow::clicker()
 						action = m_model->getAction(row);
 					}
 				}
+				else
+				{
+					emit updateActionLabel(QString("[%1] %2").arg(row).arg(action.name));
 
 				// apply window offset
 				action.originalPosition += rect.topLeft();
@@ -437,8 +437,6 @@ void MainWindow::onOpen()
 	if (m_model->load(filename))
 	{
 		QString filename = QFileInfo(m_model->getFilename()).baseName();
-
-		m_ui->scriptLabel->setText(filename);
 
 		updateStartButton();
 	}

@@ -81,6 +81,7 @@ signals:
 	void startSimple();
 	void clickerStopped();
 	void changeSystrayIcon();
+	void updateActionLabel(const QString &label);
 
 protected:
 	void showEvent(QShowEvent *e);
