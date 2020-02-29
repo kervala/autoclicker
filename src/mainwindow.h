@@ -45,13 +45,8 @@ public slots:
 	// buttons
 
 	// actions
+	void onEditScript();
 	void onStartOrStop();
-
-	// spots
-	void onInsertSpot();
-	void onDeleteSpot();
-	void onPosition();
-	void onWindowTitleChanged();
 
 	// file menu
 	void onNew();
@@ -75,8 +70,6 @@ public slots:
 	void onNoNewVersion();
 	void onProgress(qint64 readBytes, qint64 totalBytes);
 
-	void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-	void onMousePositionChanged(const QPoint &pos);
 	void onStartKeyChanged(const QKeySequence &seq);
 	void onPositionKeyChanged(const QKeySequence &seq);
 	void onDelayChanged(int delay);
@@ -84,11 +77,7 @@ public slots:
 	void onStartSimple();
 	void onChangeSystrayIcon();
 
-	void setWindowTitleButton(const QString& title);
-
 signals:
-	void mousePositionChanged(const QPoint &pos);
-	void windowTitleChanged(const QString& title);
 	void startSimple();
 	void clickerStopped();
 	void changeSystrayIcon();
@@ -103,24 +92,14 @@ protected:
 	void startListeningExternalInputEvents();
 	void listenExternalInputEvents();
 	void clicker();
-	void emitMousePosition();
 	void startOrStop(bool simpleMode);
 	void updateStartButton();
 
 	QWinTaskbarButton *m_button;
 	ActionModel *m_model;
-	QDataWidgetMapper *m_mapper;
 
 	QAtomicInt m_stopExternalListener;
 	QAtomicInt m_stopClicker;
-
-	enum eWaitingAction
-	{
-		ActionNone,
-		ActionPosition
-	};
-
-	QAtomicInt m_waitingAction;
 
 	Ui::MainWindow *m_ui;
 

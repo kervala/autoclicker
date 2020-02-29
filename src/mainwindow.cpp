@@ -23,11 +23,11 @@
 #include "ui_mainwindow.h"
 #include "configfile.h"
 #include "updatedialog.h"
+#include "editscriptdialog.h"
 #include "updater.h"
 #include "spotmodel.h"
 #include "utils.h"
 #include "testdialog.h"
-#include "capturedialog.h"
 
 #ifdef Q_OS_WIN32
 #include <QtWinExtras/QWinTaskbarProgress>
@@ -38,7 +38,7 @@
 	#define new DEBUG_NEW
 #endif
 
-MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::WindowCloseButtonHint), m_stopExternalListener(0), m_stopClicker(0), m_waitingAction(ActionNone), m_useSimpleMode(true)
+MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::WindowCloseButtonHint), m_stopExternalListener(0), m_stopClicker(0), m_useSimpleMode(true)
 {
 	m_ui = new Ui::MainWindow();
 	m_ui->setupUi(this);
@@ -56,19 +56,8 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::W
 	SystrayIcon *systray = new SystrayIcon(this);
 
 	m_model = new ActionModel(this);
-
-	m_ui->spotsListView->setModel(m_model);
-
 	// check for a new version
 	m_updater = new Updater(this);
-
-	m_ui->actionGroupBox->setVisible(false);
-
-	m_mapper = new QDataWidgetMapper(this);
-	m_mapper->setModel(m_model);
-	m_mapper->addMapping(m_ui->nameLineEdit, 0);
-	m_mapper->addMapping(m_ui->delaySpinBox, 2);
-	m_mapper->addMapping(m_ui->durationSpinBox, 3);
 
 	m_ui->startKeySequenceEdit->setKeySequence(QKeySequence(ConfigFile::getInstance()->getStartKey()));
 	m_ui->positionKeySequenceEdit->setKeySequence(QKeySequence(ConfigFile::getInstance()->getPositionKey()));
@@ -88,25 +77,14 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::W
 	connect(m_ui->actionAboutQt, &QAction::triggered, this, &MainWindow::onAboutQt);
 
 	// Buttons
+	connect(m_ui->editPushButton, &QPushButton::clicked, this, &MainWindow::onEditScript);
 	connect(m_ui->startPushButton, &QPushButton::clicked, this, &MainWindow::onStartOrStop);
-	connect(m_ui->positionPushButton, &QPushButton::clicked, this, &MainWindow::onPosition);
-	connect(m_ui->windowTitlePushButton, &QPushButton::clicked, this, &MainWindow::onWindowTitleChanged);
 
 	// Keys
 	connect(m_ui->startKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onStartKeyChanged);
 	connect(m_ui->positionKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onPositionKeyChanged);
 
-	QShortcut *shortcutDelete = new QShortcut(QKeySequence(Qt::Key_Delete), m_ui->spotsListView);
-	connect(shortcutDelete, &QShortcut::activated, this, &MainWindow::onDeleteSpot);
-
-	QShortcut* shortcutInsert = new QShortcut(QKeySequence(Qt::Key_Insert), m_ui->spotsListView);
-	connect(shortcutInsert, &QShortcut::activated, this, &MainWindow::onInsertSpot);
-
-#if FALSE && QT_VERSION >= QT_VERSION_CHECK(5, 7, 0)
-	connect(m_ui->defaultDelaySpinBox, qOverload<int>(&QSpinBox::valueChanged), this, &MainWindow::onDelayChanged);
-#else
 	connect(m_ui->defaultDelaySpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::onDelayChanged);
-#endif
 
 	// Systray
 	connect(systray, &SystrayIcon::requestMinimize, this, &MainWindow::onMinimize);
@@ -114,14 +92,8 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::W
 	connect(systray, &SystrayIcon::requestClose, this, &MainWindow::close);
 	connect(systray, &SystrayIcon::requestAction, this, &MainWindow::onSystrayAction);
 
-	// Selection model
-	connect(m_ui->spotsListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::onSelectionChanged);
-	connect(m_ui->spotsListView->selectionModel(), &QItemSelectionModel::currentRowChanged, m_mapper, &QDataWidgetMapper::setCurrentModelIndex);
-
 	// MainWindow
 	connect(this, &MainWindow::startSimple, this, &MainWindow::onStartSimple);
-	connect(this, &MainWindow::mousePositionChanged, this, &MainWindow::onMousePositionChanged);
-	connect(this, &MainWindow::windowTitleChanged, this, &MainWindow::setWindowTitleButton);
 	connect(this, &MainWindow::clickerStopped, this, &MainWindow::onStartOrStop);
 	connect(this, &MainWindow::changeSystrayIcon, this, &MainWindow::onChangeSystrayIcon);
 
@@ -171,30 +143,6 @@ void MainWindow::moveEvent(QMoveEvent *e)
 	e->accept();
 }
 
-void MainWindow::onInsertSpot()
-{
-	QModelIndexList indices = m_ui->spotsListView->selectionModel()->selectedRows();
-
-	int row = indices.isEmpty() ? -1:indices.front().row()+1;
-
-	m_model->insertRow(row);
-
-	updateStartButton();
-}
-
-void MainWindow::onDeleteSpot()
-{
-	QModelIndexList indices = m_ui->spotsListView->selectionModel()->selectedRows();
-
-	if (indices.isEmpty()) return;
-
-	int row = indices.front().row();
-
-	m_model->removeRow(row);
-
-	updateStartButton();
-}
-
 void MainWindow::startOrStop(bool simpleMode)
 {
 	// stop clicker is greater than 0 when stopped
@@ -230,6 +178,22 @@ void MainWindow::updateStartButton()
 	m_ui->startPushButton->setEnabled(m_model->rowCount() > 0);
 }
 
+void MainWindow::onEditScript()
+{
+	EditScriptDialog dialog(this, m_model);
+
+	if (dialog.exec() == QDialog::Accepted)
+	{
+		// delete current model
+		delete m_model;
+
+		// use the new model
+		m_model = dialog.getModel()->clone(this);
+
+		updateStartButton();
+	}
+}
+
 void MainWindow::onStartOrStop()
 {
 	startOrStop(false);
@@ -241,6 +205,7 @@ void MainWindow::onStartSimple()
 	m_action.delay = m_ui->defaultDelaySpinBox->value();
 	m_action.lastPosition = QCursor::pos();
 	m_action.originalPosition = m_action.lastPosition;
+	m_action.originalCount = m_action.lastCount;
 
 	startOrStop(true);
 }
@@ -271,14 +236,14 @@ void MainWindow::clicker()
 
 	int row = 0;
 
-	Action spot;
+	Action action;
 	QTime startTime = QTime::currentTime();
 	QTime endTime;
 
 	if (m_useSimpleMode)
 	{
 		// simple mode
-		spot = m_action;
+		action = m_action;
 
 		// always use absolute coordinates
 		rect = QRect(0, 0, 10, 10);
@@ -287,6 +252,9 @@ void MainWindow::clicker()
 	{
 		QString title = m_model->getWindowTitle();
 		Window window;
+
+		// reset repeat count
+		m_model->resetCount();
 
 		if (!title.isEmpty())
 		{
@@ -318,17 +286,17 @@ void MainWindow::clicker()
 		else
 		{
 			// multi mode
-			spot = m_model->getAction(row);
+			action = m_model->getAction(row);
 
 			if (window.id)
 			{
 			}
 
 			// apply window offset
-			spot.originalPosition += rect.topLeft();
-			spot.lastPosition = spot.originalPosition;
+			action.originalPosition += rect.topLeft();
+			action.lastPosition = action.originalPosition;
 
-			if (!isSameWindowAtPos(window, spot.originalPosition))
+			if (!isSameWindowAtPos(window, action.originalPosition))
 			{
 				m_stopClicker = 1;
 			}
@@ -337,39 +305,42 @@ void MainWindow::clicker()
 
 	while(!m_stopClicker)
 	{
-		// 50% change position
-		if (randomNumber(0, 1) == 0)
+		if (action.type == TypeClick)
 		{
-			// randomize position
-			int dx = randomNumber(0, 2) - 1;
-			int dy = randomNumber(0, 2) - 1;
+			// 50% change position
+			if (randomNumber(0, 1) == 0)
+			{
+				// randomize position
+				int dx = randomNumber(0, 2) - 1;
+				int dy = randomNumber(0, 2) - 1;
 
-			// invert sign
-			if ((spot.lastPosition.x() + dx > (spot.originalPosition.x() + 5)) || (spot.lastPosition.x() + dx < (spot.originalPosition.x() - 5))) dx = -dx;
-			if ((spot.lastPosition.y() + dy > (spot.originalPosition.y() + 5)) || (spot.lastPosition.y() + dx < (spot.originalPosition.y() - 5))) dy = -dy;
+				// invert sign
+				if ((action.lastPosition.x() + dx > (action.originalPosition.x() + 5)) || (action.lastPosition.x() + dx < (action.originalPosition.x() - 5))) dx = -dx;
+				if ((action.lastPosition.y() + dy > (action.originalPosition.y() + 5)) || (action.lastPosition.y() + dx < (action.originalPosition.y() - 5))) dy = -dy;
 
-			spot.lastPosition += QPoint(dx, dy);
+				action.lastPosition += QPoint(dx, dy);
+			}
+
+			// set cursor position
+			QCursor::setPos(action.lastPosition);
+
+			// left click down
+			mouseLeftClickDown(action.lastPosition);
+
+			// between 6 and 14 clicks/second = 125-166
+
+			// wait a little before releasing the mouse
+			QThread::currentThread()->msleep(randomNumber(10, 25));
+
+			// left click up
+			mouseLeftClickUp(action.lastPosition);
 		}
 
-		// set cursor position
-		QCursor::setPos(spot.lastPosition);
-
-		// left click down
-		mouseLeftClickDown(spot.lastPosition);
-
-		// between 6 and 14 clicks/second = 125-166
-
-		// wait a little before releasing the mouse
-		QThread::currentThread()->msleep(randomNumber(10, 25));
-
-		// left click up
-		mouseLeftClickUp(spot.lastPosition);
-
 		// wait before next click
-		QThread::currentThread()->msleep(randomNumber(30, spot.delay));
+		QThread::currentThread()->msleep(randomNumber(30, action.delay));
 
 		// stop auto-click if move the mouse
-		if (QCursor::pos() != spot.lastPosition)
+		if (QCursor::pos() != action.lastPosition)
 		{
 			m_stopClicker = 1;
 			break;
@@ -383,7 +354,7 @@ void MainWindow::clicker()
 			endTime = QTime::currentTime();
 
 			// check if we should pass to next spot
-			if (startTime.msecsTo(endTime) > (spot.duration * 1000))
+			if (startTime.msecsTo(endTime) > (action.duration * 1000))
 			{
 				// next spot
 				++row;
@@ -392,14 +363,54 @@ void MainWindow::clicker()
 				startTime = QTime::currentTime();
 
 				// last spot, restart to first one
-				if (row >= m_model->rowCount()) row = 0;
+				if (row >= m_model->rowCount())
+				{
+					m_model->resetCount();
+					row = 0;
+				}
 
 				// new spot
-				spot = m_model->getAction(row);
+				action = m_model->getAction(row);
+
+				// if next action is a repeat
+				if (action.type == TypeRepeat)
+				{
+					// no more repeat
+					if (action.lastCount < 1)
+					{
+						// next spot
+						++row;
+
+						// last spot, restart to first one
+						if (row >= m_model->rowCount())
+						{
+							m_model->resetCount();
+							row = 0;
+						}
+
+						// new spot
+						action = m_model->getAction(row);
+					}
+					else
+					{
+						// decrease count
+						--action.lastCount;
+
+						qDebug() << "last count" << action.lastCount;
+
+						m_model->setAction(row, action);
+
+						// start
+						row = 0;
+
+						// repeat from start
+						action = m_model->getAction(row);
+					}
+				}
 
 				// apply window offset
-				spot.originalPosition += rect.topLeft();
-				spot.lastPosition = spot.originalPosition;
+				action.originalPosition += rect.topLeft();
+				action.lastPosition = action.originalPosition;
 			}
 		}
 	}
@@ -410,52 +421,24 @@ void MainWindow::clicker()
 	}
 }
 
-void MainWindow::emitMousePosition()
-{
-	m_waitingAction = ActionNone;
-
-	// absolute coordinates
-	QPoint pos = QCursor::pos();
-
-	QString title = m_model->getWindowTitle();
-
-	if (!title.isEmpty())
-	{
-		// search a window with title
-		Window window = getWindowWithTitle(title);
-
-		// if found
-		if (window.id)
-		{
-			// convert to relative coordinates
-			pos -= window.rect.topLeft();
-		}
-		else
-		{
-			qDebug() << "No window with title" << title;
-		}
-	}
-
-	emit mousePositionChanged(pos);
-}
-
 void MainWindow::onNew()
 {
 	m_model->reset();
 
-	setWindowTitleButton("");
 	updateStartButton();
 }
 
 void MainWindow::onOpen()
 {
-	QString filename = QFileDialog::getOpenFileName(this, tr("Open actions"), ConfigFile::getInstance()->getLocalDataDirectory(), "AutoClicker Files (*.acf)");
+	QString filename = QFileDialog::getOpenFileName(this, tr("Open script"), ConfigFile::getInstance()->getLocalDataDirectory(), "AutoClicker Files (*.acf)");
 
 	if (filename.isEmpty()) return;
 
 	if (m_model->load(filename))
 	{
-		setWindowTitleButton(m_model->getWindowTitle());
+		QString filename = QFileInfo(m_model->getFilename()).baseName();
+
+		m_ui->scriptLabel->setText(filename);
 
 		updateStartButton();
 	}
@@ -473,36 +456,6 @@ void MainWindow::onSaveAs()
 	if (filename.isEmpty()) return;
 
 	m_model->save(filename);
-}
-
-void MainWindow::onPosition()
-{
-	m_ui->positionPushButton->setEnabled(false);
-	m_ui->positionPushButton->setText("???");
-
-	m_waitingAction = ActionPosition;
-}
-
-void MainWindow::onWindowTitleChanged()
-{
-	Window window;
-
-	{
-		CaptureDialog dlg(this);
-
-		if (!dlg.exec()) return;
-
-		window = dlg.getWindow();
-	}
-
-	// don't process window if minimized
-	if (isWindowMinimized(window.id)) return;
-
-	m_model->setWindowTitle(window.title);
-	m_model->updateSpotsPosition(window.rect.topLeft());
-
-	// only update the push button label
-	setWindowTitleButton(window.title);
 }
 
 void MainWindow::onTestDialog()
@@ -542,13 +495,11 @@ void MainWindow::startListeningExternalInputEvents()
 void MainWindow::listenExternalInputEvents()
 {
 	QKeySequence startKeySequence = m_ui->startKeySequenceEdit->keySequence();
-	QKeySequence positionKeySequence = m_ui->positionKeySequenceEdit->keySequence();
 
 	qint16 startKey = QKeySequenceToVK(startKeySequence);
-	qint16 positionKey = QKeySequenceToVK(positionKeySequence);
 
 	// no key defined
-	if (startKey == 0 && positionKey == 0) return;
+	if (startKey == 0) return;
 
 	while (m_stopExternalListener == 0 && QThread::currentThread()->isRunning())
 	{
@@ -560,86 +511,13 @@ void MainWindow::listenExternalInputEvents()
 			{
 				emit startSimple();
 
-				// if we were waiting for position key, send current position too
-				if (m_waitingAction == ActionPosition)
-				{
-					emitMousePosition();
-				}
-
 				// we need to stop autoclicking to relaunch thread
 				return;
-			}
-
-			if (m_waitingAction)
-			{
-				buttonPressed = isKeyPressed(positionKey);
-
-				if (buttonPressed)
-				{
-					if (m_waitingAction == ActionPosition)
-					{
-						emitMousePosition();
-					}
-				}
-
-				// continue thread
 			}
 		}
 
 		QThread::currentThread()->msleep(50);
 	}
-}
-
-void MainWindow::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
-{
-	// update controls
-	m_ui->actionGroupBox->setVisible(!selected.empty());
-
-	if (selected.empty()) return;
-
-	// update controls
-	const QItemSelectionRange &range = selected.front();
-
-	QModelIndexList indices = range.indexes();
-
-	int row = indices.front().row();
-
-	// manually update position because not handled by data mapper
-	QPoint pos = m_model->getAction(row).originalPosition;
-
-	m_ui->positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
-}
-
-void MainWindow::onMousePositionChanged(const QPoint& pos)
-{
-	// only when position button is disabled
-	if (m_ui->positionPushButton->isEnabled()) return;
-
-	QModelIndex index = m_ui->spotsListView->selectionModel()->currentIndex();
-
-	// update original and last positions
-	Action spot = m_model->getAction(index.row());
-	spot.lastPosition = pos;
-	spot.originalPosition = pos;
-	m_model->setAction(index.row(), spot);
-
-	m_ui->positionPushButton->setEnabled(true);
-	m_ui->positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
-}
-
-void MainWindow::setWindowTitleButton(const QString& title)
-{
-	QFontMetrics fm = m_ui->windowTitlePushButton->fontMetrics();
-	const int usableWidth = qRound(0.9 * m_ui->windowTitlePushButton->width());
-
-	QString elidedText = fm.elidedText(title, Qt::ElideRight, usableWidth);
-	bool elided = (elidedText != title);
-
-	QString text = elided ? elidedText : title;
-
-	if (text.isEmpty()) text = tr("Unknown");
-
-	m_ui->windowTitlePushButton->setText(text);
 }
 
 void MainWindow::onStartKeyChanged(const QKeySequence &seq)
@@ -714,13 +592,6 @@ bool MainWindow::event(QEvent *e)
 {
 	if (e->type() == QEvent::WindowDeactivate)
 	{
-		if (!isHidden())
-		{
-			if (m_waitingAction == ActionPosition)
-			{
-				emitMousePosition();
-			}
-		}
 	}
 	else if (e->type() == QEvent::Enter)
 	{

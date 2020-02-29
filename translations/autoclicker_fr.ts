@@ -963,10 +963,10 @@ Souhaitez-vous la télécharger maintenant ?</translation>
     </message>
 </context>
 <context>
-    <name>SpotModel</name>
+    <name>ActionModel</name>
     <message>
         <location filename="../src/spotmodel.cpp" line="128"/>
-        <source>Spot #%1</source>
+        <source>Action #%1</source>
         <translation>Endroit #%1</translation>
     </message>
 </context>

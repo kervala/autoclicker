@@ -24,6 +24,19 @@
 
 #include <QAbstractTableModel>
 
+enum ActionColumn
+{
+	ActionColumnName,
+	ActionColumnType,
+	ActionColumnOriginalPosition,
+	ActionColumnDelay,
+	ActionColumnDuration,
+	ActionColumnLastPosition,
+	ActionColumnOriginalCount,
+	ActionColumnLastCount,
+	ActionColumnLast
+};
+
 class ActionModel : public QAbstractTableModel
 {
 	Q_OBJECT
@@ -52,6 +65,7 @@ public:
 	void setWindowTitle(const QString& name);
 
 	void reset();
+	void resetCount();
 
 	bool load(const QString& filename);
 	bool save(const QString& filename);
@@ -59,6 +73,8 @@ public:
 	bool updateSpotsPosition(const QPoint& offset);
 
 	QString getFilename() const;
+
+	ActionModel* clone(QObject* parent = nullptr) const;
 
 private:
 	QList<Action> m_actions;

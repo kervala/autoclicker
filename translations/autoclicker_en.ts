@@ -955,11 +955,11 @@ Do you want to download it now?</translation>
     </message>
 </context>
 <context>
-    <name>SpotModel</name>
+    <name>ActionModel</name>
     <message>
         <location filename="../src/spotmodel.cpp" line="128"/>
-        <source>Spot #%1</source>
-        <translation>Spot #%1</translation>
+        <source>Action #%1</source>
+        <translation>Action #%1</translation>
     </message>
 </context>
 <context>

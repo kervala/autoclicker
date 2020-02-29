@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>196</width>
-    <height>515</height>
+    <width>150</width>
+    <height>287</height>
    </rect>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -82,36 +82,22 @@
      </widget>
     </item>
     <item>
-     <widget class="QGroupBox" name="groupBox_2">
+     <widget class="QGroupBox" name="ScriptGroupBox">
       <property name="title">
-       <string>Spots</string>
+       <string>Script</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QListView" name="spotsListView">
-         <property name="acceptDrops">
-          <bool>true</bool>
+        <widget class="QLabel" name="scriptLabel">
+         <property name="text">
+          <string>None</string>
          </property>
-         <property name="toolTip">
-          <string>Press &lt;Ins&gt; or &lt;Del&gt; to add or remove a spot.</string>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="dragEnabled">
-          <bool>true</bool>
-         </property>
-         <property name="dragDropMode">
-          <enum>QAbstractItemView::DragDrop</enum>
-         </property>
-         <property name="defaultDropAction">
-          <enum>Qt::MoveAction</enum>
-         </property>
-         <property name="selectionBehavior">
-          <enum>QAbstractItemView::SelectRows</enum>
-         </property>
-         <property name="movement">
-          <enum>QListView::Free</enum>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="editPushButton">
+         <property name="text">
+          <string>Edit</string>
          </property>
         </widget>
        </item>
@@ -125,95 +111,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="windowTitleLabel">
-         <property name="text">
-          <string>Window title</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="windowTitlePushButton">
-         <property name="text">
-          <string>Unknown</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="spotGroupBox">
-      <property name="title">
-       <string>Selected spot</string>
-      </property>
-      <layout class="QFormLayout" name="formLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="nameLabel">
-         <property name="text">
-          <string>Name</string>
-         </property>
-         <property name="buddy">
-          <cstring>nameLineEdit</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="nameLineEdit"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="positionLabel">
-         <property name="text">
-          <string>Position</string>
-         </property>
-         <property name="buddy">
-          <cstring>positionPushButton</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QPushButton" name="positionPushButton">
-         <property name="text">
-          <string>(0, 0)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="delayLabel">
-         <property name="text">
-          <string>Delay (ms)</string>
-         </property>
-         <property name="buddy">
-          <cstring>delaySpinBox</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QSpinBox" name="delaySpinBox">
-         <property name="minimum">
-          <number>1</number>
-         </property>
-         <property name="maximum">
-          <number>1000000</number>
-         </property>
-         <property name="singleStep">
-          <number>10</number>
-         </property>
-         <property name="value">
-          <number>150</number>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="durationLabel">
-         <property name="text">
-          <string>Duration (s)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QSpinBox" name="durationSpinBox"/>
-       </item>
       </layout>
      </widget>
     </item>
@@ -224,7 +121,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>196</width>
+     <width>150</width>
      <height>21</height>
     </rect>
    </property>
@@ -237,6 +134,8 @@
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
+    <addaction name="actionImport"/>
+    <addaction name="actionExport"/>
     <addaction name="separator"/>
     <addaction name="actionTestDialog"/>
     <addaction name="separator"/>
@@ -315,6 +214,16 @@
   <action name="actionNew">
    <property name="text">
     <string>&amp;New</string>
+   </property>
+  </action>
+  <action name="actionImport">
+   <property name="text">
+    <string>&amp;Import...</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="text">
+    <string>Export...</string>
    </property>
   </action>
  </widget>

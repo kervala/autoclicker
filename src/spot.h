@@ -35,7 +35,8 @@ struct Action
 	int delay;
 	QPoint lastPosition;
 	int duration;
-	int count;
+	int originalCount;
+	int lastCount;
 };
 
 QDataStream& operator << (QDataStream& stream, const Action& action);
