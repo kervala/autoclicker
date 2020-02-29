@@ -53,6 +53,6 @@ cd ..
 
 pause
 
-%UPLOADER% autoclicker 2.2 autoclicker-*.exe
+%UPLOADER% autoclicker 4.0 autoclicker-*.exe
 
 pause
