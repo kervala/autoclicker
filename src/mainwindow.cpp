@@ -341,7 +341,7 @@ void MainWindow::clicker()
 		QThread::currentThread()->msleep(randomNumber(30, action.delay));
 
 		// stop auto-click if move the mouse
-		if (QCursor::pos() != action.lastPosition)
+		if (action.type == TypeClick && QCursor::pos() != action.lastPosition)
 		{
 			m_stopClicker = 1;
 			break;
@@ -378,39 +378,26 @@ void MainWindow::clicker()
 				{
 					emit updateActionLabel(QString("[%1] %2 (%3)").arg(row).arg(action.name).arg(action.lastCount));
 
-						// last spot, restart to first one
-						if (row >= m_model->rowCount())
-						{
-							m_model->resetCount();
-							row = 0;
-						}
-
-						// new spot
-						action = m_model->getAction(row);
-					}
-					else
+					// repeat
+					if (action.lastCount > 0)
 					{
 						// decrease count
 						--action.lastCount;
 
-						qDebug() << "last count" << action.lastCount;
-
 						m_model->setAction(row, action);
 
-						// start
-						row = 0;
-
 						// repeat from start
-						action = m_model->getAction(row);
+						row = -1;
 					}
 				}
 				else
 				{
 					emit updateActionLabel(QString("[%1] %2").arg(row).arg(action.name));
 
-				// apply window offset
-				action.originalPosition += rect.topLeft();
-				action.lastPosition = action.originalPosition;
+					// apply window offset
+					action.originalPosition += rect.topLeft();
+					action.lastPosition = action.originalPosition;
+				}
 			}
 		}
 	}
