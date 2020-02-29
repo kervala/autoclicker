@@ -165,7 +165,7 @@ void MainWindow::startOrStop(bool simpleMode)
 
 	m_ui->startPushButton->setText(tr("Stop"));
 
-	hide();
+	// hide();
 
 	// reset stop flag
 	m_stopClicker = 0;
