@@ -22,7 +22,7 @@
 
 QDataStream& operator << (QDataStream& stream, const Action &action)
 {
-	stream << spot.name << spot.originalPosition << spot.delay << spot.duration;
+	stream << action.name << action.originalPosition << action.delay << action.duration << action.type << action.count;
 
 	return stream;
 }
@@ -33,7 +33,17 @@ QDataStream& operator >> (QDataStream& stream, Action& action)
 
 	if (stream.device()->property("version") >= 2)
 	{
-		stream >> spot.duration;
+		stream >> action.duration;
+
+		if (stream.device()->property("version") >= 4)
+		{
+			stream >> action.type >> action.count;
+		}
+		else
+		{
+			action.type = TypeClick;
+			action.count = 0;
+		}
 	}
 	else
 	{
@@ -42,6 +52,20 @@ QDataStream& operator >> (QDataStream& stream, Action& action)
 
 	// copy original position
 	action.lastPosition = action.originalPosition;
+
+	return stream;
+}
+
+QDataStream& operator << (QDataStream& stream, const ActionType& type)
+{
+	return stream << (int)type;
+}
+
+QDataStream& operator >> (QDataStream& stream, ActionType& type)
+{
+	int tmp;
+	stream >> tmp;
+	type = (ActionType)tmp;
 
 	return stream;
 }

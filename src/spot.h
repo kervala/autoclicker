@@ -20,13 +20,22 @@
 #ifndef ACTION_H
 #define ACTION_H
 
-struct Spot
+enum ActionType
+{
+    TypeNone,
+    TypeClick,
+    TypeRepeat
+};
+
+struct Action
 {
 	QString name;
+	ActionType type;
 	QPoint originalPosition;
 	int delay;
 	QPoint lastPosition;
 	int duration;
+	int count;
 };
 
 QDataStream& operator << (QDataStream& stream, const Action& action);

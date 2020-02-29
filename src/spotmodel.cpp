@@ -61,8 +61,8 @@ int ActionModel::rowCount(const QModelIndex &parent) const
 
 int ActionModel::columnCount(const QModelIndex &parent) const
 {
-	// name, original position, delay, duration, last position
-	return 5;
+	// name, type, original position, delay, duration, last position, count
+	return 7;
 }
 
 QVariant ActionModel::data(const QModelIndex &index, int role) const
@@ -73,11 +73,13 @@ QVariant ActionModel::data(const QModelIndex &index, int role) const
 	{
 		switch (index.column())
 		{
-			case 0: return m_spots[index.row()].name;
-			case 1: return m_spots[index.row()].originalPosition;
-			case 2: return m_spots[index.row()].delay;
-			case 3: return m_spots[index.row()].duration;
-			case 4: return m_spots[index.row()].lastPosition;
+			case 0: return m_actions[index.row()].name;
+			case 1: return m_actions[index.row()].type;
+			case 2: return m_actions[index.row()].originalPosition;
+			case 3: return m_actions[index.row()].delay;
+			case 4: return m_actions[index.row()].duration;
+			case 5: return m_actions[index.row()].lastPosition;
+			case 6: return m_actions[index.row()].count;
 		}
 	}
 	
@@ -95,11 +97,13 @@ bool ActionModel::setData(const QModelIndex &index, const QVariant &value, int r
 		// save value
 		switch (index.column())
 		{
-			case 0: m_spots[index.row()].name = value.toString(); break;
-			case 1: m_spots[index.row()].originalPosition = value.toPoint(); break;
-			case 2: m_spots[index.row()].delay = value.toInt(); break;
-			case 3: m_spots[index.row()].duration = value.toInt(); break;
-			case 4: m_spots[index.row()].lastPosition = value.toPoint(); break;
+			case 0: m_actions[index.row()].name = value.toString(); break;
+			case 1: m_actions[index.row()].type = (ActionType)value.toInt(); break;
+			case 2: m_actions[index.row()].originalPosition = value.toPoint(); break;
+			case 3: m_actions[index.row()].delay = value.toInt(); break;
+			case 4: m_actions[index.row()].duration = value.toInt(); break;
+			case 5: m_actions[index.row()].lastPosition = value.toPoint(); break;
+			case 6: m_actions[index.row()].count = value.toInt(); break;
 			default: return false;
 		}
 
@@ -129,12 +133,14 @@ bool ActionModel::insertRows(int position, int rows, const QModelIndex& parent)
 
 	for (int row = 0; row < rows; ++row)
 	{
-		Spot spot;
-		spot.name = tr("Spot #%1").arg(rowCount() + 1);
-		spot.originalPosition = QPoint(0, 0);
-		spot.delay = 150;
-		spot.duration = 0;
-		spot.lastPosition = QPoint(0, 0);
+		Action action;
+		action.name = tr("Action #%1").arg(rowCount() + 1);
+		action.type = TypeClick;
+		action.originalPosition = QPoint(0, 0);
+		action.delay = 150;
+		action.duration = 0;
+		action.lastPosition = QPoint(0, 0);
+		action.count = 0;
 
 		if (insertAtTheEnd)
 		{
@@ -237,7 +243,7 @@ void ActionModel::setAction(int row, const Action& action)
 {
 	m_actions[row] = action;
 
-	emit dataChanged(index(row, 0), index(row, 4), { Qt::DisplayRole, Qt::EditRole });
+	emit dataChanged(index(row, 0), index(row, columnCount()-1), { Qt::DisplayRole, Qt::EditRole });
 }
 
 QString ActionModel::getWindowTitle() const
