@@ -203,9 +203,11 @@ void MainWindow::onStartOrStop()
 void MainWindow::onStartSimple()
 {
 	// define unique spot parameters
+	m_action.type = TypeClick;
 	m_action.delay = m_ui->defaultDelaySpinBox->value();
 	m_action.lastPosition = QCursor::pos();
 	m_action.originalPosition = m_action.lastPosition;
+	m_action.lastCount = 0;
 	m_action.originalCount = m_action.lastCount;
 
 	startOrStop(true);
