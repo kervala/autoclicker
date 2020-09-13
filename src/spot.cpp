@@ -22,14 +22,25 @@
 
 QDataStream& operator << (QDataStream& stream, const Action &action)
 {
-	stream << action.name << action.originalPosition << action.delay << action.duration << action.type << action.originalCount;
+	stream << action.name << action.originalPosition << action.delayMin << action.delayMax << action.duration << action.type << action.originalCount;
 
 	return stream;
 }
 
 QDataStream& operator >> (QDataStream& stream, Action& action)
 {
-	stream >> action.name >> action.originalPosition >> action.delay;
+	stream >> action.name >> action.originalPosition;
+	
+	if (stream.device()->property("version") >= 5)
+	{
+		stream >> action.name >> action.delayMin;
+	}
+	else
+	{
+		action.delayMin = 30;
+	}
+
+	stream >> action.delayMax;
 
 	if (stream.device()->property("version") >= 2)
 	{

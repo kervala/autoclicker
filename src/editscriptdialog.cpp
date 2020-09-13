@@ -46,7 +46,8 @@ EditScriptDialog::EditScriptDialog(QWidget *parent, ActionModel *model):QDialog(
 	m_mapper->setModel(m_model);
 	m_mapper->addMapping(m_ui->nameLineEdit, ActionColumnName);
 	m_mapper->addMapping(m_ui->typeComboBox, ActionColumnType, "currentIndex");
-	m_mapper->addMapping(m_ui->delaySpinBox, ActionColumnDelay);
+	m_mapper->addMapping(m_ui->delayMinSpinBox, ActionColumnDelayMin);
+	m_mapper->addMapping(m_ui->delayMaxSpinBox, ActionColumnDelayMax);
 	m_mapper->addMapping(m_ui->durationSpinBox, ActionColumnDuration);
 	m_mapper->addMapping(m_ui->countSpinBox, ActionColumnOriginalCount);
 

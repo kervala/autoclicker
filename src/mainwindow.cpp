@@ -204,7 +204,8 @@ void MainWindow::onStartSimple()
 {
 	// define unique spot parameters
 	m_action.type = TypeClick;
-	m_action.delay = m_ui->defaultDelaySpinBox->value();
+	m_action.delayMin = 30;
+	m_action.delayMax = m_ui->defaultDelaySpinBox->value();
 	m_action.lastPosition = QCursor::pos();
 	m_action.originalPosition = m_action.lastPosition;
 	m_action.lastCount = 0;
@@ -340,7 +341,7 @@ void MainWindow::clicker()
 		}
 
 		// wait before next click
-		QThread::currentThread()->msleep(randomNumber(30, action.delay));
+		QThread::currentThread()->msleep(randomNumber(qMax(action.delayMin, 30), action.delayMax));
 
 		// stop auto-click if move the mouse
 		if (action.type == TypeClick && QCursor::pos() != action.lastPosition)

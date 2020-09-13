@@ -43,8 +43,12 @@ SMagicHeader s_header = { "ACFK" };
 // version 4:
 // - added action types
 // - added Repeat action type
+//
+// version 5:
+// - renamed delay to delayMax
+// - added delayMin
 
-quint32 s_version = 4;
+quint32 s_version = 5;
 
 ActionModel::ActionModel(QObject* parent) : QAbstractTableModel(parent)
 {
@@ -76,7 +80,8 @@ QVariant ActionModel::data(const QModelIndex &index, int role) const
 			case ActionColumnName: return m_actions[index.row()].name;
 			case ActionColumnType: return m_actions[index.row()].type;
 			case ActionColumnOriginalPosition: return m_actions[index.row()].originalPosition;
-			case ActionColumnDelay: return m_actions[index.row()].delay;
+			case ActionColumnDelayMin: return m_actions[index.row()].delayMin;
+			case ActionColumnDelayMax: return m_actions[index.row()].delayMax;
 			case ActionColumnDuration: return m_actions[index.row()].duration;
 			case ActionColumnLastPosition: return m_actions[index.row()].lastPosition;
 			case ActionColumnOriginalCount: return m_actions[index.row()].originalCount;
@@ -101,7 +106,8 @@ bool ActionModel::setData(const QModelIndex &index, const QVariant &value, int r
 			case ActionColumnName: m_actions[index.row()].name = value.toString(); break;
 			case ActionColumnType: m_actions[index.row()].type = (ActionType)value.toInt(); break;
 			case ActionColumnOriginalPosition: m_actions[index.row()].originalPosition = value.toPoint(); break;
-			case ActionColumnDelay: m_actions[index.row()].delay = value.toInt(); break;
+			case ActionColumnDelayMin: m_actions[index.row()].delayMin = value.toInt(); break;
+			case ActionColumnDelayMax: m_actions[index.row()].delayMax = value.toInt(); break;
 			case ActionColumnDuration: m_actions[index.row()].duration = value.toInt(); break;
 			case ActionColumnLastPosition: m_actions[index.row()].lastPosition = value.toPoint(); break;
 			case ActionColumnOriginalCount: m_actions[index.row()].originalCount = value.toInt(); break;
@@ -139,7 +145,8 @@ bool ActionModel::insertRows(int position, int rows, const QModelIndex& parent)
 		action.name = tr("Action #%1").arg(rowCount() + 1);
 		action.type = TypeClick;
 		action.originalPosition = QPoint(0, 0);
-		action.delay = 150;
+		action.delayMin = 30;
+		action.delayMax = 150;
 		action.duration = 0;
 		action.lastPosition = QPoint(0, 0);
 		action.originalCount = 0;

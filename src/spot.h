@@ -32,7 +32,8 @@ struct Action
 	QString name;
 	ActionType type;
 	QPoint originalPosition;
-	int delay;
+	int delayMin;
+	int delayMax;
 	QPoint lastPosition;
 	int duration;
 	int originalCount;
