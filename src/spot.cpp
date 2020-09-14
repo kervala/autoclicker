@@ -33,7 +33,7 @@ QDataStream& operator >> (QDataStream& stream, Action& action)
 	
 	if (stream.device()->property("version").toInt() >= 5)
 	{
-		stream >> action.name >> action.delayMin;
+		stream >> action.delayMin;
 	}
 	else
 	{
