@@ -31,7 +31,7 @@ QDataStream& operator >> (QDataStream& stream, Action& action)
 {
 	stream >> action.name >> action.originalPosition;
 	
-	if (stream.device()->property("version") >= 5)
+	if (stream.device()->property("version").toInt() >= 5)
 	{
 		stream >> action.name >> action.delayMin;
 	}
@@ -42,11 +42,11 @@ QDataStream& operator >> (QDataStream& stream, Action& action)
 
 	stream >> action.delayMax;
 
-	if (stream.device()->property("version") >= 2)
+	if (stream.device()->property("version").toInt() >= 2)
 	{
 		stream >> action.duration;
 
-		if (stream.device()->property("version") >= 4)
+		if (stream.device()->property("version").toInt() >= 4)
 		{
 			stream >> action.type >> action.originalCount;
 		}

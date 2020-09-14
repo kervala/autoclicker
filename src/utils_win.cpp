@@ -461,7 +461,7 @@ void createWindowsList(QAbstractItemModel* model)
 
 			model->setData(index, currentWindows[i].title);
 			model->setData(index, currentWindows[i].icon.isNull() ? filePixmap: currentWindows[i].icon, Qt::DecorationRole);
-			model->setData(index, qVariantFromValue(currentWindows[i]), Qt::UserRole);
+			model->setData(index, QVariant::fromValue(currentWindows[i]), Qt::UserRole);
 		}
 	}
 
@@ -473,7 +473,7 @@ void createWindowsList(QAbstractItemModel* model)
 
 		model->setData(index, QObject::tr("Whole screen"));
 		model->setData(index, desktopPixmap, Qt::DecorationRole);
-		model->setData(index, qVariantFromValue((void*)NULL), Qt::UserRole);
+		model->setData(index, QVariant::fromValue((void*)NULL), Qt::UserRole);
 	}
 }
 

@@ -123,7 +123,7 @@ QString convertIDOToDate(const QString &date)
 	iso.replace("T", " ");
 	QDateTime valid = QDateTime::fromString(iso, Qt::ISODate);
 
-	return valid.toString(Qt::DefaultLocaleShortDate);
+	return QLocale().toString(valid, QLocale::ShortFormat); // valid.toString(Qt::DefaultLocaleShortDate);
 }
 
 QString base36enc(qint64 value)
@@ -175,6 +175,7 @@ QString GetUserAgent()
 #ifdef Q_OS_WIN32
 		system = "Windows ";
 
+		// QOperatingSystemVersion::current()
 		switch (QSysInfo::WindowsVersion)
 		{
 			case QSysInfo::WV_32s: system += "3.1 with Win32s"; break;
