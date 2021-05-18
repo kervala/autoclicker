@@ -65,7 +65,7 @@
        <item row="0" column="1">
         <widget class="QSpinBox" name="defaultDelaySpinBox">
          <property name="minimum">
-          <number>40</number>
+          <number>10</number>
          </property>
          <property name="maximum">
           <number>10000</number>

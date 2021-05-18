@@ -34,6 +34,8 @@
 #include <QtWinExtras/QWinTaskbarButton>
 #endif
 
+static const int s_minimumDelay = 10;
+
 #ifdef DEBUG_NEW
 	#define new DEBUG_NEW
 #endif
@@ -204,7 +206,7 @@ void MainWindow::onStartSimple()
 {
 	// define unique spot parameters
 	m_action.type = TypeClick;
-	m_action.delayMin = 30;
+	m_action.delayMin = s_minimumDelay;
 	m_action.delayMax = m_ui->defaultDelaySpinBox->value();
 	m_action.lastPosition = QCursor::pos();
 	m_action.originalPosition = m_action.lastPosition;
@@ -334,14 +336,14 @@ void MainWindow::clicker()
 			// between 6 and 14 clicks/second = 125-166
 
 			// wait a little before releasing the mouse
-			QThread::currentThread()->msleep(randomNumber(10, 25));
+			QThread::currentThread()->msleep(randomNumber(5, 15));
 
 			// left click up
 			mouseLeftClickUp(action.lastPosition);
 		}
 
 		// wait before next click
-		QThread::currentThread()->msleep(randomNumber(qMax(action.delayMin, 30), action.delayMax));
+		QThread::currentThread()->msleep(randomNumber(qMax(action.delayMin, s_minimumDelay), action.delayMax));
 
 		// stop auto-click if move the mouse
 		if (action.type == TypeClick && QCursor::pos() != action.lastPosition)
