@@ -1,6 +1,6 @@
 #
 #  kClicker is a tool to auto-click on the screen
-#  Copyright (C) 2017-2019  Cedric OCHS
+#  Copyright (C) 2017-2022  Cedric OCHS
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by

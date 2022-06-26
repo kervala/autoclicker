@@ -1,6 +1,6 @@
 /*
- *  AutoClicker is a tool to click automatically
- *  Copyright (C) 2017-2019  Cedric OCHS
+ *  kClicker is a tool to click automatically
+ *  Copyright (C) 2017-2022  Cedric OCHS
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
