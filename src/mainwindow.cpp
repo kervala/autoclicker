@@ -25,7 +25,7 @@
 #include "updatedialog.h"
 #include "editscriptdialog.h"
 #include "updater.h"
-#include "spotmodel.h"
+#include "actionmodel.h"
 #include "utils.h"
 #include "testdialog.h"
 

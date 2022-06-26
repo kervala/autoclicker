@@ -18,7 +18,7 @@
  */
 
 #include "common.h"
-#include "spotmodel.h"
+#include "actionmodel.h"
 
 struct SMagicHeader
 {

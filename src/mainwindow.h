@@ -21,7 +21,7 @@
 #define MAINWINDOW_H
 
 #include "systrayicon.h"
-#include "spot.h"
+#include "action.h"
 
 class QWinTaskbarButton;
 class ActionModel;

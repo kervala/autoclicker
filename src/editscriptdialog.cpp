@@ -22,7 +22,7 @@
 //#include "moc_editscriptdialog.cpp"
 #include "ui_editscriptdialog.h"
 #include "configfile.h"
-#include "spotmodel.h"
+#include "actionmodel.h"
 #include "utils.h"
 #include "capturedialog.h"
 

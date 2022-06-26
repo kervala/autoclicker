@@ -20,7 +20,7 @@
 #ifndef ACTIONMODEL_H
 #define ACTIONMODEL_H
 
-#include "spot.h"
+#include "action.h"
 
 #include <QAbstractTableModel>
 

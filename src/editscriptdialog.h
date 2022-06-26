@@ -20,7 +20,7 @@
 #ifndef EDITSCRIPTDIALOG_H
 #define EDITSCRIPTDIALOG_H
 
-#include "spot.h"
+#include "action.h"
 
 class ActionModel;
 class QDataWidgetMapper;

@@ -18,7 +18,7 @@
  */
 
 #include "common.h"
-#include "spot.h"
+#include "action.h"
 
 QString pointToString(const QPoint& point)
 {
