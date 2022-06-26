@@ -52,7 +52,7 @@ QDataStream& operator >> (QDataStream& stream, Action& action)
 		}
 		else
 		{
-			action.type = TypeClick;
+			action.type = Action::Type::Click;
 			action.originalCount = 0;
 		}
 	}
@@ -70,16 +70,16 @@ QDataStream& operator >> (QDataStream& stream, Action& action)
 	return stream;
 }
 
-QDataStream& operator << (QDataStream& stream, const ActionType& type)
+QDataStream& operator << (QDataStream& stream, const Action::Type& type)
 {
-	return stream << (int)type;
+	return stream << typeToInt(type);
 }
 
-QDataStream& operator >> (QDataStream& stream, ActionType& type)
+QDataStream& operator >> (QDataStream& stream, Action::Type& type)
 {
 	int tmp;
 	stream >> tmp;
-	type = (ActionType)tmp;
+	type = typeFromInt(tmp);
 
 	return stream;
 }

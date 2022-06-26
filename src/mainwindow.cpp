@@ -206,7 +206,7 @@ void MainWindow::onStartOrStop()
 void MainWindow::onStartSimple()
 {
 	// define unique spot parameters
-	m_action.type = TypeClick;
+	m_action.type = Action::Type::Click;
 	m_action.delayMin = s_minimumDelay;
 	m_action.delayMax = m_ui->defaultDelaySpinBox->value();
 	m_action.lastPosition = QCursor::pos();
@@ -312,7 +312,7 @@ void MainWindow::clicker()
 
 	while(!m_stopClicker)
 	{
-		if (action.type == TypeClick)
+		if (action.type == Action::Type::Click)
 		{
 			// 50% change position
 			if (randomNumber(0, 1) == 0)
@@ -347,7 +347,7 @@ void MainWindow::clicker()
 		QThread::currentThread()->msleep(randomNumber(qMax(action.delayMin, s_minimumDelay), action.delayMax));
 
 		// stop auto-click if move the mouse
-		if (action.type == TypeClick && QCursor::pos() != action.lastPosition)
+		if (action.type == Action::Type::Click && QCursor::pos() != action.lastPosition)
 		{
 			m_stopClicker = 1;
 			break;
@@ -380,7 +380,7 @@ void MainWindow::clicker()
 				action = m_model->getAction(row);
 
 				// if next action is a repeat
-				if (action.type == TypeRepeat)
+				if (action.type == Action::Type::Repeat)
 				{
 					emit updateActionLabel(QString("[%1] %2 (%3)").arg(row).arg(action.name).arg(action.lastCount));
 

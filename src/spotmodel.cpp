@@ -78,7 +78,7 @@ QVariant ActionModel::data(const QModelIndex &index, int role) const
 		switch (index.column())
 		{
 			case ActionColumnName: return m_actions[index.row()].name;
-			case ActionColumnType: return m_actions[index.row()].type;
+			case ActionColumnType: return typeToInt(m_actions[index.row()].type);
 			case ActionColumnOriginalPosition: return m_actions[index.row()].originalPosition;
 			case ActionColumnDelayMin: return m_actions[index.row()].delayMin;
 			case ActionColumnDelayMax: return m_actions[index.row()].delayMax;
@@ -104,7 +104,7 @@ bool ActionModel::setData(const QModelIndex &index, const QVariant &value, int r
 		switch (index.column())
 		{
 			case ActionColumnName: m_actions[index.row()].name = value.toString(); break;
-			case ActionColumnType: m_actions[index.row()].type = (ActionType)value.toInt(); break;
+			case ActionColumnType: m_actions[index.row()].type = typeFromInt(value.toInt()); break;
 			case ActionColumnOriginalPosition: m_actions[index.row()].originalPosition = value.toPoint(); break;
 			case ActionColumnDelayMin: m_actions[index.row()].delayMin = value.toInt(); break;
 			case ActionColumnDelayMax: m_actions[index.row()].delayMax = value.toInt(); break;
@@ -143,7 +143,7 @@ bool ActionModel::insertRows(int position, int rows, const QModelIndex& /* paren
 	{
 		Action action;
 		action.name = tr("Action #%1").arg(rowCount() + 1);
-		action.type = TypeClick;
+		action.type = Action::Type::Click;
 		action.originalPosition = QPoint(0, 0);
 		action.delayMin = 30;
 		action.delayMax = 150;
@@ -284,7 +284,7 @@ void ActionModel::resetCount()
 	{
 		Action& action = m_actions[i];
 
-		if (action.type == TypeRepeat)
+		if (action.type == Action::Type::Repeat)
 		{
 			// reset repeat count
 			action.lastCount = action.originalCount;

@@ -212,7 +212,7 @@ void EditScriptDialog::onSelectionChanged(const QItemSelection& selected, const 
 
 	m_ui->positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
 
-	onTypeChanged(action.type);
+	onTypeChanged(typeToInt(action.type));
 }
 
 void EditScriptDialog::onMousePositionChanged(const QPoint& pos)
@@ -234,9 +234,9 @@ void EditScriptDialog::onMousePositionChanged(const QPoint& pos)
 
 void EditScriptDialog::onTypeChanged(int index)
 {
-	switch (index)
+	switch (typeFromInt(index))
 	{
-	case TypeRepeat:
+	case Action::Type::Repeat:
 		m_ui->durationLabel->setVisible(false);
 		m_ui->durationSpinBox->setVisible(false);
 

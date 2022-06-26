@@ -20,17 +20,21 @@
 #ifndef ACTION_H
 #define ACTION_H
 
-enum ActionType
-{
-    TypeNone,
-    TypeClick,
-    TypeRepeat
-};
-
 struct Action
 {
+	enum class Type
+	{
+		None,
+		Click,
+		Repeat
+	};
+
+	Action() :type(Type::None), delayMin(0), delayMax(0), duration(0), originalCount(0), lastCount(0)
+	{
+	}
+
 	QString name;
-	ActionType type;
+	Type type;
 	QPoint originalPosition;
 	int delayMin;
 	int delayMax;
@@ -40,10 +44,16 @@ struct Action
 	int lastCount;
 };
 
+QString typeToString(Action::Type type);
+Action::Type typeFromString(const QString &type);
+
+int typeToInt(Action::Type type);
+Action::Type typeFromInt(int type);
+
 QDataStream& operator << (QDataStream& stream, const Action& action);
 QDataStream& operator >> (QDataStream& stream, Action& action);
 
-QDataStream& operator << (QDataStream& stream, const ActionType& type);
-QDataStream& operator >> (QDataStream& stream, ActionType& type);
+QDataStream& operator << (QDataStream& stream, const Action::Type& type);
+QDataStream& operator >> (QDataStream& stream, Action::Type& type);
 
 #endif
