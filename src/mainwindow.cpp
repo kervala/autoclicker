@@ -429,7 +429,7 @@ void MainWindow::onOpen()
 
 	if (m_model->load(filename))
 	{
-		QString filename = QFileInfo(m_model->getFilename()).baseName();
+		//filename = QFileInfo(m_model->getFilename()).baseName();
 
 		updateStartButton();
 	}

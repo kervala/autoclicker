@@ -58,12 +58,12 @@ ActionModel::~ActionModel()
 {
 }
 
-int ActionModel::rowCount(const QModelIndex &parent) const
+int ActionModel::rowCount(const QModelIndex &/* parent */) const
 {
 	return m_actions.size();
 }
 
-int ActionModel::columnCount(const QModelIndex &parent) const
+int ActionModel::columnCount(const QModelIndex &/* parent */) const
 {
 	// name, type, original position, delay, duration, last position, count
 	return ActionColumnLast;
@@ -131,7 +131,7 @@ Qt::ItemFlags ActionModel::flags(const QModelIndex &index) const
 	return flags;
 }
 
-bool ActionModel::insertRows(int position, int rows, const QModelIndex& parent)
+bool ActionModel::insertRows(int position, int rows, const QModelIndex& /* parent */)
 {
 	bool insertAtTheEnd = position == -1;
 
@@ -166,7 +166,7 @@ bool ActionModel::insertRows(int position, int rows, const QModelIndex& parent)
 	return true;
 }
 
-bool ActionModel::removeRows(int position, int rows, const QModelIndex& parent)
+bool ActionModel::removeRows(int position, int rows, const QModelIndex& /* parent */)
 {
 	beginRemoveRows(QModelIndex(), position, position + rows - 1);
 
@@ -211,7 +211,7 @@ QMimeData* ActionModel::mimeData(const QModelIndexList &indexes) const
 	return mimeData;
 }
 
-bool ActionModel::dropMimeData(const QMimeData* data, Qt::DropAction actionType, int row, int column, const QModelIndex& parent)
+bool ActionModel::dropMimeData(const QMimeData* data, Qt::DropAction actionType, int row, int /* column */, const QModelIndex& /* parent */)
 {
 	if (!data->hasFormat("application/x-autoclicker")) return false;
 

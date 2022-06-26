@@ -50,7 +50,7 @@ void TestDialog::reset()
 	m_maxClickDelay = 0.0;
 }
 
-void TestDialog::mousePressEvent(QMouseEvent* event)
+void TestDialog::mousePressEvent(QMouseEvent* /* event */)
 {
 	QDateTime now = QDateTime::currentDateTime();
 
@@ -59,7 +59,7 @@ void TestDialog::mousePressEvent(QMouseEvent* event)
 	m_lastPress = now;
 }
 
-void TestDialog::mouseReleaseEvent(QMouseEvent* event)
+void TestDialog::mouseReleaseEvent(QMouseEvent* /* event */)
 {
 	QDateTime now = QDateTime::currentDateTime();
 
