@@ -2,6 +2,14 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_US" sourcelanguage="en_US">
 <context>
+    <name>ActionModel</name>
+    <message>
+        <location filename="../src/actionmodel.cpp" line="148"/>
+        <source>Action #%1</source>
+        <translation>Action #%1</translation>
+    </message>
+</context>
+<context>
     <name>ConnectDialog</name>
     <message>
         <source>Connect to server</source>
@@ -180,6 +188,95 @@
     </message>
 </context>
 <context>
+    <name>EditScriptDialog</name>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished">Dialog</translation>
+    </message>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="24"/>
+        <source>Actions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="33"/>
+        <source>Press &lt;Ins&gt; or &lt;Del&gt; to add or remove a spot.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="58"/>
+        <source>Window title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="65"/>
+        <location filename="../src/editscriptdialog.cpp" line="273"/>
+        <source>Unknown</source>
+        <translation type="unfinished">Unknown</translation>
+    </message>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="73"/>
+        <source>Selected action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="79"/>
+        <source>Name</source>
+        <translation type="unfinished">Name</translation>
+    </message>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="92"/>
+        <source>Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="102"/>
+        <source>(0, 0)</source>
+        <translation type="unfinished">(0, 0)</translation>
+    </message>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="109"/>
+        <source>Delay max (ms)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="135"/>
+        <source>Duration (s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="145"/>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="152"/>
+        <source>Count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/editscriptdialog.ui" line="169"/>
+        <source>Delay min (ms)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editscriptdialog.cpp" line="55"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editscriptdialog.cpp" line="56"/>
+        <source>Click</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editscriptdialog.cpp" line="57"/>
+        <source>Repeat</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HtmlFormatting</name>
     <message>
         <source>** %1 has been made a member of %2 by %3 *</source>
@@ -259,7 +356,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../ui/mainwindow.ui" line="244"/>
+        <location filename="../ui/mainwindow.ui" line="146"/>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
@@ -293,9 +390,8 @@
         <translation type="vanished">Delay in ms</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="87"/>
         <source>Spots</source>
-        <translation>Spots</translation>
+        <translation type="vanished">Spots</translation>
     </message>
     <message>
         <source>Load</source>
@@ -315,8 +411,8 @@
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="24"/>
-        <location filename="../ui/mainwindow.ui" line="121"/>
-        <location filename="../src/mainwindow.cpp" line="205"/>
+        <location filename="../ui/mainwindow.ui" line="110"/>
+        <location filename="../src/mainwindow.cpp" line="163"/>
         <source>Start</source>
         <translation>Start</translation>
     </message>
@@ -325,9 +421,8 @@
         <translation type="vanished">Spot</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="151"/>
         <source>Name</source>
-        <translation>Name</translation>
+        <translation type="vanished">Name</translation>
     </message>
     <message>
         <source>Click position</source>
@@ -340,90 +435,90 @@
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="38"/>
-        <location filename="../ui/mainwindow.ui" line="164"/>
         <source>Position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="61"/>
-        <location filename="../ui/mainwindow.ui" line="181"/>
         <source>Delay (ms)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="96"/>
-        <source>Press &lt;Ins&gt; or &lt;Del&gt; to add or remove a spot.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/mainwindow.ui" line="128"/>
-        <source>Window title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/mainwindow.ui" line="135"/>
-        <location filename="../src/mainwindow.cpp" line="628"/>
         <source>Unknown</source>
-        <translation type="unfinished">Unknown</translation>
+        <translation type="obsolete">Unknown</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="145"/>
-        <source>Selected spot</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/mainwindow.ui" line="174"/>
         <source>(0, 0)</source>
-        <translation>(0, 0)</translation>
+        <translation type="vanished">(0, 0)</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="207"/>
-        <source>Duration (s)</source>
+        <location filename="../ui/mainwindow.ui" line="87"/>
+        <source>Script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="230"/>
+        <location filename="../ui/mainwindow.ui" line="93"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="100"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="130"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="273"/>
+        <location filename="../ui/mainwindow.ui" line="175"/>
         <source>&amp;About...</source>
         <translation>&amp;About...</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="281"/>
+        <location filename="../ui/mainwindow.ui" line="183"/>
         <source>About Qt</source>
         <translation>About Qt</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="289"/>
+        <location filename="../ui/mainwindow.ui" line="191"/>
         <source>Check updates...</source>
         <translation>Check updates...</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="294"/>
+        <location filename="../ui/mainwindow.ui" line="196"/>
         <source>&amp;Test dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="299"/>
+        <location filename="../ui/mainwindow.ui" line="201"/>
         <source>&amp;Open...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="304"/>
+        <location filename="../ui/mainwindow.ui" line="206"/>
         <source>&amp;Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="309"/>
+        <location filename="../ui/mainwindow.ui" line="211"/>
         <source>Save &amp;as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="314"/>
+        <location filename="../ui/mainwindow.ui" line="216"/>
         <source>&amp;New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="221"/>
+        <source>&amp;Import...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ui/mainwindow.ui" line="226"/>
+        <source>Export...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -483,17 +578,17 @@
         <translation type="vanished">&amp;Logs</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="257"/>
+        <location filename="../ui/mainwindow.ui" line="159"/>
         <source>&amp;Settings</source>
         <translation>&amp;Settings</translation>
     </message>
     <message>
-        <location filename="../ui/mainwindow.ui" line="265"/>
+        <location filename="../ui/mainwindow.ui" line="167"/>
         <source>E&amp;xit</source>
         <translation>E&amp;xit</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="656"/>
+        <location filename="../src/mainwindow.cpp" line="560"/>
         <source>About %1</source>
         <translation>About %1</translation>
     </message>
@@ -502,7 +597,7 @@
         <translation type="vanished">deviantART Messaging Network (dAmn) chat client</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="660"/>
+        <location filename="../src/mainwindow.cpp" line="564"/>
         <source>Author: %1</source>
         <translation>Author: %1</translation>
     </message>
@@ -511,7 +606,7 @@
         <translation type="vanished">Homepage: %1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="661"/>
+        <location filename="../src/mainwindow.cpp" line="565"/>
         <source>Support: %1</source>
         <translation>Support: %1</translation>
     </message>
@@ -532,7 +627,7 @@
         <translation type="vanished">Enter URL to check:</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="213"/>
+        <location filename="../src/mainwindow.cpp" line="171"/>
         <source>Stop</source>
         <translation>Stop</translation>
     </message>
@@ -541,27 +636,37 @@
         <translation type="vanished">Load actions</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="442"/>
-        <source>Open actions</source>
+        <location filename="../src/mainwindow.cpp" line="428"/>
+        <source>Open script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="459"/>
+        <location filename="../src/mainwindow.cpp" line="447"/>
         <source>Save actions</source>
         <translation>Save actions</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="658"/>
+        <location filename="../src/mainwindow.cpp" line="456"/>
+        <source>Import actions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="468"/>
+        <source>Export actions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="562"/>
         <source>Tool to click automatically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="746"/>
+        <location filename="../src/mainwindow.cpp" line="636"/>
         <source>New version</source>
         <translation>New version</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="747"/>
+        <location filename="../src/mainwindow.cpp" line="637"/>
         <source>Version %1 is available since %2.
 
 Do you want to download it now?</source>
@@ -570,12 +675,12 @@ Do you want to download it now?</source>
 Do you want to download it now?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="768"/>
+        <location filename="../src/mainwindow.cpp" line="658"/>
         <source>No update found</source>
         <translation>No update found</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="769"/>
+        <location filename="../src/mainwindow.cpp" line="659"/>
         <source>You already have the last %1 version (%2).</source>
         <translation>You already have the last %1 version (%2).</translation>
     </message>
@@ -751,7 +856,7 @@ Do you want to download it now?</translation>
     <name>QObject</name>
     <message>
         <location filename="../src/utils_x.cpp" line="106"/>
-        <location filename="../src/utils_win.cpp" line="491"/>
+        <location filename="../src/utils_win.cpp" line="472"/>
         <source>Whole screen</source>
         <translation>Whole screen</translation>
     </message>
@@ -952,14 +1057,6 @@ Do you want to download it now?</translation>
     <message>
         <source>Audio files (*.wav)</source>
         <translation type="vanished">Audio files (*.wav)</translation>
-    </message>
-</context>
-<context>
-    <name>ActionModel</name>
-    <message>
-        <location filename="../src/spotmodel.cpp" line="128"/>
-        <source>Action #%1</source>
-        <translation>Action #%1</translation>
     </message>
 </context>
 <context>
