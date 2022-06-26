@@ -29,9 +29,10 @@
 #include "utils.h"
 #include "testdialog.h"
 
-#ifdef Q_OS_WIN32
+#if defined(Q_OS_WIN32) && (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <QtWinExtras/QWinTaskbarProgress>
 #include <QtWinExtras/QWinTaskbarButton>
+#define USE_TASKBAR
 #endif
 
 static const int s_minimumDelay = 10;
@@ -45,7 +46,7 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::W
 	m_ui = new Ui::MainWindow();
 	m_ui->setupUi(this);
 
-#ifdef Q_OS_WIN32
+#ifdef USE_TASKBAR
 	m_button = new QWinTaskbarButton(this);
 #endif
 
@@ -114,7 +115,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::showEvent(QShowEvent *e)
 {
-#ifdef Q_OS_WIN32
+#ifdef USE_TASKBAR
 	m_button->setWindow(windowHandle());
 #endif
 
@@ -173,7 +174,7 @@ void MainWindow::startOrStop(bool simpleMode)
 	m_stopClicker = 0;
 	m_useSimpleMode = simpleMode;
 
-	QtConcurrent::run(this, &MainWindow::clicker);
+	QtConcurrent::run(&MainWindow::clicker, this);
 }
 
 void MainWindow::updateStartButton()
@@ -478,7 +479,7 @@ void MainWindow::startListeningExternalInputEvents()
 		m_stopExternalListener = 0;
 
 		// start to listen for a key
-		QtConcurrent::run(this, &MainWindow::listenExternalInputEvents);
+		QtConcurrent::run(&MainWindow::listenExternalInputEvents, this);
 	}
 }
 
@@ -637,7 +638,7 @@ void MainWindow::onNoNewVersion()
 
 void MainWindow::onProgress(qint64 readBytes, qint64 totalBytes)
 {
-#ifdef Q_OS_WIN32
+#ifdef USE_TASKBAR
 	QWinTaskbarProgress *progress = m_button->progress();
 
 	if (readBytes == totalBytes)

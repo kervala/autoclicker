@@ -94,15 +94,14 @@ QString decodeEntities(const QString& src)
 	initSpecialEntities();
 
 	QString ret(src);
-	QRegExp re("&#([0-9]+);");
-	re.setMinimal(true);
+	QRegularExpression re("&#([0-9]+);");
 
-	int pos = 0;
+	QRegularExpressionMatchIterator it = re.globalMatch(src);
 
-	while((pos = re.indexIn(src, pos)) != -1)
+	while(it.hasNext())
 	{
-		ret = ret.replace(re.cap(0), QChar(re.cap(1).toInt(0, 10)));
-		pos += re.matchedLength();
+		QRegularExpressionMatch match = it.next();
+		ret = ret.replace(match.captured(0), QChar(match.captured(1).toInt(0, 10)));
 	}
 
 	return ret;
@@ -175,32 +174,9 @@ QString GetUserAgent()
 #ifdef Q_OS_WIN32
 		system = "Windows ";
 
-		// QOperatingSystemVersion::current()
-		switch (QSysInfo::WindowsVersion)
-		{
-			case QSysInfo::WV_32s: system += "3.1 with Win32s"; break;
-			case QSysInfo::WV_95: system += "95"; break;
-			case QSysInfo::WV_98: system += "98"; break;
-			case QSysInfo::WV_Me: system += "Me"; break;
-			case QSysInfo::WV_DOS_based: system += "DOS"; break;
+		QOperatingSystemVersion version = QOperatingSystemVersion::current();
 
-			case QSysInfo::WV_4_0: system += "NT 4.0"; break; // Windows NT 4
-			case QSysInfo::WV_5_0: system += "NT 5.0"; break; // Windows 2000
-			case QSysInfo::WV_5_1: system += "NT 5.1"; break; // Windows XP
-			case QSysInfo::WV_5_2: system += "NT 5.2"; break; // Windows XP 64bits
-			case QSysInfo::WV_6_0: system += "NT 6.0"; break; // Windows Vista
-			case QSysInfo::WV_6_1: system += "NT 6.1"; break; // Windows 7
-			case QSysInfo::WV_6_2: system += "NT 6.2"; break; // Windows 8
-			case QSysInfo::WV_6_3: system += "NT 6.3"; break; // Windows 8.1
-//			case QSysInfo::WV_10_0: system += "NT 10.0"; break; // Windows 10
-			case QSysInfo::WV_NT_based: system += "NT"; break;
-
-			case QSysInfo::WV_CE: system += "CE"; break;
-			case QSysInfo::WV_CENET: system += "CE Net"; break;
-			case QSysInfo::WV_CE_5: system += "CE 5"; break;
-			case QSysInfo::WV_CE_6: system += "CE 6"; break;
-			case QSysInfo::WV_CE_based: system += "CE"; break;
-		}
+		system += version.version().toString();
 
 		system += "; ";
 

@@ -83,7 +83,7 @@ void TestDialog::mouseReleaseEvent(QMouseEvent* event)
 
 void TestDialog::mouseMoveEvent(QMouseEvent* event)
 {
-	positionLabel->setText(tr("Mouse position: (%1, %2)").arg(event->globalPos().x()).arg(event->globalPos().y()));
+	positionLabel->setText(tr("Mouse position: (%1, %2)").arg(event->globalPosition().x()).arg(event->globalPosition().y()));
 }
 
 void TestDialog::closeEvent(QCloseEvent* e)

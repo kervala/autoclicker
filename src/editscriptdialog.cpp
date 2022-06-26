@@ -145,7 +145,7 @@ void EditScriptDialog::onPosition()
 		m_stopExternalListener = 0;
 
 		// start to listen for a key
-		QtConcurrent::run(this, &EditScriptDialog::listenExternalInputEvents);
+		QtConcurrent::run(&EditScriptDialog::listenExternalInputEvents, this);
 	}
 }
 
