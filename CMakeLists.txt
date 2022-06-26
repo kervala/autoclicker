@@ -1,5 +1,5 @@
 #
-#  AutoClicker is a tool to auto-click on the screen
+#  kClicker is a tool to auto-click on the screen
 #  Copyright (C) 2017-2019  Cedric OCHS
 #
 #  This program is free software: you can redistribute it and/or modify
