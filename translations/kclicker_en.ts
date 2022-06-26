@@ -201,7 +201,7 @@
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="33"/>
-        <source>Press &lt;Ins&gt; or &lt;Del&gt; to add or remove a spot.</source>
+        <source>Press &lt;Ins&gt; or &lt;Del&gt; to add or remove an action.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

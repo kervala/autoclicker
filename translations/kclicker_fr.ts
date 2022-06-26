@@ -6,7 +6,7 @@
     <message>
         <location filename="../src/actionmodel.cpp" line="148"/>
         <source>Action #%1</source>
-        <translation>Endroit #%1</translation>
+        <translation>Action #%1</translation>
     </message>
 </context>
 <context>
@@ -192,88 +192,92 @@
     <message>
         <location filename="../ui/editscriptdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished">Dialogue</translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="24"/>
         <source>Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Actions</translation>
+    </message>
+    <message>
+        <source>Press &lt;Ins&gt; or &lt;Del&gt; to add or remove a spot.</source>
+        <translation type="obsolete">Appuyer sur &lt;Ins&gt; ou &lt;Suppr&gt; pour ajouter ou supprimer un emplacement.</translation>
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="33"/>
-        <source>Press &lt;Ins&gt; or &lt;Del&gt; to add or remove a spot.</source>
-        <translation type="unfinished">Appuyer sur &lt;Ins&gt; ou &lt;Suppr&gt; pour ajouter ou supprimer un emplacement.</translation>
+        <source>Press &lt;Ins&gt; or &lt;Del&gt; to add or remove an action.</source>
+        <translation>Appuyer sur &lt;Ins&gt; ou &lt;Suppr&gt; pour ajouter ou supprimer une action.</translation>
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="58"/>
         <source>Window title</source>
-        <translation type="unfinished">Titre de la fenêtre</translation>
+        <translation>Titre de la fenêtre</translation>
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="65"/>
         <location filename="../src/editscriptdialog.cpp" line="273"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Inconnu</translation>
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="73"/>
         <source>Selected action</source>
-        <translation type="unfinished"></translation>
+        <translation>Action sélectionnée</translation>
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="79"/>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="92"/>
         <source>Position</source>
-        <translation type="unfinished">Position</translation>
+        <translation>Position</translation>
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="102"/>
         <source>(0, 0)</source>
-        <translation type="unfinished">(0, 0)</translation>
+        <translation>(0, 0)</translation>
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="109"/>
         <source>Delay max (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>Délai max (ms)</translation>
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="135"/>
         <source>Duration (s)</source>
-        <translation type="unfinished">Durée (s)</translation>
+        <translation>Durée (s)</translation>
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="145"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type</translation>
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="152"/>
         <source>Count</source>
-        <translation type="unfinished"></translation>
+        <translation>Compteur</translation>
     </message>
     <message>
         <location filename="../ui/editscriptdialog.ui" line="169"/>
         <source>Delay min (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>Délai min (ms)</translation>
     </message>
     <message>
         <location filename="../src/editscriptdialog.cpp" line="55"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun</translation>
     </message>
     <message>
         <location filename="../src/editscriptdialog.cpp" line="56"/>
         <source>Click</source>
-        <translation type="unfinished"></translation>
+        <translation>Clic</translation>
     </message>
     <message>
         <location filename="../src/editscriptdialog.cpp" line="57"/>
         <source>Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>Répéter</translation>
     </message>
 </context>
 <context>
@@ -474,17 +478,17 @@
     <message>
         <location filename="../ui/mainwindow.ui" line="87"/>
         <source>Script</source>
-        <translation type="unfinished"></translation>
+        <translation>Script</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="93"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="100"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Éditer</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="130"/>
@@ -534,12 +538,12 @@
     <message>
         <location filename="../ui/mainwindow.ui" line="221"/>
         <source>&amp;Import...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Importer...</translation>
     </message>
     <message>
         <location filename="../ui/mainwindow.ui" line="226"/>
         <source>Export...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter...</translation>
     </message>
     <message>
         <source>New</source>
@@ -666,7 +670,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="428"/>
         <source>Open script</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir script</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="447"/>
@@ -676,12 +680,12 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="456"/>
         <source>Import actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer actions</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="468"/>
         <source>Export actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter actions</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="562"/>

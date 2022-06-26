@@ -30,7 +30,7 @@
           <bool>true</bool>
          </property>
          <property name="toolTip">
-          <string>Press &lt;Ins&gt; or &lt;Del&gt; to add or remove a spot.</string>
+          <string>Press &lt;Ins&gt; or &lt;Del&gt; to add or remove an action.</string>
          </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
