@@ -191,7 +191,7 @@ void EditScriptDialog::listenExternalInputEvents()
 	}
 }
 
-void EditScriptDialog::onSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+void EditScriptDialog::onSelectionChanged(const QItemSelection& selected, const QItemSelection& /* deselected */)
 {
 	// update controls
 	m_ui->actionGroupBox->setVisible(!selected.empty());

@@ -459,8 +459,6 @@ void MainWindow::onImport()
 
 	if (m_model->loadText(filename))
 	{
-		//filename = QFileInfo(m_model->getFilename()).baseName();
-
 		updateStartButton();
 	}
 }
