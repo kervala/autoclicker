@@ -71,6 +71,9 @@ public:
 	bool load(const QString& filename);
 	bool save(const QString& filename);
 
+	bool loadText(const QString& filename);
+	bool saveText(const QString& filename);
+
 	bool updateSpotsPosition(const QPoint& offset);
 
 	QString getFilename() const;

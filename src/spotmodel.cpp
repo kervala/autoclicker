@@ -29,6 +29,9 @@ struct SMagicHeader
 	};
 };
 
+const static QString s_actionHeader("action=");
+const static QString s_windowHeader("window=");
+
 SMagicHeader s_header = { "ACFK" };
 
 // version 1:
@@ -147,10 +150,7 @@ bool ActionModel::insertRows(int position, int rows, const QModelIndex& /* paren
 		action.originalPosition = QPoint(0, 0);
 		action.delayMin = 30;
 		action.delayMax = 150;
-		action.duration = 0;
 		action.lastPosition = QPoint(0, 0);
-		action.originalCount = 0;
-		action.lastCount = 0;
 
 		if (insertAtTheEnd)
 		{
@@ -373,6 +373,69 @@ bool ActionModel::save(const QString& filename)
 	stream << m_windowTitle;
 
 	m_filename = filename;
+
+	return true;
+}
+
+bool ActionModel::loadText(const QString& filename)
+{
+	if (filename.isEmpty()) return false;
+
+	QSettings settings(filename, QSettings::IniFormat);
+
+	settings.beginGroup("Common");
+
+	m_windowTitle = settings.value("WindowTitle").toString();
+	int actionsCount = settings.value("ActionsCount").toInt();
+
+	settings.endGroup();
+
+	beginResetModel();
+
+	m_actions.clear();
+
+	for(int i = 0; i < actionsCount; ++i)
+	{
+		settings.beginGroup(QString("Action_%1").arg(i));
+
+		Action action;
+		action.readFromSettings(settings);
+
+		settings.endGroup();
+
+		m_actions << action;
+	}
+
+	endResetModel();
+
+	return true;
+}
+
+bool ActionModel::saveText(const QString& filename)
+{
+	if (filename.isEmpty()) return false;
+
+	QSettings settings(filename, QSettings::IniFormat);
+
+	if (!settings.isWritable()) return false;
+
+	settings.beginGroup("Common");
+
+	settings.setValue("WindowTitle", m_windowTitle);
+	settings.setValue("ActionsCount", m_actions.size());
+
+	settings.endGroup();
+
+	int actionCount = 0;
+
+	for (const Action &action: m_actions)
+	{
+		settings.beginGroup(QString("Action_%1").arg(actionCount++));
+
+		action.writeToSettings(settings);
+
+		settings.endGroup();
+	}
 
 	return true;
 }

@@ -53,6 +53,8 @@ public slots:
 	void onOpen();
 	void onSave();
 	void onSaveAs();
+	void onImport();
+	void onExport();
 	void onTestDialog();
 
 	// help menu

@@ -20,6 +20,122 @@
 #include "common.h"
 #include "spot.h"
 
+QString pointToString(const QPoint& point)
+{
+	return QString("(%1,%2)").arg(point.x()).arg(point.y());
+}
+
+QString typeToString(Action::Type type)
+{
+	switch (type)
+	{
+	case Action::Type::Click: return "click";
+	case Action::Type::Repeat: return "repeat";
+	default: break;
+	}
+
+	return "none";
+}
+
+Action::Type typeFromString(const QString& type)
+{
+	if (type == "click")
+	{
+		return Action::Type::Click;
+	}
+
+	if (type == "repeat")
+	{
+		return Action::Type::Repeat;
+	}
+
+	return Action::Type::None;
+}
+
+int typeToInt(Action::Type type)
+{
+	switch (type)
+	{
+	case Action::Type::Click: return 1;
+	case Action::Type::Repeat: return 2;
+	default: break;
+	}
+
+	return 0;
+}
+
+Action::Type typeFromInt(int type)
+{
+	switch (type)
+	{
+	case 1: return Action::Type::Click;
+	case 2: return Action::Type::Repeat;
+	default: break;
+	}
+
+	return Action::Type::None;
+}
+
+QString Action::toString() const
+{
+	return QString("\"%1\" %2 %3-%4 %5 %6 %7").arg(name)
+		.arg(pointToString(originalPosition))
+		.arg(delayMin)
+		.arg(delayMax)
+		.arg(duration)
+		.arg(typeToString(type))
+		.arg(originalCount);
+}
+
+Action Action::fromString(const QString& str)
+{
+	QRegularExpression regex("\"(.*)\" \\(([0-9]+)\\,([0-9]+)\\) ([0-9]+)-([0-9]+) ([a-z]+) ([0-9]+)");
+
+	QRegularExpressionMatch match = regex.match(str);
+
+	Action action;
+
+	if (match.hasMatch())
+	{
+		action.name = match.captured(1);
+		action.originalPosition.setX(match.captured(2).toInt());
+		action.originalPosition.setY(match.captured(3).toInt());
+		action.delayMin = match.captured(4).toInt();
+		action.delayMax = match.captured(5).toInt();
+		action.duration = match.captured(6).toInt();
+		action.type = typeFromString(match.captured(7));
+		action.originalCount = match.captured(8).toInt();
+	}
+
+	return action;
+}
+
+bool Action::readFromSettings(QSettings& settings)
+{
+	name = settings.value("Name").toString();
+	type = typeFromString(settings.value("Type").toString());
+	originalPosition = settings.value("OriginalPosition").toPoint();
+	originalCount = settings.value("OriginalCount").toInt();
+	delayMin = settings.value("DelayMin").toInt();
+	delayMax = settings.value("DelayMax").toInt();
+	duration = settings.value("Duration").toInt();
+
+	return true;
+}
+
+bool Action::writeToSettings(QSettings& settings) const
+{
+	settings.setValue("Name", name);
+	settings.setValue("Type", typeToString(type));
+	settings.setValue("OriginalPosition", originalPosition);
+	settings.setValue("OriginalCount", originalCount);
+	settings.setValue("DelayMin", delayMin);
+	settings.setValue("DelayMax", delayMax);
+	settings.setValue("Duration", duration);
+
+	return true;
+}
+
 QDataStream& operator << (QDataStream& stream, const Action &action)
 {
 	stream << action.name << action.originalPosition << action.delayMin << action.delayMax << action.duration << action.type << action.originalCount;

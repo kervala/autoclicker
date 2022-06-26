@@ -42,6 +42,13 @@ struct Action
 	int duration;
 	int originalCount;
 	int lastCount;
+
+	QString toString() const;
+
+	static Action fromString(const QString& str);
+
+	bool readFromSettings(QSettings& settings);
+	bool writeToSettings(QSettings& settings) const;
 };
 
 QString typeToString(Action::Type type);

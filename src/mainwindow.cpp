@@ -71,6 +71,8 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::W
 	connect(m_ui->actionOpen, &QAction::triggered, this, &MainWindow::onOpen);
 	connect(m_ui->actionSave, &QAction::triggered, this, &MainWindow::onSave);
 	connect(m_ui->actionSaveAs, &QAction::triggered, this, &MainWindow::onSaveAs);
+	connect(m_ui->actionImport, &QAction::triggered, this, &MainWindow::onImport);
+	connect(m_ui->actionExport, &QAction::triggered, this, &MainWindow::onExport);
 	connect(m_ui->actionTestDialog, &QAction::triggered, this, &MainWindow::onTestDialog);
 	connect(m_ui->actionExit, &QAction::triggered, this, &MainWindow::close);
 
@@ -447,6 +449,29 @@ void MainWindow::onSaveAs()
 	if (filename.isEmpty()) return;
 
 	m_model->save(filename);
+}
+
+void MainWindow::onImport()
+{
+	QString filename = QFileDialog::getOpenFileName(this, tr("Import actions"), ConfigFile::getInstance()->getLocalDataDirectory(), "Text Files (*.txt)");
+
+	if (filename.isEmpty()) return;
+
+	if (m_model->loadText(filename))
+	{
+		//filename = QFileInfo(m_model->getFilename()).baseName();
+
+		updateStartButton();
+	}
+}
+
+void MainWindow::onExport()
+{
+	QString filename = QFileDialog::getSaveFileName(this, tr("Export actions"), /* ConfigFile::getInstance()->getLocalDataDirectory() */ m_model->getFilename(), "Text Files (*.txt)");
+
+	if (filename.isEmpty()) return;
+
+	m_model->saveText(filename);
 }
 
 void MainWindow::onTestDialog()
