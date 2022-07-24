@@ -41,7 +41,8 @@ static const int s_minimumDelay = 10;
 	#define new DEBUG_NEW
 #endif
 
-MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::WindowCloseButtonHint), m_stopExternalListener(0), m_stopClicker(0), m_useSimpleMode(true)
+MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::WindowCloseButtonHint), m_button(nullptr),
+	m_scriptsModel(nullptr), m_stopExternalListener(0), m_stopClicker(0), m_useSimpleMode(true)
 {
 	m_ui = new Ui::MainWindow();
 	m_ui->setupUi(this);
@@ -58,7 +59,15 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::W
 
 	SystrayIcon *systray = new SystrayIcon(this);
 
-	m_model = new ActionModel(this);
+	// one model by default
+	m_models.push_back(new ActionModel(this));
+
+	// script list view
+	m_scriptsModel = new QStringListModel(this);
+	m_ui->scriptsListView->setModel(m_scriptsModel);
+
+	updateScripts();
+
 	// check for a new version
 	m_updater = new Updater(this);
 
@@ -100,6 +109,16 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::W
 	connect(this, &MainWindow::startSimple, this, &MainWindow::onStartSimple);
 	connect(this, &MainWindow::clickerStopped, this, &MainWindow::onStartOrStop);
 	connect(this, &MainWindow::changeSystrayIcon, this, &MainWindow::onChangeSystrayIcon);
+
+	// Scripts list view
+	QShortcut* shortcutDelete = new QShortcut(QKeySequence(Qt::Key_Delete), m_ui->scriptsListView);
+	connect(shortcutDelete, &QShortcut::activated, this, &MainWindow::onDeleteScript);
+
+	QShortcut* shortcutInsert = new QShortcut(QKeySequence(Qt::Key_Insert), m_ui->scriptsListView);
+	connect(shortcutInsert, &QShortcut::activated, this, &MainWindow::onInsertScript);
+
+	// Selection model
+	connect(m_ui->scriptsListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::onScriptChanged);
 
 	// Updater
 	connect(m_updater, &Updater::newVersionDetected, this, &MainWindow::onNewVersion);
@@ -179,20 +198,49 @@ void MainWindow::startOrStop(bool simpleMode)
 
 void MainWindow::updateStartButton()
 {
-	m_ui->startPushButton->setEnabled(m_model->rowCount() > 0);
+	int currentScript = m_ui->scriptsListView->currentIndex().row();
+
+	if (currentScript < 0) return;
+
+	m_ui->startPushButton->setEnabled(m_models[currentScript]->rowCount() > 0);
+}
+
+void MainWindow::updateScripts()
+{
+	QStringList scripts;
+
+	for (const ActionModel* model : m_models)
+	{
+		QString filename = QFileInfo(model->getFilename()).baseName();
+
+		if (filename.isEmpty())
+		{
+			filename = tr("No name");
+		}
+
+		scripts << filename;
+	}
+
+	m_scriptsModel->setStringList(scripts);
 }
 
 void MainWindow::onEditScript()
 {
-	EditScriptDialog dialog(this, m_model);
+	int currentScript = m_ui->scriptsListView->currentIndex().row();
+
+	if (currentScript < 0) return;
+
+	ActionModel* model = m_models[currentScript];
+
+	EditScriptDialog dialog(this, model);
 
 	if (dialog.exec() == QDialog::Accepted)
 	{
 		// delete current model
-		delete m_model;
+		delete model;
 
 		// use the new model
-		m_model = dialog.getModel()->clone(this);
+		m_models[currentScript] = dialog.getModel()->clone(this);
 
 		updateStartButton();
 	}
@@ -224,6 +272,43 @@ void MainWindow::onChangeSystrayIcon()
 	SystrayIcon::getInstance()->setStatus(status);
 }
 
+void MainWindow::onInsertScript()
+{
+	QModelIndexList indices = m_ui->scriptsListView->selectionModel()->selectedRows();
+
+	int row = indices.isEmpty() ? -1 : indices.front().row() + 1;
+
+	ActionModel* model = new ActionModel(this);
+
+	m_models.insert(row, model);
+
+	updateScripts();
+	updateStartButton();
+}
+
+void MainWindow::onDeleteScript()
+{
+	QModelIndexList indices = m_ui->scriptsListView->selectionModel()->selectedRows();
+
+	if (indices.isEmpty()) return;
+
+	int row = indices.front().row();
+
+	ActionModel* model = m_models[row];
+
+	delete model;
+
+	m_models.remove(row);
+
+	updateScripts();
+	updateStartButton();
+}
+
+void MainWindow::onScriptChanged(const QItemSelection& selected, const QItemSelection& deselected)
+{
+	updateStartButton();
+}
+
 static int randomNumber(int min, int max)
 {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
@@ -236,6 +321,12 @@ static int randomNumber(int min, int max)
 
 void MainWindow::clicker()
 {
+	int currentScript = m_ui->scriptsListView->currentIndex().row();
+
+	if (currentScript < 0) return;
+
+	ActionModel* model = m_models[currentScript];
+
 	QRect rect;
 
 	// wait a little
@@ -257,11 +348,11 @@ void MainWindow::clicker()
 	}
 	else
 	{
-		QString title = m_model->getWindowTitle();
+		QString title = model->getWindowTitle();
 		Window window;
 
 		// reset repeat count
-		m_model->resetCount();
+		model->resetCount();
 
 		if (!title.isEmpty())
 		{
@@ -293,7 +384,7 @@ void MainWindow::clicker()
 		else
 		{
 			// multi mode
-			action = m_model->getAction(row);
+			action = model->getAction(row);
 
 			if (window.id)
 			{
@@ -370,14 +461,14 @@ void MainWindow::clicker()
 				startTime = QTime::currentTime();
 
 				// last spot, restart to first one
-				if (row >= m_model->rowCount())
+				if (row >= model->rowCount())
 				{
-					m_model->resetCount();
+					model->resetCount();
 					row = 0;
 				}
 
 				// new spot
-				action = m_model->getAction(row);
+				action = model->getAction(row);
 
 				// if next action is a repeat
 				if (action.type == Action::Type::Repeat)
@@ -390,7 +481,7 @@ void MainWindow::clicker()
 						// decrease count
 						--action.lastCount;
 
-						m_model->setAction(row, action);
+						model->setAction(row, action);
 
 						// repeat from start
 						row = -1;
@@ -416,8 +507,17 @@ void MainWindow::clicker()
 
 void MainWindow::onNew()
 {
-	m_model->reset();
+	for (ActionModel* model : m_models)
+	{
+		delete model;
+	}
 
+	m_models.clear();
+
+	// add only one model
+	m_models.push_back(new ActionModel(this));
+
+	updateScripts();
 	updateStartButton();
 }
 
@@ -427,26 +527,45 @@ void MainWindow::onOpen()
 
 	if (filename.isEmpty()) return;
 
-	if (m_model->load(filename))
+	ActionModel* model = new ActionModel(this);
+
+	if (model->load(filename))
 	{
-		//filename = QFileInfo(m_model->getFilename()).baseName();
+		m_models.push_back(model);
 
 		updateStartButton();
+		updateScripts();
+	}
+	else
+	{
+		delete model;
 	}
 }
 
 void MainWindow::onSave()
 {
-	m_model->save(m_model->getFilename());
+	int currentScript = m_ui->scriptsListView->currentIndex().row();
+
+	if (currentScript < 0) return;
+
+	ActionModel* model = m_models[currentScript];
+
+	model->save(model->getFilename());
 }
 
 void MainWindow::onSaveAs()
 {
-	QString filename = QFileDialog::getSaveFileName(this, tr("Save actions"), /* ConfigFile::getInstance()->getLocalDataDirectory() */ m_model->getFilename(), "AutoClicker Files (*.acf)");
+	int currentScript = m_ui->scriptsListView->currentIndex().row();
+
+	if (currentScript < 0) return;
+
+	ActionModel* model = m_models[currentScript];
+
+	QString filename = QFileDialog::getSaveFileName(this, tr("Save actions"), /* ConfigFile::getInstance()->getLocalDataDirectory() */ model->getFilename(), "AutoClicker Files (*.acf)");
 
 	if (filename.isEmpty()) return;
 
-	m_model->save(filename);
+	model->save(filename);
 }
 
 void MainWindow::onImport()
@@ -455,19 +574,34 @@ void MainWindow::onImport()
 
 	if (filename.isEmpty()) return;
 
-	if (m_model->loadText(filename))
+	ActionModel* model = new ActionModel(this);
+
+	if (model->loadText(filename))
 	{
+		m_models.push_back(model);
+
 		updateStartButton();
+		updateScripts();
+	}
+	else
+	{
+		delete model;
 	}
 }
 
 void MainWindow::onExport()
 {
-	QString filename = QFileDialog::getSaveFileName(this, tr("Export actions"), /* ConfigFile::getInstance()->getLocalDataDirectory() */ m_model->getFilename(), "Text Files (*.txt)");
+	int currentScript = m_ui->scriptsListView->currentIndex().row();
+
+	if (currentScript < 0) return;
+
+	ActionModel* model = m_models[currentScript];
+
+	QString filename = QFileDialog::getSaveFileName(this, tr("Export actions"), /* ConfigFile::getInstance()->getLocalDataDirectory() */ model->getFilename(), "Text Files (*.txt)");
 
 	if (filename.isEmpty()) return;
 
-	m_model->saveText(filename);
+	model->saveText(filename);
 }
 
 void MainWindow::onTestDialog()

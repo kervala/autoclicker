@@ -78,6 +78,10 @@ public slots:
 	void onStartSimple();
 	void onChangeSystrayIcon();
 
+	void onInsertScript();
+	void onDeleteScript();
+	void onScriptChanged(const QItemSelection& selected, const QItemSelection& deselected);
+
 signals:
 	void startSimple();
 	void clickerStopped();
@@ -96,9 +100,12 @@ protected:
 	void clicker();
 	void startOrStop(bool simpleMode);
 	void updateStartButton();
+	void updateScripts();
 
 	QWinTaskbarButton *m_button;
-	ActionModel *m_model;
+	QList<ActionModel*> m_models;
+
+	QStringListModel* m_scriptsModel;
 
 	QAtomicInt m_stopExternalListener;
 	QAtomicInt m_stopClicker;
