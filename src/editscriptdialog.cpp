@@ -139,13 +139,10 @@ void EditScriptDialog::onPosition()
 	m_ui->positionPushButton->setText("???");
 
 	// if cursor is outside window, begin to listen on keys
-	if (!rect().contains(mapFromGlobal(QCursor::pos())) && !ConfigFile::getInstance()->getPositionKey().isEmpty())
+	if (!rect().contains(mapFromGlobal(QCursor::pos())))
 	{
 		// reset external listener
 		m_stopExternalListener = 0;
-
-		// start to listen for a key
-		QtConcurrent::run(&EditScriptDialog::listenExternalInputEvents, this);
 	}
 }
 
@@ -169,26 +166,6 @@ void EditScriptDialog::onWindowTitleChanged()
 
 	// only update the push button label
 	setWindowTitleButton(window.title);
-}
-
-void EditScriptDialog::listenExternalInputEvents()
-{
-	QKeySequence positionKeySequence = ConfigFile::getInstance()->getPositionKey();
-
-	qint16 positionKey = QKeySequenceToVK(positionKeySequence);
-
-	// no key defined
-	if (positionKey == 0) return;
-
-	while (m_stopExternalListener == 0 && QThread::currentThread()->isRunning())
-	{
-		if (!underMouse() && isKeyPressed(positionKey))
-		{
-			emitMousePosition();
-		}
-
-		QThread::currentThread()->msleep(50);
-	}
 }
 
 void EditScriptDialog::onSelectionChanged(const QItemSelection& selected, const QItemSelection& /* deselected */)

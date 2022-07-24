@@ -63,8 +63,6 @@ signals:
 protected:
 	bool event(QEvent *e);
 
-	void startListeningExternalInputEvents();
-	void listenExternalInputEvents();
 	void emitMousePosition();
 
 	ActionModel *m_model;

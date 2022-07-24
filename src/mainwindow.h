@@ -73,7 +73,6 @@ public slots:
 	void onProgress(qint64 readBytes, qint64 totalBytes);
 
 	void onStartKeyChanged(const QKeySequence &seq);
-	void onPositionKeyChanged(const QKeySequence &seq);
 	void onDelayChanged(int delay);
 
 	void onStartSimple();

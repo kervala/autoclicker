@@ -63,7 +63,6 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::W
 	m_updater = new Updater(this);
 
 	m_ui->startKeySequenceEdit->setKeySequence(QKeySequence(ConfigFile::getInstance()->getStartKey()));
-	m_ui->positionKeySequenceEdit->setKeySequence(QKeySequence(ConfigFile::getInstance()->getPositionKey()));
 	m_ui->defaultDelaySpinBox->setValue(ConfigFile::getInstance()->getDelay());
 
 	// File menu
@@ -87,7 +86,6 @@ MainWindow::MainWindow() : QMainWindow(nullptr, Qt::WindowStaysOnTopHint | Qt::W
 
 	// Keys
 	connect(m_ui->startKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onStartKeyChanged);
-	connect(m_ui->positionKeySequenceEdit, &QKeySequenceEdit::keySequenceChanged, this, &MainWindow::onPositionKeyChanged);
 
 	connect(m_ui->defaultDelaySpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &MainWindow::onDelayChanged);
 	connect(this, &MainWindow::updateActionLabel, m_ui->scriptLabel, &QLabel::setText);
@@ -537,11 +535,6 @@ void MainWindow::listenExternalInputEvents()
 void MainWindow::onStartKeyChanged(const QKeySequence &seq)
 {
 	ConfigFile::getInstance()->setStartKey(seq.toString());
-}
-
-void MainWindow::onPositionKeyChanged(const QKeySequence &seq)
-{
-	ConfigFile::getInstance()->setPositionKey(seq.toString());
 }
 
 void MainWindow::onDelayChanged(int delay)

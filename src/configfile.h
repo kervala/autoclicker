@@ -67,7 +67,6 @@ DECLARE_QSTRING_VAR(DownloadDirectory, downloadDirectory);
 DECLARE_QSTRING_VAR(GlobalDataDirectory, globalDataDirectory);
 DECLARE_QSTRING_VAR(LocalDataDirectory, localDataDirectory);
 DECLARE_QSTRING_VAR(StartKey, startKey);
-DECLARE_QSTRING_VAR(PositionKey, positionKey);
 DECLARE_TYPED_VAR(QSize, WindowSize, size);
 DECLARE_TYPED_VAR(QPoint, WindowPosition, position);
 DECLARE_TYPED_VAR(QSize, TestDialogSize, testDialogSize);

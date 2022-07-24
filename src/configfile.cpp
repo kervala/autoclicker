@@ -148,7 +148,6 @@ bool ConfigFile::loadVersion1()
 	m_settings.beginGroup("keys");
 
 	m_startKey = m_settings.value("start", "").toString();
-	m_positionKey = m_settings.value("position", "").toString();
 
 	m_settings.endGroup();
 
@@ -202,7 +201,6 @@ bool ConfigFile::save()
 	m_settings.beginGroup("keys");
 
 	m_settings.setValue("start", m_startKey);
-	m_settings.setValue("position", m_positionKey);
 
 	m_settings.endGroup();
 
@@ -370,7 +368,6 @@ IMPLEMENT_QSTRING_VAR(DownloadDirectory, downloadDirectory);
 IMPLEMENT_QSTRING_VAR(GlobalDataDirectory, globalDataDirectory);
 IMPLEMENT_QSTRING_VAR(LocalDataDirectory, localDataDirectory);
 IMPLEMENT_QSTRING_VAR(StartKey, startKey);
-IMPLEMENT_QSTRING_VAR(PositionKey, positionKey);
 
 IMPLEMENT_SIZE_VAR(WindowSize, size);
 IMPLEMENT_POINT_VAR(WindowPosition, position);
