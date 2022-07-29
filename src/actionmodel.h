@@ -65,6 +65,9 @@ public:
 	QString getWindowTitle() const;
 	void setWindowTitle(const QString& name);
 
+	QString getName() const;
+	void setName(const QString& name);
+
 	void reset();
 	void resetCount();
 
@@ -84,6 +87,7 @@ private:
 	QList<Action> m_actions;
 	QString m_windowTitle;
 	QString m_filename;
+	QString m_name;
 };
 
 #endif

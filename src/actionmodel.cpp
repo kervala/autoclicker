@@ -50,8 +50,11 @@ SMagicHeader s_header = { "ACFK" };
 // version 5:
 // - renamed delay to delayMax
 // - added delayMin
+//
+// version 6:
+// - added name
 
-quint32 s_version = 5;
+quint32 s_version = 6;
 
 ActionModel::ActionModel(QObject* parent) : QAbstractTableModel(parent)
 {
@@ -266,10 +269,22 @@ void ActionModel::setWindowTitle(const QString& title)
 	m_windowTitle = title;
 }
 
+QString ActionModel::getName() const
+{
+	return m_name;
+}
+
+void ActionModel::setName(const QString& name)
+{
+	m_name = name;
+}
+
+
 void ActionModel::reset()
 {
 	m_windowTitle.clear();
 	m_filename.clear();
+	m_name.clear();
 
 	beginResetModel();
 
@@ -342,6 +357,17 @@ bool ActionModel::load(const QString& filename)
 		m_windowTitle.clear();
 	}
 
+	// deserialize name
+	if (version >= 6)
+	{
+		stream >> m_name;
+	}
+	else
+	{
+		// use filename
+		m_name = QFileInfo(filename).baseName();
+	}
+
 	m_filename = filename;
 
 	return true;
@@ -372,6 +398,17 @@ bool ActionModel::save(const QString& filename)
 	// serialize window title
 	stream << m_windowTitle;
 
+	// serialize name
+	if (m_name.isEmpty())
+	{
+		// use filename
+		stream << QFileInfo(filename).baseName();
+	}
+	else
+	{
+		stream << m_name;
+	}
+
 	m_filename = filename;
 
 	return true;
@@ -385,7 +422,9 @@ bool ActionModel::loadText(const QString& filename)
 
 	settings.beginGroup("Common");
 
+	m_name = settings.value("Name").toString();
 	m_windowTitle = settings.value("WindowTitle").toString();
+
 	int actionsCount = settings.value("ActionsCount").toInt();
 
 	settings.endGroup();
@@ -421,7 +460,9 @@ bool ActionModel::saveText(const QString& filename)
 
 	settings.beginGroup("Common");
 
+	settings.setValue("Name", m_name);
 	settings.setValue("WindowTitle", m_windowTitle);
+
 	settings.setValue("ActionsCount", m_actions.size());
 
 	settings.endGroup();
@@ -463,6 +504,7 @@ ActionModel* ActionModel::clone(QObject *parent) const
 	ActionModel* res = new ActionModel(parent);
 
 	res->m_actions = m_actions;
+	res->m_name = m_name;
 	res->m_windowTitle = m_windowTitle;
 	res->m_filename = m_filename;
 

@@ -211,14 +211,14 @@ void MainWindow::updateScripts()
 
 	for (const ActionModel* model : m_models)
 	{
-		QString filename = QFileInfo(model->getFilename()).baseName();
+		QString name = model->getName();
 
-		if (filename.isEmpty())
+		if (name.isEmpty())
 		{
-			filename = tr("No name");
+			name = tr("No name");
 		}
 
-		scripts << filename;
+		scripts << name;
 	}
 
 	m_scriptsModel->setStringList(scripts);

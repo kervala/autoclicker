@@ -53,6 +53,16 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="nameLabel_2">
+         <property name="text">
+          <string>Name</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="nameEdit"/>
+       </item>
+       <item>
         <widget class="QLabel" name="windowTitleLabel">
          <property name="text">
           <string>Window title</string>
@@ -202,6 +212,18 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>spotsListView</tabstop>
+  <tabstop>nameEdit</tabstop>
+  <tabstop>windowTitlePushButton</tabstop>
+  <tabstop>nameLineEdit</tabstop>
+  <tabstop>typeComboBox</tabstop>
+  <tabstop>positionPushButton</tabstop>
+  <tabstop>delayMinSpinBox</tabstop>
+  <tabstop>delayMaxSpinBox</tabstop>
+  <tabstop>durationSpinBox</tabstop>
+  <tabstop>countSpinBox</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

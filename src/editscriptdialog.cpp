@@ -76,7 +76,8 @@ EditScriptDialog::EditScriptDialog(QWidget *parent, ActionModel *model):QDialog(
 
 	// MainWindow
 	connect(this, &EditScriptDialog::mousePositionChanged, this, &EditScriptDialog::onMousePositionChanged);
-	connect(this, &EditScriptDialog::windowTitleChanged, this, &EditScriptDialog::setWindowTitleButton);
+
+	m_ui->nameEdit->setText(m_model->getName());
 
 	setWindowTitleButton(m_model->getWindowTitle());
 }
@@ -275,4 +276,11 @@ bool EditScriptDialog::event(QEvent *e)
 	}
 
 	return QDialog::event(e);
+}
+
+void EditScriptDialog::accept()
+{
+	m_model->setName(m_ui->nameEdit->text());
+
+	QDialog::accept();
 }
