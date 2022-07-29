@@ -321,12 +321,6 @@ static int randomNumber(int min, int max)
 
 void MainWindow::clicker()
 {
-	int currentScript = m_ui->scriptsListView->currentIndex().row();
-
-	if (currentScript < 0) return;
-
-	ActionModel* model = m_models[currentScript];
-
 	QRect rect;
 
 	// wait a little
@@ -337,6 +331,7 @@ void MainWindow::clicker()
 	Action action;
 	QTime startTime = QTime::currentTime();
 	QTime endTime;
+	ActionModel* model = nullptr;
 
 	if (m_useSimpleMode)
 	{
@@ -348,6 +343,12 @@ void MainWindow::clicker()
 	}
 	else
 	{
+		int currentScript = m_ui->scriptsListView->currentIndex().row();
+
+		if (currentScript < 0) return;
+
+		model = m_models[currentScript];
+
 		QString title = model->getWindowTitle();
 		Window window;
 
@@ -447,7 +448,7 @@ void MainWindow::clicker()
 		emit changeSystrayIcon();
 
 		// if not using simple mode
-		if (!m_useSimpleMode)
+		if (!m_useSimpleMode && model)
 		{
 			endTime = QTime::currentTime();
 
