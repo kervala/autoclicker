@@ -276,11 +276,10 @@ void MainWindow::onInsertScript()
 {
 	QModelIndexList indices = m_ui->scriptsListView->selectionModel()->selectedRows();
 
-	int row = indices.isEmpty() ? -1 : indices.front().row() + 1;
-
 	ActionModel* model = new ActionModel(this);
 
-	m_models.insert(row, model);
+	// always append to the end
+	m_models.append(model);
 
 	updateScripts();
 	updateStartButton();
