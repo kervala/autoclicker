@@ -243,6 +243,7 @@ void MainWindow::onEditScript()
 		m_models[currentScript] = dialog.getModel()->clone(this);
 
 		updateStartButton();
+		updateScripts();
 	}
 }
 
