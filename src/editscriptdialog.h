@@ -56,9 +56,10 @@ public slots:
 
 	void setWindowTitleButton(const QString& title);
 
+	void accept() override;
+
 signals:
 	void mousePositionChanged(const QPoint &pos);
-	void windowTitleChanged(const QString& title);
 
 protected:
 	bool event(QEvent *e);

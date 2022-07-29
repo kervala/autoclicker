@@ -19,7 +19,6 @@
 
 #include "common.h"
 #include "editscriptdialog.h"
-//#include "moc_editscriptdialog.cpp"
 #include "ui_editscriptdialog.h"
 #include "configfile.h"
 #include "actionmodel.h"
