@@ -279,7 +279,7 @@ void MainWindow::onInsertScript()
 	ActionModel* model = new ActionModel(this);
 
 	// always append to the end
-	m_models.append(model);
+	m_models.push_back(model);
 
 	updateScripts();
 	updateStartButton();
