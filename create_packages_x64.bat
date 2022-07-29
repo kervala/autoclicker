@@ -1,7 +1,7 @@
 @echo off
 
 :: To be sure Python and Qt are in PATH
-set PATH=%PATH%;D:\Tools\Python27;D:\Tools\Python27\Scripts;C:\Prog\Qt\6.3.1\msvc2019_64\bin
+set PATH=%PATH%;C:\Prog\Qt\6.3.1\msvc2019_64\bin
 ::set PATH=%PATH%;D:\Tools\Python27;D:\Tools\Python27\Scripts;C:\Prog\Qt\5.15.2\msvc2019_64\bin
 
 set CURRENTDIR=%cd%
