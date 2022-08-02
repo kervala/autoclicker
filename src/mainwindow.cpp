@@ -207,6 +207,9 @@ void MainWindow::updateStartButton()
 
 void MainWindow::updateScripts()
 {
+	// save selection
+	int currentScript = m_ui->scriptsListView->currentIndex().row();
+
 	QStringList scripts;
 
 	for (const ActionModel* model : m_models)
@@ -222,6 +225,8 @@ void MainWindow::updateScripts()
 	}
 
 	m_scriptsModel->setStringList(scripts);
+
+	m_ui->scriptsListView->setCurrentIndex(m_scriptsModel->index(currentScript));
 }
 
 void MainWindow::onEditScript()
