@@ -350,59 +350,67 @@ void MainWindow::clicker()
 	{
 		int currentScript = m_ui->scriptsListView->currentIndex().row();
 
-		if (currentScript < 0) return;
-
-		model = m_models[currentScript];
-
-		QString title = model->getWindowTitle();
-		Window window;
-
-		// reset repeat count
-		model->resetCount();
-
-		if (!title.isEmpty())
-		{
-			Windows windows;
-			createWindowsList(windows);
-
-			for (int i = 0; i < windows.size(); ++i)
-			{
-				if (windows[i].title == title)
-				{
-					window = windows[i];
-					break;
-				}
-			}
-
-			rect = window.rect;
-		}
-		else
-		{
-			// only top left position is used
-			rect = QRect(0, 0, 10, 10);
-		}
-
-		// no window with that name
-		if (rect.isNull())
+		if (currentScript < 0)
 		{
 			m_stopClicker = 1;
 		}
 		else
 		{
-			// multi mode
-			action = model->getAction(row);
+			model = m_models[currentScript];
 
-			if (window.id)
+			QString title = model->getWindowTitle();
+			Window window;
+
+			// reset repeat count
+			model->resetCount();
+
+			if (!title.isEmpty())
 			{
+				Windows windows;
+				createWindowsList(windows);
+
+				for (int i = 0; i < windows.size(); ++i)
+				{
+					if (windows[i].title == title)
+					{
+						window = windows[i];
+						break;
+					}
+				}
+
+				rect = window.rect;
+			}
+			else
+			{
+				// only top left position is used
+				rect = QRect(0, 0, 10, 10);
 			}
 
-			// apply window offset
-			action.originalPosition += rect.topLeft();
-			action.lastPosition = action.originalPosition;
-
-			if (!isSameWindowAtPos(window, action.originalPosition))
+			// no window with that name
+			if (rect.isNull())
 			{
 				m_stopClicker = 1;
+			}
+			else
+			{
+				// start from specific action
+				row = model->getStartFrom();
+
+				// multi mode
+				action = model->getAction(row);
+
+				if (window.id)
+				{
+				}
+
+				// apply window offset
+				action.originalPosition += rect.topLeft();
+				action.lastPosition = action.originalPosition;
+
+				if (!isSameWindowAtPos(window, action.originalPosition))
+				{
+					m_stopClicker = 1;
+				}
 			}
 		}
 	}
