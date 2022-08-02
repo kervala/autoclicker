@@ -449,13 +449,23 @@ void MainWindow::clicker()
 		}
 
 		// wait before next click
-		QThread::currentThread()->msleep(randomNumber(qMax(action.delayMin, s_minimumDelay), action.delayMax));
+		int ms = randomNumber(qMax(action.delayMin, s_minimumDelay), action.delayMax);
 
-		// stop auto-click if move the mouse
-		if (action.type == Action::Type::Click && QCursor::pos() != action.lastPosition)
+		while (ms > 0)
 		{
-			m_stopClicker = 1;
-			break;
+			// maximum 1 second
+			int tmpMs = qMin(1000, ms);
+
+			QThread::currentThread()->msleep(tmpMs);
+
+			ms -= tmpMs;
+
+			// stop auto-click if move the mouse
+			if (action.type == Action::Type::Click && QCursor::pos() != action.lastPosition)
+			{
+				m_stopClicker = 1;
+				break;
+			}
 		}
 
 		emit changeSystrayIcon();
