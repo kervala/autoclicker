@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>484</width>
-    <height>373</height>
+    <height>381</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,7 +53,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="nameLabel_2">
+        <widget class="QLabel" name="nameLabel">
          <property name="text">
           <string>Name</string>
          </property>
@@ -84,7 +84,7 @@
       </property>
       <layout class="QFormLayout" name="formLayout">
        <item row="0" column="0">
-        <widget class="QLabel" name="nameLabel">
+        <widget class="QLabel" name="nameActionLabel">
          <property name="text">
           <string>Name</string>
          </property>
