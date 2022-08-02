@@ -471,7 +471,7 @@ void MainWindow::clicker()
 		emit changeSystrayIcon();
 
 		// if not using simple mode
-		if (!m_useSimpleMode && model)
+		if (m_stopClicker != 1 && !m_useSimpleMode && model)
 		{
 			endTime = QTime::currentTime();
 
