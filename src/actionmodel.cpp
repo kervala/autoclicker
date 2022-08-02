@@ -56,7 +56,7 @@ SMagicHeader s_header = { "ACFK" };
 
 quint32 s_version = 6;
 
-ActionModel::ActionModel(QObject* parent) : QAbstractTableModel(parent)
+ActionModel::ActionModel(QObject* parent) : QAbstractTableModel(parent), m_startFrom(0)
 {
 }
 
@@ -176,6 +176,11 @@ bool ActionModel::removeRows(int position, int rows, const QModelIndex& /* paren
 	for (int row = 0; row < rows; ++row)
 	{
 		m_actions.removeAt(position + row);
+
+		if (m_startFrom == row)
+		{
+			m_startFrom = 0;
+		}
 	}
 
 	endRemoveRows();
@@ -279,12 +284,23 @@ void ActionModel::setName(const QString& name)
 	m_name = name;
 }
 
+int ActionModel::getStartFrom() const
+{
+	return m_startFrom;
+}
+
+void ActionModel::setStartFrom(int startFrom)
+{
+	m_startFrom = startFrom;
+}
 
 void ActionModel::reset()
 {
 	m_windowTitle.clear();
 	m_filename.clear();
 	m_name.clear();
+
+	m_startFrom = 0;
 
 	beginResetModel();
 
@@ -507,6 +523,7 @@ ActionModel* ActionModel::clone(QObject *parent) const
 	res->m_name = m_name;
 	res->m_windowTitle = m_windowTitle;
 	res->m_filename = m_filename;
+	res->m_startFrom = m_startFrom;
 
 	return res;
 }

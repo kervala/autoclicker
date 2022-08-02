@@ -58,6 +58,7 @@ EditScriptDialog::EditScriptDialog(QWidget *parent, ActionModel *model):QDialog(
 	m_ui->typeComboBox->setModel(typesModel);
 
 	connect(m_ui->typeComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &EditScriptDialog::onTypeChanged);
+	connect(m_ui->thisActionPushButton, &QPushButton::clicked, this, &EditScriptDialog::onThisActionClicked);
 
 	// Buttons
 	connect(m_ui->positionPushButton, &QPushButton::clicked, this, &EditScriptDialog::onPosition);
@@ -190,6 +191,8 @@ void EditScriptDialog::onSelectionChanged(const QItemSelection& selected, const 
 	m_ui->positionPushButton->setText(QString("(%1, %2)").arg(pos.x()).arg(pos.y()));
 
 	onTypeChanged(typeToInt(action.type));
+
+	m_ui->thisActionPushButton->setChecked(row == m_model->getStartFrom());
 }
 
 void EditScriptDialog::onMousePositionChanged(const QPoint& pos)
@@ -235,6 +238,17 @@ void EditScriptDialog::onTypeChanged(int index)
 		m_ui->countLabel->setVisible(false);
 		m_ui->countSpinBox->setVisible(false);
 	}
+}
+
+void EditScriptDialog::onThisActionClicked()
+{
+	QModelIndexList indices = m_ui->spotsListView->selectionModel()->selectedRows();
+
+	int row = indices.isEmpty() ? -1 : indices.front().row();
+
+	if (row == -1) return;
+
+	m_model->setStartFrom(row);
 }
 
 void EditScriptDialog::setWindowTitleButton(const QString& title)

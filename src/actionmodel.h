@@ -68,6 +68,9 @@ public:
 	QString getName() const;
 	void setName(const QString& name);
 
+	int getStartFrom() const;
+	void setStartFrom(int startFrom);
+
 	void reset();
 	void resetCount();
 
@@ -88,6 +91,7 @@ private:
 	QString m_windowTitle;
 	QString m_filename;
 	QString m_name;
+	int m_startFrom;
 };
 
 #endif

@@ -53,6 +53,7 @@ public slots:
 	void onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 	void onMousePositionChanged(const QPoint &pos);
 	void onTypeChanged(int index);
+	void onThisActionClicked();
 
 	void setWindowTitleButton(const QString& title);
 
