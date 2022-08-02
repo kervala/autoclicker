@@ -621,7 +621,11 @@ void MainWindow::onExport()
 
 	ActionModel* model = m_models[currentScript];
 
-	QString filename = QFileDialog::getSaveFileName(this, tr("Export actions"), /* ConfigFile::getInstance()->getLocalDataDirectory() */ model->getFilename(), "Text Files (*.txt)");
+	QFileInfo info(model->getFilename());
+
+	QString filename = info.absoluteFilePath() + "/" + info.baseName() + ".txt";
+
+	filename = QFileDialog::getSaveFileName(this, tr("Export actions"), filename, "Text Files (*.txt)");
 
 	if (filename.isEmpty()) return;
 
